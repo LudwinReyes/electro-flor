@@ -6,15 +6,18 @@
   command = "npm run build"
 
 # Redirects para SPA (Single Page Application)
+# force = false significa que NO redirige si el archivo existe
 [[redirects]]
   from = "/admin/*"
   to = "/admin/index.html"
   status = 200
+  force = false
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  force = false
 
 # Headers de seguridad
 [[headers]]

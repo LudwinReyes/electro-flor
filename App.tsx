@@ -131,15 +131,12 @@ const HomePage: React.FC<{
             </div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-8">
-            {products.filter(p => p.displaySections?.includes('ultimo_ingreso')).length > 0 ? (
-              products.filter(p => p.displaySections?.includes('ultimo_ingreso')).slice(0, 5).map(product => (
-                <ProductCard key={product._id || product.slug || product.id} product={product} onAddToQuote={onAddToQuote} />
-              ))
-            ) : (
-              <div className="col-span-full text-center py-8 text-gray-500">
-                <p>Marca productos con "Último Ingreso" en Sanity Studio para mostrarlos aquí.</p>
-              </div>
-            )}
+            {(products.filter(p => p.displaySections?.includes('ultimo_ingreso')).length > 0
+              ? products.filter(p => p.displaySections?.includes('ultimo_ingreso'))
+              : products
+            ).slice(0, 5).map(product => (
+              <ProductCard key={product._id || product.slug || product.id} product={product} onAddToQuote={onAddToQuote} />
+            ))}
           </div>
         </div>
       </section>
