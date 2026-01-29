@@ -62,3 +62,16 @@ scripts/
 # Archivos temporales
 *.tmp
 *.temp
+
+# Documentación local (guías, estados, etc.)
+GUIA_*.md
+ESTADO_*.md
+TODO.md
+INSTALACION_*.md
+PROBLEMAS_*.md
+QUICK_START.md
+RESUMEN_*.md
+SOLUCION_*.md
+
+# Plantillas de productos
+plantilla_productos.csv
