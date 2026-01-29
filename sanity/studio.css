@@ -1,0 +1,66 @@
+/* ELECTRO FLOR - Sanity Studio Custom Theme */
+/* Dark Mode Enterprise - Estilo limpio */
+
+:root {
+  --ef-primary: #002D62;
+  --ef-secondary: #8CC63F;
+}
+
+/* Item seleccionado - borde verde izquierdo y fondo sutil */
+[data-ui="PaneItem"][data-selected] {
+  background-color: rgba(140, 198, 63, 0.12) !important;
+  border-left: 3px solid #8CC63F !important;
+  border-radius: 0 !important;
+}
+
+/* Items normales sin borde */
+[data-ui="PaneItem"] {
+  border-left: 3px solid transparent !important;
+  transition: all 0.15s ease !important;
+}
+
+[data-ui="PaneItem"]:hover {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+/* Botón Publish con color de marca */
+[data-ui="Button"][data-tone="positive"] {
+  background: #8CC63F !important;
+  color: #002D62 !important;
+  font-weight: 700 !important;
+}
+
+[data-ui="Button"][data-tone="positive"]:hover {
+  background: #7ab534 !important;
+}
+
+/* Focus rings sutiles */
+[data-ui="TextInput"]:focus,
+[data-ui="TextArea"]:focus {
+  box-shadow: 0 0 0 1px rgba(140, 198, 63, 0.5) !important;
+}
+
+/* Badge de estado */
+[data-ui="Badge"][data-tone="positive"] {
+  background-color: rgba(140, 198, 63, 0.15) !important;
+  color: #8CC63F !important;
+}
+
+/* Scrollbar minimalista */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}

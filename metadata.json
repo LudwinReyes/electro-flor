@@ -1,0 +1,7 @@
+{
+  "name": "Electro Flor | Ferretería y Material Eléctrico",
+  "description": "Tu ferretería de confianza. Especialistas en herramientas, construcción, gasfitería y soluciones eléctricas integrales con la mejor calidad.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
