@@ -1,11 +1,63 @@
 
-import React from 'react';
-import { Mail, Phone, MapPin, Clock, Send, MessageSquare } from 'lucide-react';
+import React, { useState } from 'react';
+import { Mail, Phone, MapPin, Clock, Send, MessageSquare, CheckCircle, Loader2 } from 'lucide-react';
 import { CONTACT_INFO } from '../config';
 import { useSiteConfig } from '../contexts/SiteConfigContext';
+import { saveContactForm } from '../services/sanity';
 
 const ContactPage: React.FC = () => {
   const { siteSettings, colors, contact } = useSiteConfig();
+
+  const [formData, setFormData] = useState({
+    name: '',
+    company: '',
+    whatsapp: '',
+    subject: 'cotizacion_corporativa',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    if (!formData.name || !formData.whatsapp) {
+      setError('Por favor completa los campos obligatorios');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const result = await saveContactForm(formData);
+
+      if (result) {
+        setIsSubmitted(true);
+        setFormData({
+          name: '',
+          company: '',
+          whatsapp: '',
+          subject: 'cotizacion_corporativa',
+          message: ''
+        });
+      } else {
+        setError('Error al enviar. Por favor intenta nuevamente.');
+      }
+    } catch (err) {
+      setError('Error al enviar. Por favor intenta nuevamente.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="bg-gray-50 min-h-screen pb-20">
@@ -67,38 +119,106 @@ const ContactPage: React.FC = () => {
             <h2 className="text-2xl font-black text-[#002D62] uppercase mb-8 flex items-center gap-3">
               <Send className="text-[#8CC63F]" /> Formulario de Cotización
             </h2>
-            <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Nombre Completo</label>
-                <input type="text" className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl focus:border-[#8CC63F] outline-none font-bold text-sm" placeholder="Ej: Juan Pérez" />
-              </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Empresa / RUC</label>
-                <input type="text" className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl focus:border-[#8CC63F] outline-none font-bold text-sm" placeholder="Opcional" />
-              </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">WhatsApp</label>
-                <input type="text" className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl focus:border-[#8CC63F] outline-none font-bold text-sm" placeholder="+51" />
-              </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Asunto</label>
-                <select className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl focus:border-[#8CC63F] outline-none font-bold text-sm">
-                  <option>Cotización Corporativa</option>
-                  <option>Consulta Técnica</option>
-                  <option>Atención Post-Venta</option>
-                  <option>Otros</option>
-                </select>
-              </div>
-              <div className="md:col-span-2 space-y-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Mensaje / Detalle de Pedido</label>
-                <textarea rows={4} className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl focus:border-[#8CC63F] outline-none font-bold text-sm" placeholder="Describe los materiales que necesitas..."></textarea>
-              </div>
-              <div className="md:col-span-2 pt-4">
-                <button className="w-full bg-[#002D62] text-white py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-2xl hover:bg-blue-900 transition-all active:scale-95">
-                  Enviar Mensaje Directo
+
+            {isSubmitted ? (
+              <div className="text-center py-12">
+                <CheckCircle size={64} className="mx-auto text-[#8CC63F] mb-4" />
+                <h3 className="text-2xl font-black text-[#002D62] mb-2">¡Mensaje Enviado!</h3>
+                <p className="text-gray-500 mb-6">Nos pondremos en contacto contigo pronto.</p>
+                <button
+                  onClick={() => setIsSubmitted(false)}
+                  className="bg-[#8CC63F] text-[#002D62] px-8 py-3 rounded-xl font-black uppercase text-xs hover:bg-green-400 transition-all"
+                >
+                  Enviar otro mensaje
                 </button>
               </div>
-            </form>
+            ) : (
+              <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Nombre Completo *</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl focus:border-[#8CC63F] outline-none font-bold text-sm"
+                    placeholder="Ej: Juan Pérez"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Empresa / RUC</label>
+                  <input
+                    type="text"
+                    name="company"
+                    value={formData.company}
+                    onChange={handleChange}
+                    className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl focus:border-[#8CC63F] outline-none font-bold text-sm"
+                    placeholder="Opcional"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">WhatsApp *</label>
+                  <input
+                    type="text"
+                    name="whatsapp"
+                    value={formData.whatsapp}
+                    onChange={handleChange}
+                    className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl focus:border-[#8CC63F] outline-none font-bold text-sm"
+                    placeholder="+51 999 999 999"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Asunto</label>
+                  <select
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl focus:border-[#8CC63F] outline-none font-bold text-sm"
+                  >
+                    <option value="cotizacion_corporativa">Cotización Corporativa</option>
+                    <option value="consulta_tecnica">Consulta Técnica</option>
+                    <option value="post_venta">Atención Post-Venta</option>
+                    <option value="otros">Otros</option>
+                  </select>
+                </div>
+                <div className="md:col-span-2 space-y-2">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Mensaje / Detalle de Pedido</label>
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows={4}
+                    className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl focus:border-[#8CC63F] outline-none font-bold text-sm"
+                    placeholder="Describe los materiales que necesitas..."
+                  ></textarea>
+                </div>
+
+                {error && (
+                  <div className="md:col-span-2 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-bold">
+                    {error}
+                  </div>
+                )}
+
+                <div className="md:col-span-2 pt-4">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-[#002D62] text-white py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-2xl hover:bg-blue-900 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 size={18} className="animate-spin" />
+                        Enviando...
+                      </>
+                    ) : (
+                      'Enviar Mensaje Directo'
+                    )}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </div>

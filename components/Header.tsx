@@ -216,6 +216,7 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
         <div className={`flex py-3 gap-8 text-[11px] font-black text-[${BRAND_COLORS.primary}] uppercase tracking-widest`}>
           <Link to="/" className={`hover:text-[${BRAND_COLORS.secondary}] border-b-2 border-transparent hover:border-[${BRAND_COLORS.secondary}]`}>Inicio</Link>
           <Link to="/productos" className={`hover:text-[${BRAND_COLORS.secondary}] border-b-2 border-transparent hover:border-[${BRAND_COLORS.secondary}]`}>Productos</Link>
+          <Link to="/marcas" className={`hover:text-[${BRAND_COLORS.secondary}] border-b-2 border-transparent hover:border-[${BRAND_COLORS.secondary}]`}>Marcas</Link>
           <Link to="/nosotros" className={`hover:text-[${BRAND_COLORS.secondary}] border-b-2 border-transparent hover:border-[${BRAND_COLORS.secondary}]`}>Nosotros</Link>
           <Link to="/contacto" className={`hover:text-[${BRAND_COLORS.secondary}] border-b-2 border-transparent hover:border-[${BRAND_COLORS.secondary}]`}>Contacto</Link>
           <Link to="/faq" className={`hover:text-[${BRAND_COLORS.secondary}] border-b-2 border-transparent hover:border-[${BRAND_COLORS.secondary}]`}>Preguntas</Link>
@@ -251,6 +252,7 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
               <div className="h-px bg-gray-100 my-2"></div>
               <Link to="/" onClick={() => setIsMenuOpen(false)}>Inicio</Link>
               <Link to="/productos" onClick={() => setIsMenuOpen(false)}>Catálogo completo</Link>
+              <Link to="/marcas" onClick={() => setIsMenuOpen(false)}>Marcas</Link>
               <Link to="/nosotros" onClick={() => setIsMenuOpen(false)}>Nosotros</Link>
               <Link to="/contacto" onClick={() => setIsMenuOpen(false)}>Contacto</Link>
               <button onClick={() => { onOpenCalc(); setIsMenuOpen(false); }} className="flex items-center gap-3 text-left">

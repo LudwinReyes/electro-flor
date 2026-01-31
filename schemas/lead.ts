@@ -6,10 +6,38 @@ export default defineType({
     type: 'document',
     fields: [
         defineField({
+            name: 'name',
+            title: 'Nombre Completo',
+            type: 'string',
+        }),
+        defineField({
+            name: 'company',
+            title: 'Empresa / RUC',
+            type: 'string',
+        }),
+        defineField({
             name: 'whatsapp',
             title: 'Número de WhatsApp',
             type: 'string',
             validation: Rule => Rule.required()
+        }),
+        defineField({
+            name: 'subject',
+            title: 'Asunto',
+            type: 'string',
+            options: {
+                list: [
+                    { title: 'Cotización Corporativa', value: 'cotizacion_corporativa' },
+                    { title: 'Consulta Técnica', value: 'consulta_tecnica' },
+                    { title: 'Atención Post-Venta', value: 'post_venta' },
+                    { title: 'Otros', value: 'otros' }
+                ]
+            },
+        }),
+        defineField({
+            name: 'message',
+            title: 'Mensaje / Detalle de Pedido',
+            type: 'text',
         }),
         defineField({
             name: 'source',
@@ -18,11 +46,11 @@ export default defineType({
             options: {
                 list: [
                     { title: 'Programa Especialista (Footer)', value: 'programa_especialista' },
-                    { title: 'Contacto', value: 'contacto' },
+                    { title: 'Formulario de Contacto', value: 'contacto' },
                     { title: 'Otro', value: 'otro' }
                 ]
             },
-            initialValue: 'programa_especialista'
+            initialValue: 'contacto'
         }),
         defineField({
             name: 'status',
@@ -40,8 +68,9 @@ export default defineType({
         }),
         defineField({
             name: 'notes',
-            title: 'Notas',
-            type: 'text'
+            title: 'Notas Internas',
+            type: 'text',
+            description: 'Notas del equipo de ventas'
         }),
         defineField({
             name: 'createdAt',
@@ -52,8 +81,22 @@ export default defineType({
     ],
     preview: {
         select: {
-            title: 'whatsapp',
-            subtitle: 'status'
+            title: 'name',
+            subtitle: 'whatsapp',
+            status: 'status',
+            source: 'source'
+        },
+        prepare({ title, subtitle, status, source }) {
+            const statusLabels: Record<string, string> = {
+                nuevo: '🟢 Nuevo',
+                contactado: '🟡 Contactado',
+                cliente: '✅ Cliente',
+                descartado: '🔴 Descartado'
+            };
+            return {
+                title: title || subtitle || 'Sin nombre',
+                subtitle: `${statusLabels[status] || status} | ${subtitle || ''}`
+            }
         }
     },
     orderings: [
@@ -61,6 +104,11 @@ export default defineType({
             title: 'Más recientes',
             name: 'createdAtDesc',
             by: [{ field: 'createdAt', direction: 'desc' }]
+        },
+        {
+            title: 'Estado',
+            name: 'statusAsc',
+            by: [{ field: 'status', direction: 'asc' }]
         }
     ]
 })

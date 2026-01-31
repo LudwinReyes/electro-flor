@@ -190,7 +190,7 @@ const ProductDetail: React.FC = () => {
                 {product.brand}
               </span>
               <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
-                CÓDIGO: {product.code}
+                {product.code}
               </span>
             </div>
 

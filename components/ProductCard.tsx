@@ -26,22 +26,22 @@ const ProductCard: React.FC<Props> = ({ product, onAddToQuote }) => {
         </div>
       </div>
 
-      {/* Imagen del Producto - Altura fija para consistencia visual */}
-      <div className="relative h-52 md:h-64 p-4 flex items-center justify-center bg-white mb-4 w-full">
-        <Link to={`/producto/${product.slug || product.id}`} className="w-full h-full flex items-center justify-center">
-          <img 
-            src={product.image} 
-            alt={product.name} 
-            className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500"
+      {/* Imagen del Producto - Cubre todo el ancho */}
+      <div className="relative h-52 md:h-64 flex items-center justify-center bg-gradient-to-b from-gray-50 to-white mb-4 w-full rounded-2xl overflow-hidden">
+        <Link to={`/producto/${product.slug || product.id}`} className="w-full h-full flex items-center justify-center p-2">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
           />
         </Link>
       </div>
-      
+
       {/* Información */}
       <div className="flex flex-col flex-grow">
         <div className="flex items-center gap-2 mb-2">
           <span className={`text-[11px] font-black text-[${BRAND_COLORS.secondary}] uppercase tracking-tight`}>{product.brand}</span>
-          <span className="text-[10px] text-gray-300 font-bold uppercase tracking-tight">SKU: {product.code}</span>
+          <span className="text-[10px] text-gray-300 font-bold uppercase tracking-tight">{product.code}</span>
         </div>
 
         <Link to={`/producto/${product.slug || product.id}`}>
@@ -49,21 +49,21 @@ const ProductCard: React.FC<Props> = ({ product, onAddToQuote }) => {
             {product.name}
           </h3>
         </Link>
-        
+
         <div className="flex items-center justify-between mb-4">
           <div className="flex gap-0.5">
-            {[1,2,3,4,5].map(i => <Star key={i} size={16} className={`text-[${BRAND_COLORS.secondary}] fill-current`} />)}
+            {[1, 2, 3, 4, 5].map(i => <Star key={i} size={16} className={`text-[${BRAND_COLORS.secondary}] fill-current`} />)}
           </div>
           <div className="flex flex-col items-end leading-none text-right">
-             <span className={`text-[9px] text-[${BRAND_COLORS.primary}] font-black uppercase`}>ENTREGA</span>
-             <span className={`text-[9px] text-[${BRAND_COLORS.primary}] font-black uppercase`}>INMEDIATA</span>
+            <span className={`text-[9px] text-[${BRAND_COLORS.primary}] font-black uppercase`}>ENTREGA</span>
+            <span className={`text-[9px] text-[${BRAND_COLORS.primary}] font-black uppercase`}>INMEDIATA</span>
           </div>
         </div>
 
         {/* Botones de Acción - Diseño según captura */}
         <div className="mt-auto space-y-3">
           <div className="flex gap-2 h-12">
-            <a 
+            <a
               href={`${CONTACT_INFO.phone.whatsapp}?text=${encodeURIComponent(SITE_MESSAGES.whatsapp.quoteRequest(product.name))}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -71,7 +71,7 @@ const ProductCard: React.FC<Props> = ({ product, onAddToQuote }) => {
             >
               <i className="fab fa-whatsapp text-xl"></i> {SITE_MESSAGES.cta.quote}
             </a>
-            <button 
+            <button
               onClick={(e) => {
                 e.preventDefault();
                 onAddToQuote?.(product);
@@ -81,8 +81,8 @@ const ProductCard: React.FC<Props> = ({ product, onAddToQuote }) => {
               <Plus size={24} className="group-hover/btn:scale-110 transition-transform" />
             </button>
           </div>
-          
-          <Link 
+
+          <Link
             to={`/producto/${product.slug || product.id}`}
             className="w-full block text-center text-[#002D62] text-[11px] font-black hover:bg-gray-100 transition-colors uppercase tracking-widest py-3 bg-[#f8f9fa] rounded-2xl"
           >

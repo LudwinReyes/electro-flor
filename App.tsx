@@ -8,6 +8,7 @@ import ProductCard from './components/ProductCard';
 import ProductDetail from './components/ProductDetail';
 import FichaTecnicaPage from './components/FichaTecnicaPage';
 import ProductsPage from './components/ProductsPage';
+import BrandsPage from './components/BrandsPage';
 import AboutUsPage from './components/AboutUsPage';
 import ContactPage from './components/ContactPage';
 import FaqPage from './components/FaqPage';
@@ -17,6 +18,7 @@ import QuoteCart from './components/QuoteCart';
 import CableCalculator from './components/CableCalculator';
 import PriceListModal from './components/PriceListModal';
 import ShipmentUrgencyBar from './components/ShipmentUrgencyBar';
+import ScrollToTop from './components/ScrollToTop';
 import ProductCarousel from './components/ProductCarousel';
 import { CATEGORIES as MOCK_CATEGORIES, PRODUCTS as MOCK_PRODUCTS, BRANDS } from './constants';
 import { Product, Category } from './types';
@@ -276,6 +278,7 @@ const App: React.FC = () => {
   return (
     <SiteConfigProvider>
       <div className="min-h-screen bg-white font-sans text-gray-900">
+        <ScrollToTop />
         <ShipmentUrgencyBar />
         <Header
           quoteCount={quoteItems.length}
@@ -297,6 +300,7 @@ const App: React.FC = () => {
               />
             } />
             <Route path="/productos" element={<ProductsPage />} />
+            <Route path="/marcas" element={<BrandsPage />} />
             <Route path="/producto/:id" element={<ProductDetail />} />
             <Route path="/nosotros" element={<AboutUsPage />} />
             <Route path="/contacto" element={<ContactPage />} />

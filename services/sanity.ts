@@ -491,6 +491,40 @@ export const saveLead = async (whatsapp: string, source: string = 'programa_espe
   }
 };
 
+interface ContactFormData {
+  name: string;
+  company?: string;
+  whatsapp: string;
+  subject: string;
+  message: string;
+}
+
+export const saveContactForm = async (data: ContactFormData) => {
+  if (!isSanityConfigured()) {
+    console.warn('Sanity no está configurado para guardar formularios');
+    return null;
+  }
+
+  try {
+    const result = await sanityWriteClient.create({
+      _type: 'lead',
+      name: data.name,
+      company: data.company || '',
+      whatsapp: data.whatsapp,
+      subject: data.subject,
+      message: data.message,
+      source: 'contacto',
+      status: 'nuevo',
+      createdAt: new Date().toISOString()
+    });
+    console.log('✅ Formulario de contacto guardado:', result);
+    return result;
+  } catch (error) {
+    console.error('❌ Error al guardar formulario:', error);
+    return null;
+  }
+};
+
 // ==================== BANNERS Y BARRA DE URGENCIA ====================
 
 export const getPromoBanners = async () => {

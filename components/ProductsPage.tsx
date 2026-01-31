@@ -12,9 +12,10 @@ const ProductsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchUrl = searchParams.get('search') || '';
   const categoryUrl = searchParams.get('category') || '';
+  const brandUrl = searchParams.get('brand') || '';
 
   const [activeCategory, setActiveCategory] = useState<string | null>(categoryUrl || null);
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>(brandUrl ? [brandUrl] : []);
   const [sortBy, setSortBy] = useState('A a la Z');
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const productsTopRef = useRef<HTMLDivElement>(null);
@@ -47,16 +48,41 @@ const ProductsPage: React.FC = () => {
     if (categoryUrl) setActiveCategory(categoryUrl);
   }, [categoryUrl]);
 
+  useEffect(() => {
+    if (brandUrl) setSelectedBrands([brandUrl]);
+  }, [brandUrl]);
+
   // Usar datos de Sanity si existen, sino usar hardcodeados
   const products = sanityProducts.length > 0 ? sanityProducts : PRODUCTS;
   const categories = sanityCategories.length > 0 ? sanityCategories : CATEGORIES;
   const brands = sanityBrands.length > 0 ? sanityBrands : BRANDS;
 
+  // Obtener subcategorías de una categoría padre
+  const getSubcategoryNames = (parentCategoryName: string): string[] => {
+    const parentCat = categories.find((c: any) => c.name === parentCategoryName);
+    if (!parentCat) return [];
+
+    const subcategories = categories.filter((c: any) => c.parentCategory === parentCat.slug);
+    return subcategories.map((c: any) => c.name);
+  };
+
   const filteredProducts = products.filter((p: any) => {
     const productCategory = p.category?.name || p.category || '';
     const productBrand = p.brand?.name || p.brand || '';
 
-    const categoryMatch = !activeCategory || productCategory === activeCategory;
+    // Si hay una categoría activa, verificar si es categoría padre o subcategoría
+    let categoryMatch = !activeCategory;
+    if (activeCategory) {
+      // Verificar si el producto pertenece a la categoría activa
+      if (productCategory === activeCategory) {
+        categoryMatch = true;
+      } else {
+        // Verificar si la categoría activa es padre y el producto pertenece a una subcategoría
+        const subcategoryNames = getSubcategoryNames(activeCategory);
+        categoryMatch = subcategoryNames.includes(productCategory);
+      }
+    }
+
     const brandMatch = selectedBrands.length === 0 || selectedBrands.includes(productBrand);
     const searchMatch = !searchUrl ||
       p.name?.toLowerCase().includes(searchUrl.toLowerCase()) ||
@@ -101,15 +127,30 @@ const ProductsPage: React.FC = () => {
           <div className={`w-4 h-1 bg-[${BRAND_COLORS.secondary}] rounded-full`}></div> Categorías
         </h3>
         <div className="grid grid-cols-1 gap-2">
-          {categories.map((cat: any) => (
-            <button
-              key={cat.slug}
-              onClick={() => setActiveCategory(cat.name === activeCategory ? null : cat.name)}
-              className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-black uppercase transition-all flex justify-between items-center border ${activeCategory === cat.name ? `bg-[${BRAND_COLORS.secondary}] text-[${BRAND_COLORS.primary}] border-[${BRAND_COLORS.secondary}]` : 'text-gray-500 bg-gray-50 border-transparent hover:border-gray-200'}`}
-            >
-              {cat.name}
-              {activeCategory === cat.name && <Check size={14} />}
-            </button>
+          {/* Categorías principales (sin parentCategory) */}
+          {categories.filter((cat: any) => !cat.parentCategory).map((parentCat: any) => (
+            <div key={parentCat.slug}>
+              <button
+                onClick={() => setActiveCategory(parentCat.name === activeCategory ? null : parentCat.name)}
+                className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-black uppercase transition-all flex justify-between items-center border ${activeCategory === parentCat.name ? `bg-[${BRAND_COLORS.secondary}] text-[${BRAND_COLORS.primary}] border-[${BRAND_COLORS.secondary}]` : 'text-gray-500 bg-gray-50 border-transparent hover:border-gray-200'}`}
+              >
+                {parentCat.name}
+                {activeCategory === parentCat.name && <Check size={14} />}
+              </button>
+              {/* Subcategorías */}
+              {categories.filter((sub: any) => sub.parentCategory === parentCat.slug).map((subCat: any) => (
+                <button
+                  key={subCat.slug}
+                  onClick={() => setActiveCategory(subCat.name === activeCategory ? null : subCat.name)}
+                  className={`w-full text-left pl-8 pr-4 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all flex justify-between items-center border mt-1 ${activeCategory === subCat.name ? `bg-[${BRAND_COLORS.primary}] text-white border-[${BRAND_COLORS.primary}]` : 'text-gray-400 bg-white border-gray-100 hover:border-gray-200'}`}
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="text-gray-300">└</span> {subCat.name}
+                  </span>
+                  {activeCategory === subCat.name && <Check size={12} />}
+                </button>
+              ))}
+            </div>
           ))}
         </div>
       </div>
