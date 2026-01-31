@@ -7,6 +7,11 @@
 
 # Servir archivos estáticos del admin directamente (NO redirigir)
 [[redirects]]
+  from = "/static/*"
+  to = "/static/:splat"
+  status = 200
+
+[[redirects]]
   from = "/admin/static/*"
   to = "/admin/static/:splat"
   status = 200

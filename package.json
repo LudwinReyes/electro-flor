@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run build:frontend && npm run build:studio",
+    "build": "npm run build:frontend && npm run build:studio && npm run postbuild",
     "build:frontend": "vite build",
     "build:studio": "npx sanity build dist/admin --yes",
+    "postbuild": "cp -r dist/admin/static dist/static || xcopy /E /I /Y dist\\admin\\static dist\\static",
     "preview": "vite preview",
     "studio": "npx sanity dev --port 3333"
   },

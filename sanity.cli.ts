@@ -6,5 +6,8 @@ export default defineCliConfig({
         dataset: 'production'
     },
     // Configuración para despliegue estático
-    studioHost: 'electro-flor-admin'
+    studioHost: 'electro-flor-admin',
+    vite: {
+        base: '/admin/'
+    }
 })
