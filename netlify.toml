@@ -5,14 +5,20 @@
   publish = "dist"
   command = "npm run build"
 
-# Redirects para SPA (Single Page Application)
-# force = false significa que NO redirige si el archivo existe
+# Servir archivos estáticos del admin directamente (NO redirigir)
+[[redirects]]
+  from = "/admin/static/*"
+  to = "/admin/static/:splat"
+  status = 200
+
+# SPA fallback para rutas del admin
 [[redirects]]
   from = "/admin/*"
   to = "/admin/index.html"
   status = 200
   force = false
 
+# SPA fallback para el frontend
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -30,5 +36,10 @@
 # Cache de assets estáticos
 [[headers]]
   for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/admin/static/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
