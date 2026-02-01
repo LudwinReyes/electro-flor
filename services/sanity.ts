@@ -9,7 +9,7 @@ const API_VERSION = (import.meta as any).env?.VITE_SANITY_API_VERSION || '2024-0
 export const sanityClient = createClient({
   projectId: PROJECT_ID,
   dataset: DATASET,
-  useCdn: false, // Desactivar CDN temporalmente para evitar CORS
+  useCdn: true, // ✅ Activar CDN para usar peticiones cacheadas (1M gratis vs 250k)
   apiVersion: API_VERSION,
   perspective: 'published', // Solo obtener documentos publicados
   stega: {
@@ -26,59 +26,141 @@ const handleSanityError = (error: any, fallback: any = null) => {
   return fallback;
 };
 
+// ==================== SISTEMA DE CACHÉ ====================
+
+interface CacheEntry<T> {
+  data: T;
+  expiry: number;
+}
+
+/**
+ * Sistema de caché con sessionStorage para reducir peticiones a Sanity
+ * @param key - Clave única para identificar los datos
+ * @param fetchFn - Función que obtiene los datos de Sanity
+ * @param ttlMinutes - Tiempo de vida del caché en minutos (default: 10)
+ */
+const getCachedData = async <T>(
+  key: string,
+  fetchFn: () => Promise<T>,
+  ttlMinutes: number = 10
+): Promise<T> => {
+  const cacheKey = `sanity_cache_${key}`;
+
+  try {
+    const cached = sessionStorage.getItem(cacheKey);
+
+    if (cached) {
+      const { data, expiry }: CacheEntry<T> = JSON.parse(cached);
+      if (Date.now() < expiry) {
+        console.log(`📦 Cache HIT: ${key}`);
+        return data;
+      }
+      console.log(`⏰ Cache EXPIRED: ${key}`);
+    }
+  } catch (e) {
+    // Si hay error leyendo caché, continuar con fetch
+  }
+
+  console.log(`🔄 Fetching from Sanity: ${key}`);
+  const data = await fetchFn();
+
+  try {
+    sessionStorage.setItem(cacheKey, JSON.stringify({
+      data,
+      expiry: Date.now() + (ttlMinutes * 60 * 1000)
+    }));
+  } catch (e) {
+    // Si sessionStorage está lleno, limpiar caché viejo
+    clearOldCache();
+  }
+
+  return data;
+};
+
+/**
+ * Limpiar caché viejo cuando sessionStorage está lleno
+ */
+const clearOldCache = () => {
+  const keysToRemove: string[] = [];
+  for (let i = 0; i < sessionStorage.length; i++) {
+    const key = sessionStorage.key(i);
+    if (key?.startsWith('sanity_cache_')) {
+      keysToRemove.push(key);
+    }
+  }
+  keysToRemove.forEach(key => sessionStorage.removeItem(key));
+  console.log('🧹 Cache cleared');
+};
+
+/**
+ * Forzar recarga de datos (útil después de publicar en Sanity Studio)
+ */
+export const invalidateCache = (key?: string) => {
+  if (key) {
+    sessionStorage.removeItem(`sanity_cache_${key}`);
+  } else {
+    clearOldCache();
+  }
+};
+
+
 // ==================== PRODUCTOS ====================
 
 export const getProducts = async () => {
   if (!isSanityConfigured()) return null;
 
-  const query = `*[_type == "product"] | order(featured desc, name asc) {
-    _id,
-    name,
-    "slug": slug.current,
-    "brand": brand->name,
-    "brandSlug": brand->slug.current,
-    "category": category->name,
-    "categorySlug": category->slug.current,
-    "image": image.asset->url,
-    "images": images[].asset->url,
-    description,
-    shortDescription,
-    specifications,
-    featured,
-    displaySections,
-    "pdfFile": pdfFile.asset->url,
-    pdfUrl,
-    youtubeVideo
-  }`;
+  return getCachedData('products', async () => {
+    const query = `*[_type == "product"] | order(featured desc, name asc) {
+      _id,
+      name,
+      "slug": slug.current,
+      "brand": brand->name,
+      "brandSlug": brand->slug.current,
+      "category": category->name,
+      "categorySlug": category->slug.current,
+      "image": image.asset->url,
+      "images": images[].asset->url,
+      description,
+      shortDescription,
+      specifications,
+      featured,
+      displaySections,
+      "pdfFile": pdfFile.asset->url,
+      pdfUrl,
+      youtubeVideo
+    }`;
 
-  try {
-    return await sanityClient.fetch(query);
-  } catch (error) {
-    return handleSanityError(error);
-  }
+    try {
+      return await sanityClient.fetch(query);
+    } catch (error) {
+      return handleSanityError(error);
+    }
+  }, 5); // 5 minutos de caché para productos
 };
 
 // Obtener productos por sección (top_ventas, ultimo_ingreso, soluciones_destacadas)
 export const getProductsBySection = async (section: string) => {
   if (!isSanityConfigured()) return null;
 
-  const query = `*[_type == "product" && $section in displaySections] | order(_createdAt desc) {
-    _id,
-    name,
-    "slug": slug.current,
-    "brand": brand->name,
-    "category": category->name,
-    "image": image.asset->url,
-    description,
-    shortDescription,
-    featured
-  }`;
+  return getCachedData(`products_section_${section}`, async () => {
+    const query = `*[_type == "product" && $section in displaySections] | order(_createdAt desc) {
+      _id,
+      name,
+      "slug": slug.current,
+      "brand": brand->name,
+      "category": category->name,
+      "image": image.asset->url,
+      description,
+      shortDescription,
+      featured
+    }`;
 
-  try {
-    return await sanityClient.fetch(query, { section });
-  } catch (error) {
-    return handleSanityError(error);
-  }
+    try {
+      return await sanityClient.fetch(query, { section });
+    } catch (error) {
+      return handleSanityError(error);
+    }
+  }, 10); // 10 minutos de caché
 };
 
 export const getProductBySlug = async (slug: string) => {
@@ -110,6 +192,7 @@ export const getProductBySlug = async (slug: string) => {
     shortDescription,
     specifications,
     featured,
+    displaySections,
     "pdfFile": pdfFile.asset->url,
     pdfUrl,
     youtubeVideo
@@ -125,22 +208,24 @@ export const getProductBySlug = async (slug: string) => {
 export const getFeaturedProducts = async (limit: number = 8) => {
   if (!isSanityConfigured()) return null;
 
-  const query = `*[_type == "product" && featured == true][0...${limit}] | order(name asc) {
-    _id,
-    name,
-    "slug": slug.current,
-    "brand": brand->name,
-    "category": category->name,
-    "image": image.asset->url,
-    description,
-    featured
-  }`;
+  return getCachedData(`featured_products_${limit}`, async () => {
+    const query = `*[_type == "product" && featured == true][0...${limit}] | order(name asc) {
+      _id,
+      name,
+      "slug": slug.current,
+      "brand": brand->name,
+      "category": category->name,
+      "image": image.asset->url,
+      description,
+      featured
+    }`;
 
-  try {
-    return await sanityClient.fetch(query);
-  } catch (error) {
-    return handleSanityError(error);
-  }
+    try {
+      return await sanityClient.fetch(query);
+    } catch (error) {
+      return handleSanityError(error);
+    }
+  }, 10); // 10 minutos caché
 };
 
 // ==================== CATEGORÍAS ====================
@@ -148,23 +233,25 @@ export const getFeaturedProducts = async (limit: number = 8) => {
 export const getCategories = async () => {
   if (!isSanityConfigured()) return null;
 
-  const query = `*[_type == "category"] | order(order asc, name asc) {
-    _id,
-    name,
-    "slug": slug.current,
-    "image": image.asset->url,
-    description,
-    icon,
-    order,
-    featured,
-    "parentCategory": parentCategory->slug.current
-  }`;
+  return getCachedData('categories', async () => {
+    const query = `*[_type == "category"] | order(order asc, name asc) {
+      _id,
+      name,
+      "slug": slug.current,
+      "image": image.asset->url,
+      description,
+      icon,
+      order,
+      featured,
+      "parentCategory": parentCategory->slug.current
+    }`;
 
-  try {
-    return await sanityClient.fetch(query);
-  } catch (error) {
-    return handleSanityError(error);
-  }
+    try {
+      return await sanityClient.fetch(query);
+    } catch (error) {
+      return handleSanityError(error);
+    }
+  }, 30); // 30 minutos de caché para categorías (cambian poco)
 };
 
 export const getCategoryBySlug = async (slug: string) => {
@@ -198,19 +285,21 @@ export const getCategoryBySlug = async (slug: string) => {
 export const getBrands = async () => {
   if (!isSanityConfigured()) return null;
 
-  const query = `*[_type == "brand"] | order(name asc) {
-    _id,
-    name,
-    "slug": slug.current,
-    "logo": logo.asset->url,
-    description
-  }`;
+  return getCachedData('brands', async () => {
+    const query = `*[_type == "brand"] | order(name asc) {
+      _id,
+      name,
+      "slug": slug.current,
+      "logo": logo.asset->url,
+      description
+    }`;
 
-  try {
-    return await sanityClient.fetch(query);
-  } catch (error) {
-    return handleSanityError(error);
-  }
+    try {
+      return await sanityClient.fetch(query);
+    } catch (error) {
+      return handleSanityError(error);
+    }
+  }, 30); // 30 minutos de caché para marcas
 };
 
 export const getBrandBySlug = async (slug: string) => {
@@ -268,67 +357,73 @@ export const getProjects = async () => {
 export const getSiteSettings = async () => {
   if (!isSanityConfigured()) return null;
 
-  const query = `*[_type == "siteSettings"][0] {
-    siteName,
-    siteDescription,
-    "logo": logo.asset->url,
-    primaryColor,
-    secondaryColor,
-    phone,
-    whatsapp,
-    email,
-    address,
-    "facebook": socialMedia.facebook,
-    "instagram": socialMedia.instagram,
-    "linkedin": socialMedia.linkedin,
-    "schedule": businessHours
-  }`;
+  return getCachedData('siteSettings', async () => {
+    const query = `*[_type == "siteSettings"][0] {
+      siteName,
+      siteDescription,
+      "logo": logo.asset->url,
+      primaryColor,
+      secondaryColor,
+      phone,
+      whatsapp,
+      email,
+      address,
+      "facebook": socialMedia.facebook,
+      "instagram": socialMedia.instagram,
+      "linkedin": socialMedia.linkedin,
+      "schedule": businessHours
+    }`;
 
-  try {
-    const result = await sanityClient.fetch(query);
-    console.log('🔍 Query result from Sanity:', result);
-    return result;
-  } catch (error) {
-    console.error('❌ Error fetching site settings:', error);
-    return handleSanityError(error);
-  }
+    try {
+      const result = await sanityClient.fetch(query);
+      console.log('🔍 Query result from Sanity:', result);
+      return result;
+    } catch (error) {
+      console.error('❌ Error fetching site settings:', error);
+      return handleSanityError(error);
+    }
+  }, 60); // 60 minutos de caché para configuración (cambia muy poco)
 };
 
 export const getHeaderSettings = async () => {
   if (!isSanityConfigured()) return null;
 
-  const query = `*[_type == "headerSettings"][0] {
-    "logo": logo.asset->url,
-    brandName,
-    navigation,
-    urgencyBar
-  }`;
+  return getCachedData('headerSettings', async () => {
+    const query = `*[_type == "headerSettings"][0] {
+      "logo": logo.asset->url,
+      brandName,
+      navigation,
+      urgencyBar
+    }`;
 
-  try {
-    return await sanityClient.fetch(query);
-  } catch (error) {
-    return handleSanityError(error);
-  }
+    try {
+      return await sanityClient.fetch(query);
+    } catch (error) {
+      return handleSanityError(error);
+    }
+  }, 60); // 60 minutos de caché
 };
 
 export const getFooterSettings = async () => {
   if (!isSanityConfigured()) return null;
 
-  const query = `*[_type == "footerSettings"][0] {
-    "featuredCategories": featuredCategories[]-> {
-      _id,
-      name,
-      "slug": slug.current
-    },
-    institutionalLinks,
-    copyrightText
-  }`;
+  return getCachedData('footerSettings', async () => {
+    const query = `*[_type == "footerSettings"][0] {
+      "featuredCategories": featuredCategories[]-> {
+        _id,
+        name,
+        "slug": slug.current
+      },
+      institutionalLinks,
+      copyrightText
+    }`;
 
-  try {
-    return await sanityClient.fetch(query);
-  } catch (error) {
-    return handleSanityError(error);
-  }
+    try {
+      return await sanityClient.fetch(query);
+    } catch (error) {
+      return handleSanityError(error);
+    }
+  }, 60); // 60 minutos de caché
 };
 
 // ==================== PÁGINAS ====================
@@ -336,33 +431,60 @@ export const getFooterSettings = async () => {
 export const getHomePage = async () => {
   if (!isSanityConfigured()) return null;
 
-  const query = `*[_type == "homePage"][0] {
-    hero {
-      title,
-      subtitle,
-      ctaText,
-      ctaLink,
-      "backgroundImage": backgroundImage.asset->url
-    },
-    featuredProducts {
-      enabled,
-      title,
-      "products": products[]->{ 
-        _id, 
-        name, 
-        "slug": slug.current,
-        "brand": brand->name,
-        "image": image.asset->url 
-      }
-    },
-    categoriesSection,
-    projectsSection,
-    features,
-    seo
-  }`;
+  return getCachedData('homePage', async () => {
+    const query = `*[_type == "homePage"][0] {
+      hero {
+        title,
+        subtitle,
+        ctaText,
+        ctaLink,
+        "backgroundImage": backgroundImage.asset->url
+      },
+      featuredProducts {
+        enabled,
+        title,
+        "products": products[]->{ 
+          _id, 
+          name, 
+          "slug": slug.current,
+          "brand": brand->name,
+          "image": image.asset->url 
+        }
+      },
+      categoriesSection,
+      projectsSection,
+      features,
+      testimonials,
+      stats,
+      brandsSection
+    }`;
+
+    try {
+      return await sanityClient.fetch(query);
+    } catch (error) {
+      return handleSanityError(error);
+    }
+  }, 30); // 30 minutos de caché
+};
+
+export const getProjectBySlug = async (slug: string) => {
+  if (!isSanityConfigured()) return null;
+
+  const query = `*[_type == "project" && slug.current == $slug][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    type,
+    location,
+    "image": image.asset->url,
+    "gallery": gallery[].asset->url,
+    description,
+    client,
+    year
+  }`; // Removed 'seo' since it's causing issues if not defined
 
   try {
-    return await sanityClient.fetch(query);
+    return await sanityClient.fetch(query, { slug });
   } catch (error) {
     return handleSanityError(error);
   }
@@ -403,19 +525,21 @@ export const getAboutPage = async () => {
 export const getFAQs = async () => {
   if (!isSanityConfigured()) return null;
 
-  const query = `*[_type == "faqPage" && published == true] | order(order asc) {
-    _id,
-    question,
-    answer,
-    category,
-    order
-  }`;
+  return getCachedData('faqs', async () => {
+    const query = `*[_type == "faqPage" && published == true] | order(order asc) {
+      _id,
+      question,
+      answer,
+      category,
+      order
+    }`;
 
-  try {
-    return await sanityClient.fetch(query);
-  } catch (error) {
-    return handleSanityError(error);
-  }
+    try {
+      return await sanityClient.fetch(query);
+    } catch (error) {
+      return handleSanityError(error);
+    }
+  }, 30); // 30 minutos de caché para FAQs
 };
 
 export const getFAQsByCategory = async (category: string) => {
