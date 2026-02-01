@@ -5,7 +5,7 @@ import { PRODUCTS } from '../constants';
 import { getProductBySlug } from '../services/sanity';
 import { PortableText } from '@portabletext/react';
 import PDFViewer from './PDFViewer';
-import { Star, ChevronLeft, Mail, Facebook, Twitter, Linkedin, ChevronRight, PlayCircle, FileText, Image as ImageIcon, Search, Download, Share2, ExternalLink } from 'lucide-react';
+import { Star, ChevronLeft, Mail, Facebook, Twitter, Linkedin, ChevronRight, PlayCircle, FileText, Image as ImageIcon, Search, Download, Share2, ExternalLink, Plus } from 'lucide-react';
 import { BRAND_COLORS, CONTACT_INFO, SITE_MESSAGES } from '../config';
 import { useSiteConfig } from '../contexts/SiteConfigContext';
 
@@ -27,7 +27,11 @@ interface Product {
   youtubeVideo?: string;
 }
 
-const ProductDetail: React.FC = () => {
+interface Props {
+  onAddToQuote?: (product: any) => void;
+}
+
+const ProductDetail: React.FC<Props> = ({ onAddToQuote }) => {
   const { id } = useParams(); // id es realmente el slug
   const { siteSettings, contact } = useSiteConfig();
   const [product, setProduct] = useState<Product | null>(null);
@@ -233,6 +237,16 @@ const ProductDetail: React.FC = () => {
               </h3>
 
               <div className="flex flex-col gap-4">
+                <button
+                  onClick={() => onAddToQuote?.(product)}
+                  className="bg-white border-2 border-[#002D62] text-[#002D62] px-8 py-5 rounded-2xl flex items-center justify-center gap-4 font-black uppercase text-xs hover:bg-[#002D62] hover:text-white transition-all shadow-sm group"
+                >
+                  <Plus size={24} className="text-[#8CC63F] group-hover:text-white transition-colors" />
+                  <div className="flex flex-col items-start leading-none">
+                    <span className="text-[8px] opacity-70 mb-1">AGREGAR A MI LISTA</span>
+                    <span className="text-sm md:text-base">COTIZAR VARIOS PRODUCTOS</span>
+                  </div>
+                </button>
                 <a href={whatsappUrl} target="_blank" className="bg-[#25D366] text-white px-8 py-5 rounded-2xl flex items-center justify-center gap-4 font-black uppercase text-xs hover:opacity-90 transition-all shadow-lg shadow-green-500/10">
                   <i className="fab fa-whatsapp text-2xl"></i>
                   <div className="flex flex-col items-start leading-none">

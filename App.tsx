@@ -224,15 +224,19 @@ const App: React.FC = () => {
   }, []);
 
   const addToQuote = (product: Product) => {
+    // Asegurar que usamos el ID correcto (Sanity usa _id)
+    const productId = product._id || product.id;
+
     setQuoteItems(prev => {
-      if (prev.find(item => item.id === product.id)) return prev;
+      // Verificar si ya existe usando el ID correcto
+      if (prev.find(item => (item._id || item.id) === productId)) return prev;
       return [...prev, product];
     });
     setIsQuoteOpen(true);
   };
 
   const removeFromQuote = (id: string) => {
-    setQuoteItems(prev => prev.filter(item => item.id !== id));
+    setQuoteItems(prev => prev.filter(item => (item._id || item.id) !== id));
   };
 
   const handleSearch = (query: string) => {
@@ -299,9 +303,9 @@ const App: React.FC = () => {
                 promoBanner={promoBanner}
               />
             } />
-            <Route path="/productos" element={<ProductsPage />} />
+            <Route path="/productos" element={<ProductsPage onAddToQuote={addToQuote} />} />
             <Route path="/marcas" element={<BrandsPage />} />
-            <Route path="/producto/:id" element={<ProductDetail />} />
+            <Route path="/producto/:id" element={<ProductDetail onAddToQuote={addToQuote} />} />
             <Route path="/nosotros" element={<AboutUsPage />} />
             <Route path="/contacto" element={<ContactPage />} />
             <Route path="/faq" element={<FaqPage />} />

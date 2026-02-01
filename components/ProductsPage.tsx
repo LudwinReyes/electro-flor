@@ -8,8 +8,16 @@ import { Product } from '../types';
 import { BRAND_COLORS } from '../config';
 import { getProducts, getCategories, getBrands } from '../services/sanity';
 
-const ProductsPage: React.FC = () => {
+
+interface Props {
+  onAddToQuote?: (product: Product) => void;
+}
+
+const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
   const [searchParams, setSearchParams] = useSearchParams();
+  // ... (resto del código igual)
+  // Asegurarse de pasar onAddToQuote al renderizar ProductCard más abajo
+
   const searchUrl = searchParams.get('search') || '';
   const categoryUrl = searchParams.get('category') || '';
   const brandUrl = searchParams.get('brand') || '';
@@ -236,7 +244,7 @@ const ProductsPage: React.FC = () => {
           ) : filteredProducts.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 md:gap-8">
               {filteredProducts.map((product: any) => (
-                <ProductCard key={product._id || product.id} product={product} />
+                <ProductCard key={product._id || product.id} product={product} onAddToQuote={onAddToQuote} />
               ))}
             </div>
           ) : (

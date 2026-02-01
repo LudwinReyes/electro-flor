@@ -15,14 +15,14 @@ interface Props {
 const QuoteCart: React.FC<Props> = ({ isOpen, onClose, items, onRemove, onClear }) => {
   const sendQuote = () => {
     if (items.length === 0) return;
-    
+
     // Construcción del mensaje con saltos de línea claros
     let message = `${SITE_MESSAGES.whatsapp.bulkQuote}\n\n`;
     items.forEach((item, index) => {
       message += `${index + 1}. ${item.name}\n`;
     });
     message += "\nSolicito precios por volumen y tiempos de entrega. Gracias.";
-    
+
     const url = `${CONTACT_INFO.phone.whatsapp}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
   };
@@ -32,7 +32,7 @@ const QuoteCart: React.FC<Props> = ({ isOpen, onClose, items, onRemove, onClear 
   return (
     <div className="fixed inset-0 z-[100] flex justify-end">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose}></div>
-      
+
       <div className="relative w-full max-w-md bg-white h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
         <div className={`bg-[${BRAND_COLORS.primary}] p-6 text-white flex justify-between items-center border-b-4 border-[${BRAND_COLORS.secondary}]`}>
           <div>
@@ -52,7 +52,7 @@ const QuoteCart: React.FC<Props> = ({ isOpen, onClose, items, onRemove, onClear 
             </div>
           ) : (
             items.map(item => (
-              <div key={item.id} className="flex gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-100 group">
+              <div key={item._id || item.id} className="flex gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-100 group">
                 <div className="w-16 h-16 bg-white rounded-xl p-2 flex-shrink-0">
                   <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
                 </div>
@@ -60,8 +60,8 @@ const QuoteCart: React.FC<Props> = ({ isOpen, onClose, items, onRemove, onClear 
                   <h4 className={`text-[11px] font-black text-[${BRAND_COLORS.primary}] uppercase leading-tight line-clamp-2`}>{item.name}</h4>
                   <p className="text-[9px] font-bold text-gray-400 mt-1 uppercase">Marca: {item.brand}</p>
                 </div>
-                <button 
-                  onClick={() => onRemove(item.id)}
+                <button
+                  onClick={() => onRemove(item._id || item.id)}
                   className="text-gray-300 hover:text-red-500 transition-colors"
                 >
                   <Trash2 size={18} />
@@ -77,15 +77,15 @@ const QuoteCart: React.FC<Props> = ({ isOpen, onClose, items, onRemove, onClear 
               <span className={`text-xs font-black text-[${BRAND_COLORS.primary}] uppercase`}>Total Productos:</span>
               <span className={`text-lg font-black text-[${BRAND_COLORS.secondary}]`}>{items.length}</span>
             </div>
-            
-            <button 
+
+            <button
               onClick={sendQuote}
               className={`w-full bg-[${BRAND_COLORS.success}] text-white py-4 rounded-2xl font-black uppercase text-xs flex items-center justify-center gap-3 shadow-xl hover:scale-[1.02] active:scale-95 transition-all`}
             >
               <i className="fab fa-whatsapp text-2xl"></i> Enviar Lista por WhatsApp
             </button>
-            
-            <button 
+
+            <button
               onClick={onClear}
               className="w-full text-[10px] font-black text-gray-400 hover:text-red-500 uppercase tracking-widest transition-colors"
             >
