@@ -6,6 +6,7 @@ import { CATEGORIES } from '../constants';
 import { Product } from '../types';
 import { BRAND_COLORS, CONTACT_INFO } from '../config';
 import { useSiteConfig } from '../contexts/SiteConfigContext';
+import { getCategories } from '../services/sanity';
 
 interface Props {
   quoteCount: number;
@@ -23,9 +24,22 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState<Product[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [sanityCategories, setSanityCategories] = useState<any[]>([]);
   const searchRef = useRef<HTMLDivElement>(null);
   const categoryMenuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  // Cargar categorías desde Sanity
+  useEffect(() => {
+    getCategories().then(cats => {
+      if (cats && cats.length > 0) {
+        setSanityCategories(cats);
+      }
+    });
+  }, []);
+
+  // Usar categorías de Sanity si existen, sino usar hardcodeadas
+  const categories = sanityCategories.length > 0 ? sanityCategories : CATEGORIES;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -130,7 +144,7 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
                 <div className="px-6 mb-2 border-b border-gray-50 pb-2">
                   <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Nuestras Líneas</p>
                 </div>
-                {CATEGORIES.map((cat) => (
+                {categories.filter((cat: any) => !cat.parentCategory).map((cat: any) => (
                   <Link
                     key={cat.slug}
                     to={`/productos?category=${encodeURIComponent(cat.name)}`}
@@ -138,7 +152,7 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
                     className={`flex items-center justify-between px-6 py-3 hover:bg-[${BRAND_COLORS.secondaryOpacity[10]}] text-[${BRAND_COLORS.primary}] transition-colors group`}
                   >
                     <div className="flex items-center gap-3">
-                      <i className={`fas ${cat.icon} text-[${BRAND_COLORS.secondary}] group-hover:scale-110 transition-transform w-5 text-center`}></i>
+                      <i className={`fas ${cat.icon || 'fa-folder'} text-[${BRAND_COLORS.secondary}] group-hover:scale-110 transition-transform w-5 text-center`}></i>
                       <span className="text-[11px] font-black uppercase tracking-tight">{cat.name}</span>
                     </div>
                     <ArrowUpRight size={14} className={`text-gray-200 group-hover:text-[${BRAND_COLORS.secondary}] transition-colors`} />
@@ -238,14 +252,14 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
             <div className={`flex flex-col gap-6 font-black uppercase text-[11px] tracking-widest text-[${BRAND_COLORS.primary}]`}>
               <div className="space-y-4">
                 <p className={`text-[9px] font-black text-[${BRAND_COLORS.secondary}] border-b border-gray-50 pb-1`}>PRODUCTOS</p>
-                {CATEGORIES.map(cat => (
+                {categories.filter((cat: any) => !cat.parentCategory).map((cat: any) => (
                   <Link
                     key={cat.slug}
                     to={`/productos?category=${encodeURIComponent(cat.name)}`}
                     onClick={() => setIsMenuOpen(false)}
                     className={`flex items-center gap-3 hover:text-[${BRAND_COLORS.secondary}]`}
                   >
-                    <i className={`fas ${cat.icon} text-[${BRAND_COLORS.secondary}] w-4`}></i> {cat.name}
+                    <i className={`fas ${cat.icon || 'fa-folder'} text-[${BRAND_COLORS.secondary}] w-4`}></i> {cat.name}
                   </Link>
                 ))}
               </div>

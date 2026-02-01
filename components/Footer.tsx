@@ -178,19 +178,15 @@ const Footer: React.FC = () => {
             {(siteSettings.facebook || contact.social.facebook) && (
               <a href={siteSettings.facebook || contact.social.facebook} target="_blank" rel="noopener noreferrer" className="text-white p-3.5 rounded-2xl transition-all" style={{ backgroundColor: colors.primary }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = colors.secondary} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = colors.primary}><Facebook size={20} /></a>
             )}
-            {(siteSettings.instagram || contact.social.instagram) && (
-              <a href={siteSettings.instagram || contact.social.instagram} target="_blank" rel="noopener noreferrer" className="text-white p-3.5 rounded-2xl transition-all" style={{ backgroundColor: colors.primary }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = colors.secondary} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = colors.primary}><Instagram size={20} /></a>
-            )}
-            {(siteSettings.linkedin || contact.social.linkedin) && (
-              <a href={siteSettings.linkedin || contact.social.linkedin} target="_blank" rel="noopener noreferrer" className="text-white p-3.5 rounded-2xl transition-all" style={{ backgroundColor: colors.primary }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = colors.secondary} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = colors.primary}><Linkedin size={20} /></a>
-            )}
           </div>
         </div>
       </div>
 
       <div className={`bg-[${colors.primary}] py-8`}>
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-[10px] font-bold text-white/50 uppercase tracking-[0.2em]">ELECTRO FLOR PERÚ © 2024 - LA FUERZA DE TU CONSTRUCCIÓN</p>
+          <p className="text-[10px] font-bold text-white/50 uppercase tracking-[0.2em]">
+            ELECTRO FLOR PERÚ © 2024 Desarrollado por LR Digital Solutions
+          </p>
         </div>
       </div>
     </footer>

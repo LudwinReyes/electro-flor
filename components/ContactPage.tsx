@@ -223,15 +223,30 @@ const ContactPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Mapa Simulado */}
+      {/* Mapa Real de Google Maps */}
       <section className="max-w-7xl mx-auto px-4 mt-20">
-        <div className="bg-gray-200 h-96 rounded-[3rem] overflow-hidden relative border-8 border-white shadow-2xl">
-          <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5ce?auto=format&fit=crop&q=80&w=1600" className="w-full h-full object-cover opacity-60 grayscale" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-2xl shadow-2xl border-4 border-[#8CC63F] text-center">
-              <MapPin className="mx-auto text-[#002D62] mb-2" size={32} />
-              <p className="font-black text-[#002D62] uppercase text-xs">Visítanos en nuestra sede central</p>
-              <p className="text-[10px] font-bold text-gray-400 uppercase">AV. ARGENTINA 245 - LIMA</p>
+        <div className="bg-white rounded-[3rem] overflow-hidden border-8 border-white shadow-2xl">
+          <div className="relative">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d975.5082548834!2d-77.04490407006182!3d-12.044196254288837!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c5f0866f76d7%3A0x8c8c8c8c8c8c8c8c!2sCentro%20Comercial%20Nicolini!5e0!3m2!1ses!2spe!4v1706729000000!5m2!1ses!2spe"
+              width="100%"
+              height="400"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="w-full"
+            ></iframe>
+            <div className="absolute bottom-4 left-4 bg-white p-4 rounded-2xl shadow-xl border-2 border-[#8CC63F]">
+              <div className="flex items-center gap-3">
+                <div className="bg-[#8CC63F] p-3 rounded-xl">
+                  <MapPin className="text-[#002D62]" size={24} />
+                </div>
+                <div>
+                  <p className="font-black text-[#002D62] uppercase text-xs">Centro Comercial Nicolini</p>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase">Av. Argentina 245, Pasaje 2, Puesto AR12</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
