@@ -233,7 +233,7 @@ export const getFeaturedProducts = async (limit: number = 8) => {
 export const getCategories = async () => {
   if (!isSanityConfigured()) return null;
 
-  return getCachedData('categories', async () => {
+  return getCachedData('categories_v2', async () => {
     const query = `*[_type == "category"] | order(order asc, name asc) {
       _id,
       name,

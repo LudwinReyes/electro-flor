@@ -259,7 +259,7 @@ const ProductDetail: React.FC<Props> = ({ onAddToQuote }) => {
                   <Mail size={24} />
                   <div className="flex flex-col items-start leading-none">
                     <span className="text-[8px] opacity-90 mb-1">ESCRÍBENOS:</span>
-                    <span className="text-sm md:text-base">VENTAS@ELECTROFLOR.COM.PE</span>
+                    <span className="text-sm md:text-base uppercase">{siteSettings.email || (typeof contact.email === 'string' ? contact.email : contact.email.sales)}</span>
                   </div>
                 </a>
               </div>

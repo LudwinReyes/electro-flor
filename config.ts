@@ -24,11 +24,11 @@ export const SEO_CONFIG = {
  */
 export const CONTACT_INFO = {
   phone: {
-    display: '999 000 000',
-    full: '51999000000',
-    formatted: '+51 999 000 000',
-    link: 'tel:51999000000',
-    whatsapp: 'https://wa.me/51999000000'
+    display: '948 198 701',
+    full: '51948198701',
+    formatted: '+51 948 198 701',
+    link: 'tel:51948198701',
+    whatsapp: 'https://wa.me/51948198701'
   },
   email: {
     sales: 'ventas@electroflor.com.pe',
@@ -134,7 +134,7 @@ export const BRAND_COLORS = {
   // Colores principales
   primary: '#002D62',      // Azul oscuro
   secondary: '#8CC63F',    // Verde lima
-  
+
   // Variaciones de primary
   primaryLight: '#003d82',
   primaryDark: '#001d42',
@@ -144,7 +144,7 @@ export const BRAND_COLORS = {
     20: 'rgba(0, 45, 98, 0.2)',
     90: 'rgba(0, 45, 98, 0.9)',
   },
-  
+
   // Variaciones de secondary
   secondaryLight: '#a3e04a',
   secondaryDark: '#7ab32e',
@@ -154,13 +154,13 @@ export const BRAND_COLORS = {
     20: 'rgba(140, 198, 63, 0.2)',
     30: 'rgba(140, 198, 63, 0.3)',
   },
-  
+
   // Colores de estado
   success: '#25d366',      // WhatsApp green
   error: '#ef4444',
   warning: '#f59e0b',
   info: '#3b82f6',
-  
+
   // Colores neutrales
   white: '#ffffff',
   black: '#000000',
@@ -176,7 +176,7 @@ export const BRAND_COLORS = {
     800: '#1f2937',
     900: '#111827',
   },
-  
+
   // Colores de fondo
   background: {
     main: '#fcfdfd',
