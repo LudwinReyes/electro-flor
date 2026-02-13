@@ -8,6 +8,9 @@ import PDFViewer from './PDFViewer';
 import { Star, ChevronLeft, Mail, Facebook, Twitter, Linkedin, ChevronRight, PlayCircle, FileText, Image as ImageIcon, Search, Download, Share2, ExternalLink, Plus } from 'lucide-react';
 import { BRAND_COLORS, CONTACT_INFO, SITE_MESSAGES } from '../config';
 import { useSiteConfig } from '../contexts/SiteConfigContext';
+import SEOHead from './SEOHead';
+import { Helmet } from 'react-helmet-async';
+import { optimizeImage, optimizeImages } from '../utils/optimizeImage';
 
 interface Product {
   id?: string;
@@ -95,6 +98,7 @@ const ProductDetail: React.FC<Props> = ({ onAddToQuote }) => {
 
   /* Logic updated to ensure main image is always selectable */
   const thumbnails = product.images ? [product.image, ...product.images.filter(img => img !== product.image)] : [product.image];
+  const optimizedThumbnails = optimizeImages(thumbnails, 1200);
 
   // Normalizar especificaciones: convertir array de Sanity a objeto
   const normalizedSpecs: Record<string, string> = Array.isArray(product.specifications)
@@ -128,8 +132,53 @@ const ProductDetail: React.FC<Props> = ({ onAddToQuote }) => {
     setZoomStyle({ display: 'none', transformOrigin: '0% 0%' });
   };
 
+  // Extraer texto plano para description SEO
+  const seoDescription = (() => {
+    if (product.shortDescription) return product.shortDescription;
+    if (typeof product.description === 'string') return product.description.slice(0, 160);
+    if (Array.isArray(product.description)) {
+      return product.description
+        .filter((b: any) => b._type === 'block')
+        .map((b: any) => b.children?.map((c: any) => c.text).join(''))
+        .join(' ')
+        .slice(0, 160);
+    }
+    return `${product.name} - ${product.brand}. Disponible con stock garantizado en ELECTRO FLOR.`;
+  })();
+
   return (
     <div className="bg-white pb-20 relative font-sans">
+      <SEOHead
+        title={`${product.name} - ${product.brand}`}
+        description={seoDescription}
+        image={product.image}
+        url={`/producto/${product.slug || id}`}
+        type="product"
+      />
+      {/* Product JSON-LD Structured Data */}
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": product.name,
+          "image": product.image,
+          "description": seoDescription,
+          "brand": {
+            "@type": "Brand",
+            "name": product.brand
+          },
+          "category": product.category,
+          "sku": product.code || product.slug || '',
+          "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+            "seller": {
+              "@type": "Organization",
+              "name": "ELECTRO FLOR"
+            }
+          }
+        })}</script>
+      </Helmet>
       {/* Breadcrumbs - Verde (Captura) */}
       <div className="bg-[#8CC63F] py-2">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
@@ -157,8 +206,10 @@ const ProductDetail: React.FC<Props> = ({ onAddToQuote }) => {
               onMouseLeave={handleMouseLeave}
             >
               <img
-                src={selectedImage}
+                src={optimizeImage(selectedImage, 1200)}
                 alt={product.name}
+                width={600}
+                height={450}
                 className="max-w-[75%] h-auto object-contain transition-transform duration-200"
                 style={zoomStyle.display === 'block' ? { transform: 'scale(2)', transformOrigin: zoomStyle.transformOrigin } : {}}
               />
@@ -181,7 +232,7 @@ const ProductDetail: React.FC<Props> = ({ onAddToQuote }) => {
                   onClick={() => setSelectedImage(img)}
                   className={`w-20 h-20 md:w-24 md:h-24 shrink-0 rounded-lg border-2 p-1.5 transition-all bg-white ${selectedImage === img ? 'border-[#8CC63F]' : 'border-gray-100'}`}
                 >
-                  <img src={img} alt={`Vista ${idx}`} className="w-full h-full object-contain" />
+                  <img src={optimizeImage(img, 400)} alt={`Vista ${idx + 1} de ${product.name}`} loading="lazy" decoding="async" width={96} height={96} className="w-full h-full object-contain" />
                 </button>
               ))}
             </div>
@@ -220,7 +271,7 @@ const ProductDetail: React.FC<Props> = ({ onAddToQuote }) => {
             {(product.pdfFile || product.pdfUrl) && (
               <div className="flex flex-wrap gap-4 mb-12">
                 <a
-                  href={`/#/ficha-tecnica/${product.slug}`}
+                  href={`/ficha-tecnica/${product.slug}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-gray-100 text-[#002D62] px-6 py-3 rounded-xl flex items-center gap-3 font-black uppercase text-[10px] tracking-widest hover:bg-gray-200 transition-all border border-gray-200"

@@ -7,6 +7,7 @@ import { Product } from '../types';
 import { BRAND_COLORS, CONTACT_INFO } from '../config';
 import { useSiteConfig } from '../contexts/SiteConfigContext';
 import { getCategories } from '../services/sanity';
+import { optimizeImage } from '../utils/optimizeImage';
 
 interface Props {
   quoteCount: number;
@@ -94,15 +95,12 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
             <button onClick={onOpenCalc} className="flex items-center gap-1.5 hover:text-white transition group" style={{ color: colors.secondary }}>
               <Calculator size={14} /> Calculadora
             </button>
-            <button onClick={onOpenPriceList} className="flex items-center gap-1.5 text-white bg-white/10 px-3 py-1 rounded-lg transition group hover:text-white" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = colors.secondary; e.currentTarget.style.color = colors.primary; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'white'; }}>
-              <LayoutList size={14} style={{ color: colors.secondary }} /> Lista Pro
-            </button>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-3 md:py-4 flex items-center justify-between gap-2 md:gap-4">
-        <button className="lg:hidden p-2" style={{ color: colors.primary }} onClick={() => setIsMenuOpen(true)}>
+        <button aria-label="Abrir menú de navegación" className="lg:hidden p-2" style={{ color: colors.primary }} onClick={() => setIsMenuOpen(true)}>
           <Menu size={28} />
         </button>
 
@@ -110,13 +108,15 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
           {/* Logo: usa siteSettings.logo si existe, sino muestra icono de fallback */}
           {siteSettings.logo ? (
             <img
-              src={siteSettings.logo}
+              src={optimizeImage(siteSettings.logo, 400)}
               alt={siteSettings.siteName || 'ELECTRO FLOR'}
+              width={180}
+              height={56}
               className="h-10 md:h-14 w-auto object-contain"
             />
           ) : (
             <>
-              <div className="p-1.5 md:p-2 rounded-lg" style={{ backgroundColor: colors.primary }}>
+              <div className="h-10 md:h-14 flex items-center justify-center p-1.5 md:p-2 rounded-lg" style={{ backgroundColor: colors.primary }}>
                 <i className="fas fa-hammer text-lg md:text-2xl" style={{ color: colors.secondary }}></i>
               </div>
               <div className="flex flex-col hidden xs:flex">
@@ -173,7 +173,7 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
                 onFocus={() => searchQuery.length > 1 && setShowSuggestions(true)}
                 className={`w-full border-2 border-gray-100 rounded-full py-2.5 px-6 focus:outline-none focus:border-[${BRAND_COLORS.secondary}] bg-gray-50 text-xs font-medium transition-all`}
               />
-              <button type="submit" className={`absolute right-1.5 top-1/2 -translate-y-1/2 bg-[${BRAND_COLORS.primary}] text-white p-2 rounded-full hover:bg-blue-900 transition-colors`}>
+              <button type="submit" aria-label="Buscar productos" className={`absolute right-1.5 top-1/2 -translate-y-1/2 bg-[${BRAND_COLORS.primary}] text-white p-2 rounded-full hover:bg-blue-900 transition-colors`}>
                 <Search size={16} className={`text-[${BRAND_COLORS.secondary}]`} />
               </button>
             </form>
@@ -209,6 +209,7 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
         <div className="flex items-center gap-1.5 md:gap-4">
           <button
             onClick={onOpenQuote}
+            aria-label={`Ver lista de cotización${quoteCount > 0 ? ` (${quoteCount} productos)` : ''}`}
             className={`relative p-2 md:p-2.5 bg-gray-50 text-[${BRAND_COLORS.primary}] rounded-xl hover:bg-[${BRAND_COLORS.secondary}] transition-all`}
           >
             <FileText size={22} />
@@ -246,7 +247,7 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
                 <div className={`bg-[${BRAND_COLORS.primary}] p-1.5 rounded-lg`}><i className={`fas fa-hammer text-[${BRAND_COLORS.secondary}]`}></i></div>
                 <span className={`text-[${BRAND_COLORS.primary}] font-black text-xl uppercase tracking-tighter`}>ELECTRO FLOR</span>
               </div>
-              <button onClick={() => setIsMenuOpen(false)} className="text-gray-400"><X size={28} /></button>
+              <button onClick={() => setIsMenuOpen(false)} aria-label="Cerrar menú" className="text-gray-400"><X size={28} /></button>
             </div>
 
             <div className={`flex flex-col gap-6 font-black uppercase text-[11px] tracking-widest text-[${BRAND_COLORS.primary}]`}>

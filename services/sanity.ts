@@ -44,7 +44,7 @@ const getCachedData = async <T>(
   fetchFn: () => Promise<T>,
   ttlMinutes: number = 10
 ): Promise<T> => {
-  const cacheKey = `sanity_cache_${key}`;
+  const cacheKey = `sanity_cache_v2_${key}`;
 
   try {
     const cached = sessionStorage.getItem(cacheKey);
@@ -64,14 +64,16 @@ const getCachedData = async <T>(
   console.log(`🔄 Fetching from Sanity: ${key}`);
   const data = await fetchFn();
 
-  try {
-    sessionStorage.setItem(cacheKey, JSON.stringify({
-      data,
-      expiry: Date.now() + (ttlMinutes * 60 * 1000)
-    }));
-  } catch (e) {
-    // Si sessionStorage está lleno, limpiar caché viejo
-    clearOldCache();
+  if (data !== null && data !== undefined) {
+    try {
+      sessionStorage.setItem(cacheKey, JSON.stringify({
+        data,
+        expiry: Date.now() + (ttlMinutes * 60 * 1000)
+      }));
+    } catch (e) {
+      // Si sessionStorage está lleno, limpiar caché viejo
+      clearOldCache();
+    }
   }
 
   return data;

@@ -4,6 +4,7 @@ import { Product } from '../types';
 import { Star, Plus, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { BRAND_COLORS, CONTACT_INFO, SITE_MESSAGES } from '../config';
+import { optimizeImage } from '../utils/optimizeImage';
 
 interface Props {
   product: Product;
@@ -30,8 +31,12 @@ const ProductCard: React.FC<Props> = ({ product, onAddToQuote }) => {
       <div className="relative h-52 md:h-64 flex items-center justify-center bg-gradient-to-b from-gray-50 to-white mb-4 w-full rounded-2xl overflow-hidden">
         <Link to={`/producto/${product.slug || product.id}`} className="w-full h-full flex items-center justify-center p-2">
           <img
-            src={product.image}
+            src={optimizeImage(product.image, 600)}
             alt={product.name}
+            loading="lazy"
+            decoding="async"
+            width={300}
+            height={300}
             className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
           />
         </Link>
@@ -76,6 +81,7 @@ const ProductCard: React.FC<Props> = ({ product, onAddToQuote }) => {
                 e.preventDefault();
                 onAddToQuote?.(product);
               }}
+              aria-label={`Agregar ${product.name} a la cotización`}
               className={`w-12 bg-[${BRAND_COLORS.primary}] text-[${BRAND_COLORS.secondary}] rounded-2xl flex items-center justify-center hover:bg-blue-950 transition-all shadow-sm group/btn`}
             >
               <Plus size={24} className="group-hover/btn:scale-110 transition-transform" />

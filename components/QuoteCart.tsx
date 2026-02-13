@@ -39,7 +39,7 @@ const QuoteCart: React.FC<Props> = ({ isOpen, onClose, items, onRemove, onClear 
             <h2 className="text-xl font-black uppercase tracking-tighter">Lista de Cotización</h2>
             <p className={`text-[10px] font-bold text-[${BRAND_COLORS.secondary}] uppercase tracking-widest`}>Solicitud de Volumen Pro</p>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition">
+          <button onClick={onClose} aria-label="Cerrar lista de cotización" className="p-2 hover:bg-white/10 rounded-full transition">
             <X size={24} />
           </button>
         </div>
@@ -54,7 +54,7 @@ const QuoteCart: React.FC<Props> = ({ isOpen, onClose, items, onRemove, onClear 
             items.map(item => (
               <div key={item._id || item.id} className="flex gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-100 group">
                 <div className="w-16 h-16 bg-white rounded-xl p-2 flex-shrink-0">
-                  <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
+                  <img src={item.image} alt={item.name} loading="lazy" width={64} height={64} className="w-full h-full object-contain" />
                 </div>
                 <div className="flex-grow">
                   <h4 className={`text-[11px] font-black text-[${BRAND_COLORS.primary}] uppercase leading-tight line-clamp-2`}>{item.name}</h4>
@@ -62,6 +62,7 @@ const QuoteCart: React.FC<Props> = ({ isOpen, onClose, items, onRemove, onClear 
                 </div>
                 <button
                   onClick={() => onRemove(item._id || item.id)}
+                  aria-label={`Eliminar ${item.name} de la lista`}
                   className="text-gray-300 hover:text-red-500 transition-colors"
                 >
                   <Trash2 size={18} />

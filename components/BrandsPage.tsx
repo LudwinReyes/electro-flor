@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Building2, ArrowRight, Sparkles } from 'lucide-react';
 import { getBrands } from '../services/sanity';
 import { useSiteConfig } from '../contexts/SiteConfigContext';
+import SEOHead from './SEOHead';
+import { optimizeImage } from '../utils/optimizeImage';
 
 interface Brand {
     _id: string;
@@ -49,6 +51,11 @@ const BrandsPage: React.FC = () => {
 
     return (
         <div className="min-h-screen" style={{ backgroundColor: '#f8fafc' }}>
+            <SEOHead
+                title="Nuestras Marcas - Distribuidores Autorizados"
+                description="Distribuidores autorizados de las mejores marcas de material eléctrico: Bosch, Schneider Electric, Philips, Donilux, Daxso y más. Garantía oficial en Lima, Perú."
+                url="/marcas"
+            />
             {/* Hero Section */}
             <div
                 className="relative py-20 overflow-hidden"
@@ -110,8 +117,12 @@ const BrandsPage: React.FC = () => {
                             <div className="relative z-10 w-full h-20 flex items-center justify-center mb-4">
                                 {brand.logo ? (
                                     <img
-                                        src={brand.logo}
+                                        src={optimizeImage(brand.logo, 300)}
                                         alt={brand.name}
+                                        loading="lazy"
+                                        decoding="async"
+                                        width={160}
+                                        height={80}
                                         className="max-h-full max-w-full object-contain group-hover:scale-105 transition-all duration-300"
                                     />
                                 ) : (

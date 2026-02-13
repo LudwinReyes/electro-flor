@@ -5,6 +5,7 @@ import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin, ArrowRight, Constru
 import { BRAND_COLORS, CONTACT_INFO } from '../config';
 import { useSiteConfig } from '../contexts/SiteConfigContext';
 import { saveLead, getProgramaEspecialista } from '../services/sanity';
+import { optimizeImage } from '../utils/optimizeImage';
 
 const Footer: React.FC = () => {
   const { siteSettings, footerSettings, colors, contact } = useSiteConfig();
@@ -135,8 +136,12 @@ const Footer: React.FC = () => {
             {/* Logo: usa siteSettings.logo si existe */}
             {siteSettings.logo ? (
               <img
-                src={siteSettings.logo}
+                src={optimizeImage(siteSettings.logo, 300)}
                 alt={siteSettings.siteName || 'ELECTRO FLOR'}
+                loading="lazy"
+                decoding="async"
+                width={150}
+                height={48}
                 className="h-12 w-auto object-contain"
               />
             ) : (
@@ -176,7 +181,7 @@ const Footer: React.FC = () => {
           </div>
           <div className="flex gap-3">
             {(siteSettings.facebook || contact.social.facebook) && (
-              <a href={siteSettings.facebook || contact.social.facebook} target="_blank" rel="noopener noreferrer" className="text-white p-3.5 rounded-2xl transition-all" style={{ backgroundColor: colors.primary }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = colors.secondary} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = colors.primary}><Facebook size={20} /></a>
+              <a href={siteSettings.facebook || contact.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Visitar Facebook de Electro Flor" className="text-white p-3.5 rounded-2xl transition-all" style={{ backgroundColor: colors.primary }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = colors.secondary} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = colors.primary}><Facebook size={20} /></a>
             )}
           </div>
         </div>

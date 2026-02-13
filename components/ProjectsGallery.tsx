@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { LayoutGrid, MapPin, Building } from 'lucide-react';
 import { BRAND_COLORS } from '../config';
 import { getProjects } from '../services/sanity';
+import { optimizeImage } from '../utils/optimizeImage';
 
 interface Project {
   _id?: string;
@@ -76,8 +77,12 @@ const ProjectsGallery: React.FC = () => {
             >
               {/* Imagen con zoom sutil */}
               <img
-                src={proj.image}
+                src={optimizeImage(proj.image, 800)}
                 alt={proj.title}
+                loading="lazy"
+                decoding="async"
+                width={800}
+                height={600}
                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
               />
 

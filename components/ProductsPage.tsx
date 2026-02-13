@@ -7,6 +7,7 @@ import ProductCard from './ProductCard';
 import { Product } from '../types';
 import { BRAND_COLORS } from '../config';
 import { getProducts, getCategories, getBrands } from '../services/sanity';
+import SEOHead from './SEOHead';
 
 
 interface Props {
@@ -136,30 +137,60 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
         </h3>
         <div className="grid grid-cols-1 gap-2">
           {/* Categorías principales (sin parentCategory) */}
-          {categories.filter((cat: any) => !cat.parentCategory).map((parentCat: any) => (
-            <div key={parentCat.slug}>
-              <button
-                onClick={() => setActiveCategory(parentCat.name === activeCategory ? null : parentCat.name)}
-                className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-black uppercase transition-all flex justify-between items-center border ${activeCategory === parentCat.name ? `bg-[${BRAND_COLORS.secondary}] text-[${BRAND_COLORS.primary}] border-[${BRAND_COLORS.secondary}]` : 'text-gray-500 bg-gray-50 border-transparent hover:border-gray-200'}`}
-              >
-                {parentCat.name}
-                {activeCategory === parentCat.name && <Check size={14} />}
-              </button>
-              {/* Subcategorías */}
-              {categories.filter((sub: any) => sub.parentCategory === parentCat.slug).map((subCat: any) => (
+          {categories.filter((cat: any) => !cat.parentCategory).map((parentCat: any) => {
+            // Orden personalizado de subcategorías por categoría padre
+            const subcategoryOrder: Record<string, string[]> = {
+              'Iluminación': [
+                'Reflectores',
+                'Highbay',
+                'Alumbrado Público Led',
+                'Alumbrado Público Solar',
+                'Reflectores Solares',
+                'Luces de Emergencia',
+                'Paneles y Downlights',
+                'Focos'
+              ]
+            };
+
+            const subcats = categories.filter((sub: any) => sub.parentCategory === parentCat.slug);
+
+            // Ordenar subcategorías: si hay orden personalizado, usarlo; sino por order/nombre
+            const customOrder = subcategoryOrder[parentCat.name];
+            if (customOrder) {
+              subcats.sort((a: any, b: any) => {
+                const indexA = customOrder.findIndex(name => a.name.toLowerCase() === name.toLowerCase());
+                const indexB = customOrder.findIndex(name => b.name.toLowerCase() === name.toLowerCase());
+                const posA = indexA === -1 ? 999 : indexA;
+                const posB = indexB === -1 ? 999 : indexB;
+                return posA - posB;
+              });
+            }
+
+            return (
+              <div key={parentCat.slug}>
                 <button
-                  key={subCat.slug}
-                  onClick={() => setActiveCategory(subCat.name === activeCategory ? null : subCat.name)}
-                  className={`w-full text-left pl-8 pr-4 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all flex justify-between items-center border mt-1 ${activeCategory === subCat.name ? `bg-[${BRAND_COLORS.primary}] text-white border-[${BRAND_COLORS.primary}]` : 'text-gray-400 bg-white border-gray-100 hover:border-gray-200'}`}
+                  onClick={() => setActiveCategory(parentCat.name === activeCategory ? null : parentCat.name)}
+                  className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-black uppercase transition-all flex justify-between items-center border ${activeCategory === parentCat.name ? `bg-[${BRAND_COLORS.secondary}] text-[${BRAND_COLORS.primary}] border-[${BRAND_COLORS.secondary}]` : 'text-gray-500 bg-gray-50 border-transparent hover:border-gray-200'}`}
                 >
-                  <span className="flex items-center gap-2">
-                    <span className="text-gray-300">└</span> {subCat.name}
-                  </span>
-                  {activeCategory === subCat.name && <Check size={12} />}
+                  {parentCat.name}
+                  {activeCategory === parentCat.name && <Check size={14} />}
                 </button>
-              ))}
-            </div>
-          ))}
+                {/* Subcategorías */}
+                {subcats.map((subCat: any) => (
+                  <button
+                    key={subCat.slug}
+                    onClick={() => setActiveCategory(subCat.name === activeCategory ? null : subCat.name)}
+                    className={`w-full text-left pl-8 pr-4 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all flex justify-between items-center border mt-1 ${activeCategory === subCat.name ? `bg-[${BRAND_COLORS.primary}] text-white border-[${BRAND_COLORS.primary}]` : 'text-gray-400 bg-white border-gray-100 hover:border-gray-200'}`}
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className="text-gray-300">└</span> {subCat.name}
+                    </span>
+                    {activeCategory === subCat.name && <Check size={12} />}
+                  </button>
+                ))}
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -188,6 +219,11 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
 
   return (
     <div className={`bg-[${BRAND_COLORS.background.alt}] min-h-screen relative pb-10`}>
+      <SEOHead
+        title="Catálogo de Productos - Material Eléctrico e Iluminación"
+        description="Explora nuestro catálogo completo de material eléctrico: iluminación LED industrial, reflectores, conductores, tableros y herramientas. Stock garantizado en Lima, Perú."
+        url="/productos"
+      />
       <div className={`bg-[${BRAND_COLORS.primary}] py-12 relative overflow-hidden`}>
         <div className="absolute inset-0 opacity-10">
           <div className="grid grid-cols-6 h-full">
@@ -206,7 +242,7 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
 
       <div className="max-w-7xl mx-auto px-4 py-8 md:py-12 flex flex-col lg:flex-row gap-8" ref={productsTopRef}>
         <aside className="hidden lg:block w-72 flex-shrink-0">
-          <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 sticky top-40">
+          <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 sticky top-40 max-h-[calc(100vh-11rem)] overflow-y-auto custom-scrollbar">
             <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-50">
               <h2 className={`font-black text-[${BRAND_COLORS.primary}] uppercase text-sm`}>Filtros</h2>
               <button onClick={clearFilters} className="text-[10px] font-bold text-gray-400 hover:text-red-500 uppercase transition-colors">Limpiar</button>
@@ -276,6 +312,9 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
               <img
                 src={brand.logo}
                 alt={brand.name}
+                loading="lazy"
+                width={120}
+                height={48}
                 className="max-h-12 max-w-full object-contain grayscale group-hover:grayscale-0 transition-all duration-500"
               />
             </button>
@@ -289,7 +328,7 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
           <div className="absolute right-0 top-0 bottom-0 w-[85%] max-w-sm bg-white shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
             <div className={`bg-[${BRAND_COLORS.primary}] p-6 text-white flex justify-between items-center`}>
               <h2 className="font-black uppercase text-sm">Filtros</h2>
-              <button onClick={() => setIsFilterDrawerOpen(false)} className="bg-white/10 p-2 rounded-full"><X size={20} /></button>
+              <button onClick={() => setIsFilterDrawerOpen(false)} aria-label="Cerrar filtros" className="bg-white/10 p-2 rounded-full"><X size={20} /></button>
             </div>
             <div className="flex-grow overflow-y-auto p-6"><FilterContent /></div>
             <div className="p-6 border-t border-gray-100"><button onClick={() => setIsFilterDrawerOpen(false)} className={`w-full bg-[${BRAND_COLORS.primary}] text-white py-4 rounded-2xl font-black uppercase text-[10px]`}>Ver Resultados</button></div>

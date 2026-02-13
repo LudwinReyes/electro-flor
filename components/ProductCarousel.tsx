@@ -59,9 +59,9 @@ const ProductCarousel: React.FC<Props> = ({ products, title, subtitle, onAddToQu
           </div>
 
           <div className="flex items-center gap-4">
-             {/* Flechas de navegación Desktop - Colores dinámicos según disponibilidad (Azul/Verde activos, Gris inactivos) */}
+            {/* Flechas de navegación Desktop - Colores dinámicos según disponibilidad (Azul/Verde activos, Gris inactivos) */}
             <div className="hidden md:flex gap-2">
-              <button 
+              <button
                 onClick={() => scroll('left')}
                 disabled={!canScrollLeft}
                 className={`p-3 transition-all rounded-full border-2 ${canScrollLeft ? 'text-[#002D62] border-[#002D62] hover:bg-[#002D62] hover:text-[#8CC63F]' : 'text-gray-300 border-gray-100 cursor-not-allowed bg-gray-50'}`}
@@ -69,7 +69,7 @@ const ProductCarousel: React.FC<Props> = ({ products, title, subtitle, onAddToQu
               >
                 <ChevronLeft size={24} />
               </button>
-              <button 
+              <button
                 onClick={() => scroll('right')}
                 disabled={!canScrollRight}
                 className={`p-3 transition-all rounded-full border-2 ${canScrollRight ? 'text-[#002D62] border-[#002D62] hover:bg-[#002D62] hover:text-[#8CC63F]' : 'text-gray-300 border-gray-100 cursor-not-allowed bg-gray-50'}`}
@@ -89,14 +89,14 @@ const ProductCarousel: React.FC<Props> = ({ products, title, subtitle, onAddToQu
           
           CORRECCIÓN: Se cambió de 'min-w' a 'w' para forzar ancho fijo y evitar variaciones.
         */}
-        <div 
+        <div
           ref={scrollRef}
           onScroll={checkScroll}
           className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-8 pb-10 no-scrollbar"
         >
-          {displayProducts.map((product) => (
-            <div 
-              key={product.id} 
+          {displayProducts.map((product, index) => (
+            <div
+              key={product._id || product.id || index}
               className="w-full md:w-[calc(50%-16px)] lg:w-[calc(25%-24px)] snap-start shrink-0 h-full flex-none"
             >
               <ProductCard product={product} onAddToQuote={onAddToQuote} />

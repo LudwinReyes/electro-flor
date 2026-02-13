@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { getDeliveryBanner } from '../services/sanity';
+import { optimizeImage } from '../utils/optimizeImage';
 
 interface DeliveryConfig {
   truckImage?: string;
@@ -37,8 +38,12 @@ const DeliveryBanner: React.FC = () => {
         {/* Camión con animación */}
         <div className="flex justify-center md:justify-start order-2 md:order-1">
           <img
-            src={config?.truckImage || "https://loganelectricperu.com/wp-content/uploads/2024/07/descarga-15-1.png"}
+            src={optimizeImage(config?.truckImage || "https://loganelectricperu.com/wp-content/uploads/2024/07/descarga-15-1.png", 600)}
             alt="Vehículo de carga"
+            loading="lazy"
+            decoding="async"
+            width={400}
+            height={300}
             className="h-28 md:h-44 lg:h-56 object-contain drop-shadow-2xl animate-truck"
           />
         </div>

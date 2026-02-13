@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp, HelpCircle, Truck, ShieldCheck, CreditCard, FileText } from 'lucide-react';
 import { CONTACT_INFO } from '../config';
 import { getFAQs } from '../services/sanity';
+import SEOHead from './SEOHead';
+import { Helmet } from 'react-helmet-async';
 
 const FaqPage: React.FC = () => {
   const [activeIdx, setActiveIdx] = useState<number | null>(0);
@@ -53,6 +55,25 @@ const FaqPage: React.FC = () => {
 
   return (
     <div className="bg-white min-h-screen">
+      <SEOHead
+        title="Preguntas Frecuentes - Envíos, Garantías y Pagos"
+        description="Resuelve tus dudas sobre envíos a provincias, garantías de fábrica, medios de pago y devoluciones en ELECTRO FLOR. Atención inmediata por WhatsApp."
+        url="/faq"
+      />
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": faqs.map(faq => ({
+            "@type": "Question",
+            "name": faq.q,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": faq.a
+            }
+          }))
+        })}</script>
+      </Helmet>
       <section className="bg-[#8CC63F] py-20 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-black text-[#002D62] uppercase tracking-tighter">PREGUNTAS <span className="text-white">FRECUENTES</span></h1>
@@ -74,39 +95,39 @@ const FaqPage: React.FC = () => {
               q: faq.question,
               a: faq.answer
             })) : faqs).map((faq, idx) => (
-            <div key={idx} className={`border-2 rounded-3xl overflow-hidden transition-all ${activeIdx === idx ? 'border-[#002D62] shadow-xl' : 'border-gray-100 hover:border-gray-200'}`}>
-              <button 
-                onClick={() => setActiveIdx(activeIdx === idx ? null : idx)}
-                className="w-full p-6 text-left flex justify-between items-center bg-white"
-              >
-                <div className="flex items-center gap-4">
-                  <div className={`p-2 rounded-xl ${activeIdx === idx ? 'bg-[#8CC63F] text-[#002D62]' : 'bg-gray-100 text-gray-400'}`}>
-                    {faq.icon}
+              <div key={idx} className={`border-2 rounded-3xl overflow-hidden transition-all ${activeIdx === idx ? 'border-[#002D62] shadow-xl' : 'border-gray-100 hover:border-gray-200'}`}>
+                <button
+                  onClick={() => setActiveIdx(activeIdx === idx ? null : idx)}
+                  className="w-full p-6 text-left flex justify-between items-center bg-white"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className={`p-2 rounded-xl ${activeIdx === idx ? 'bg-[#8CC63F] text-[#002D62]' : 'bg-gray-100 text-gray-400'}`}>
+                      {faq.icon}
+                    </div>
+                    <span className={`text-xs md:text-sm font-black uppercase tracking-tight ${activeIdx === idx ? 'text-[#002D62]' : 'text-gray-500'}`}>
+                      {faq.q}
+                    </span>
                   </div>
-                  <span className={`text-xs md:text-sm font-black uppercase tracking-tight ${activeIdx === idx ? 'text-[#002D62]' : 'text-gray-500'}`}>
-                    {faq.q}
-                  </span>
-                </div>
-                {activeIdx === idx ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-              </button>
-              
-              {activeIdx === idx && (
-                <div className="p-6 pt-0 bg-white text-gray-500 text-sm font-medium leading-relaxed animate-in slide-in-from-top-2">
-                  <div className="h-px bg-gray-50 mb-6"></div>
-                  {faq.a}
-                </div>
-              )}
-            </div>
-          ))}
+                  {activeIdx === idx ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                </button>
+
+                {activeIdx === idx && (
+                  <div className="p-6 pt-0 bg-white text-gray-500 text-sm font-medium leading-relaxed animate-in slide-in-from-top-2">
+                    <div className="h-px bg-gray-50 mb-6"></div>
+                    {faq.a}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         )}
 
         <div className="mt-20 bg-gray-50 p-12 rounded-[3rem] text-center border-2 border-dashed border-gray-200">
-           <h3 className="text-[#002D62] font-black text-xl uppercase mb-4">¿Tu duda no está aquí?</h3>
-           <p className="text-gray-400 text-sm mb-8">Escríbenos directamente y un especialista te responderá en minutos.</p>
-           <a href={`https://wa.me/${CONTACT_INFO.phone.whatsapp}?text=${encodeURIComponent('Hola, tengo una consulta')}`} className="inline-flex items-center gap-2 bg-[#25D366] text-white px-8 py-4 rounded-xl font-black uppercase text-xs shadow-lg hover:scale-105 transition-all">
-              Consultar ahora por WhatsApp
-           </a>
+          <h3 className="text-[#002D62] font-black text-xl uppercase mb-4">¿Tu duda no está aquí?</h3>
+          <p className="text-gray-400 text-sm mb-8">Escríbenos directamente y un especialista te responderá en minutos.</p>
+          <a href={`https://wa.me/${CONTACT_INFO.phone.whatsapp}?text=${encodeURIComponent('Hola, tengo una consulta')}`} className="inline-flex items-center gap-2 bg-[#25D366] text-white px-8 py-4 rounded-xl font-black uppercase text-xs shadow-lg hover:scale-105 transition-all">
+            Consultar ahora por WhatsApp
+          </a>
         </div>
       </section>
     </div>

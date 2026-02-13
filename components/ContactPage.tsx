@@ -4,6 +4,7 @@ import { Mail, Phone, MapPin, Clock, Send, MessageSquare, CheckCircle, Loader2 }
 import { CONTACT_INFO } from '../config';
 import { useSiteConfig } from '../contexts/SiteConfigContext';
 import { saveContactForm } from '../services/sanity';
+import SEOHead from './SEOHead';
 
 const ContactPage: React.FC = () => {
   const { siteSettings, colors, contact } = useSiteConfig();
@@ -61,6 +62,11 @@ const ContactPage: React.FC = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen pb-20">
+      <SEOHead
+        title="Contacto - Cotizaciones y Consultas"
+        description="Contacta a ELECTRO FLOR para cotizaciones corporativas, consultas técnicas y pedidos de material eléctrico. WhatsApp: 948 198 701. Av. Argentina 245, Lima."
+        url="/contacto"
+      />
       <section className="bg-[#002D62] py-20">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter">CENTRO DE <span className="text-[#8CC63F]">CONTACTO</span></h1>
