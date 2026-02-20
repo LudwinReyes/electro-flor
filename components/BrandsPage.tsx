@@ -24,7 +24,39 @@ const BrandsPage: React.FC = () => {
             try {
                 const data = await getBrands();
                 if (data) {
-                    setBrands(data);
+                    // Ordenar marcas: Prioridad específica primero, luego alfabético
+                    const PRIORITY_BRANDS = [
+                        "LEDVANCE",
+                        "NOVALAMPS",
+                        "OPALUX",
+                        "PHILIPS",
+                        "SCHNEIDER",
+                        "SHALUX LIGHTING"
+                    ];
+
+                    const sortedBrands = data.sort((a, b) => {
+                        const nameA = a.name.toUpperCase();
+                        const nameB = b.name.toUpperCase();
+
+                        // Buscar índice de prioridad (si existe)
+                        // Buscamos coincidencia parcial o exacta
+                        const indexA = PRIORITY_BRANDS.findIndex(p => nameA.includes(p));
+                        const indexB = PRIORITY_BRANDS.findIndex(p => nameB.includes(p));
+
+                        // Si ambas están en prioridad, ordenar por su posición en la lista PRIORITY
+                        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+
+                        // Si solo A está en prioridad, va primero
+                        if (indexA !== -1) return -1;
+
+                        // Si solo B está en prioridad, va primero
+                        if (indexB !== -1) return 1;
+
+                        // Si ninguna es prioritaria, orden alfabético normal
+                        return nameA.localeCompare(nameB);
+                    });
+
+                    setBrands(sortedBrands);
                 }
             } catch (error) {
                 console.error('Error fetching brands:', error);
@@ -98,7 +130,7 @@ const BrandsPage: React.FC = () => {
                     {brands.map((brand) => (
                         <Link
                             key={brand._id}
-                            to={`/productos?brand=${encodeURIComponent(brand.name)}`}
+                            to={`/productos/marca/${brand.slug}`}
                             className="group relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:border-transparent transition-all duration-300 flex flex-col items-center justify-center min-h-[160px]"
                             style={{
                                 '--hover-border': colors.secondary

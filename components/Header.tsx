@@ -133,7 +133,19 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
           <div className="relative" ref={categoryMenuRef}>
             <button
               onClick={() => setIsCategoryMenuOpen(!isCategoryMenuOpen)}
-              className={`hidden md:flex items-center gap-2 bg-gray-100 hover:bg-[${BRAND_COLORS.secondary}] hover:text-[${BRAND_COLORS.primary}] text-[${BRAND_COLORS.primary}] px-4 py-2.5 rounded-xl transition-all font-black text-[10px] uppercase tracking-widest shrink-0`}
+              className={`hidden md:flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all font-black text-[10px] uppercase tracking-widest shrink-0`}
+              style={{
+                backgroundColor: colors.gray[100],
+                color: colors.primary
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = colors.secondary;
+                e.currentTarget.style.color = colors.primary;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = colors.gray[100];
+                e.currentTarget.style.color = colors.primary;
+              }}
             >
               <LayoutGrid size={18} /> Categorías <ChevronDown size={14} className={`transition-transform ${isCategoryMenuOpen ? 'rotate-180' : ''}`} />
             </button>
@@ -147,15 +159,16 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
                 {categories.filter((cat: any) => !cat.parentCategory).map((cat: any) => (
                   <Link
                     key={cat.slug}
-                    to={`/productos?category=${encodeURIComponent(cat.name)}`}
+                    to={`/productos/${cat.slug}`}
                     onClick={() => setIsCategoryMenuOpen(false)}
-                    className={`flex items-center justify-between px-6 py-3 hover:bg-[${BRAND_COLORS.secondaryOpacity[10]}] text-[${BRAND_COLORS.primary}] transition-colors group`}
+                    className="flex items-center justify-between px-6 py-3 transition-colors group"
+                    style={{ color: colors.primary }}
                   >
                     <div className="flex items-center gap-3">
-                      <i className={`fas ${cat.icon || 'fa-folder'} text-[${BRAND_COLORS.secondary}] group-hover:scale-110 transition-transform w-5 text-center`}></i>
+                      <i className={`fas ${cat.icon || 'fa-folder'} w-5 text-center`} style={{ color: colors.secondary }}></i>
                       <span className="text-[11px] font-black uppercase tracking-tight">{cat.name}</span>
                     </div>
-                    <ArrowUpRight size={14} className={`text-gray-200 group-hover:text-[${BRAND_COLORS.secondary}] transition-colors`} />
+                    <ArrowUpRight size={14} className="text-gray-200 group-hover:text-current transition-colors" style={{ color: colors.secondary }} />
                   </Link>
                 ))}
               </div>
@@ -170,11 +183,19 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
                 placeholder="¿Qué material buscas?"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onFocus={() => searchQuery.length > 1 && setShowSuggestions(true)}
-                className={`w-full border-2 border-gray-100 rounded-full py-2.5 px-6 focus:outline-none focus:border-[${BRAND_COLORS.secondary}] bg-gray-50 text-xs font-medium transition-all`}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = colors.secondary;
+                  if (searchQuery.length > 1) setShowSuggestions(true);
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = '#F3F4F6';
+                  // Delay para permitir click en sugerencias
+                  setTimeout(() => setShowSuggestions(false), 200);
+                }}
+                className="w-full border-2 border-gray-100 rounded-full py-2.5 px-6 focus:outline-none bg-gray-50 text-xs font-medium transition-all"
               />
-              <button type="submit" aria-label="Buscar productos" className={`absolute right-1.5 top-1/2 -translate-y-1/2 bg-[${BRAND_COLORS.primary}] text-white p-2 rounded-full hover:bg-blue-900 transition-colors`}>
-                <Search size={16} className={`text-[${BRAND_COLORS.secondary}]`} />
+              <button type="submit" aria-label="Buscar productos" className="absolute right-1.5 top-1/2 -translate-y-1/2 text-white p-2 rounded-full hover:opacity-90 transition-colors" style={{ backgroundColor: colors.primary }}>
+                <Search size={16} style={{ color: colors.secondary }} />
               </button>
             </form>
 
@@ -210,11 +231,15 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
           <button
             onClick={onOpenQuote}
             aria-label={`Ver lista de cotización${quoteCount > 0 ? ` (${quoteCount} productos)` : ''}`}
-            className={`relative p-2 md:p-2.5 bg-gray-50 text-[${BRAND_COLORS.primary}] rounded-xl hover:bg-[${BRAND_COLORS.secondary}] transition-all`}
+            className="relative p-2 md:p-2.5 bg-gray-50 rounded-xl transition-all"
+            style={{ color: colors.primary }}
           >
             <FileText size={22} />
             {quoteCount > 0 && (
-              <span className={`absolute -top-1.5 -right-1.5 bg-[${BRAND_COLORS.primary}] text-[${BRAND_COLORS.secondary}] text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white`}>
+              <span
+                className="absolute -top-1.5 -right-1.5 text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white"
+                style={{ backgroundColor: colors.primary, color: colors.secondary }}
+              >
                 {quoteCount}
               </span>
             )}
@@ -228,13 +253,13 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
       </div>
 
       <nav className="hidden lg:block max-w-7xl mx-auto px-4 border-t border-gray-50 overflow-x-auto">
-        <div className={`flex py-3 gap-8 text-[11px] font-black text-[${BRAND_COLORS.primary}] uppercase tracking-widest`}>
-          <Link to="/" className={`hover:text-[${BRAND_COLORS.secondary}] border-b-2 border-transparent hover:border-[${BRAND_COLORS.secondary}]`}>Inicio</Link>
-          <Link to="/productos" className={`hover:text-[${BRAND_COLORS.secondary}] border-b-2 border-transparent hover:border-[${BRAND_COLORS.secondary}]`}>Productos</Link>
-          <Link to="/marcas" className={`hover:text-[${BRAND_COLORS.secondary}] border-b-2 border-transparent hover:border-[${BRAND_COLORS.secondary}]`}>Marcas</Link>
-          <Link to="/nosotros" className={`hover:text-[${BRAND_COLORS.secondary}] border-b-2 border-transparent hover:border-[${BRAND_COLORS.secondary}]`}>Nosotros</Link>
-          <Link to="/contacto" className={`hover:text-[${BRAND_COLORS.secondary}] border-b-2 border-transparent hover:border-[${BRAND_COLORS.secondary}]`}>Contacto</Link>
-          <Link to="/faq" className={`hover:text-[${BRAND_COLORS.secondary}] border-b-2 border-transparent hover:border-[${BRAND_COLORS.secondary}]`}>Preguntas</Link>
+        <div className="flex py-3 gap-8 text-[11px] font-black uppercase tracking-widest" style={{ color: colors.primary }}>
+          <Link to="/" className="hover:opacity-80 transition-opacity" style={{ borderBottom: `2px solid transparent` }}>Inicio</Link>
+          <Link to="/productos" className="hover:opacity-80 transition-opacity">Productos</Link>
+          <Link to="/marcas" className="hover:opacity-80 transition-opacity">Marcas</Link>
+          <Link to="/nosotros" className="hover:opacity-80 transition-opacity">Nosotros</Link>
+          <Link to="/contacto" className="hover:opacity-80 transition-opacity">Contacto</Link>
+          <Link to="/faq" className="hover:opacity-80 transition-opacity">Preguntas</Link>
         </div>
       </nav>
 

@@ -33,6 +33,18 @@ export default defineType({
       name: 'description',
       title: 'Descripción',
       type: 'text'
+    }),
+    defineField({
+      name: 'seoTitle',
+      title: 'Título SEO',
+      type: 'string',
+      description: 'Título personalizado para buscadores (Google). Si se deja vacío se usará el nombre.'
+    }),
+    defineField({
+      name: 'seoDescription',
+      title: 'Descripción SEO',
+      type: 'text',
+      description: 'Descripción corta para buscadores (Google). Máximo 160 caracteres.'
     })
   ],
   preview: {

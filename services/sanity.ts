@@ -242,6 +242,8 @@ export const getCategories = async () => {
       "slug": slug.current,
       "image": image.asset->url,
       description,
+      seoTitle,
+      seoDescription,
       icon,
       order,
       featured,
@@ -293,7 +295,9 @@ export const getBrands = async () => {
       name,
       "slug": slug.current,
       "logo": logo.asset->url,
-      description
+      description,
+      seoTitle,
+      seoDescription
     }`;
 
     try {
@@ -360,7 +364,7 @@ export const getSiteSettings = async () => {
   if (!isSanityConfigured()) return null;
 
   return getCachedData('siteSettings', async () => {
-    const query = `*[_type == "siteSettings"][0] {
+    const query = `*[_id == "siteSettings"][0] {
       siteName,
       siteDescription,
       "logo": logo.asset->url,

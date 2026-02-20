@@ -84,7 +84,7 @@ const FichaTecnicaPage: React.FC = () => {
             <header className="bg-[#002D62] px-4 py-3 flex items-center justify-between sticky top-0 z-50">
                 <div className="flex items-center gap-4">
                     <Link
-                        to={`/productos/${slug}`}
+                        to={`/producto/${slug}`}
                         className="flex items-center gap-2 text-white hover:text-[#8CC63F] transition-colors"
                     >
                         <ChevronLeft size={20} />

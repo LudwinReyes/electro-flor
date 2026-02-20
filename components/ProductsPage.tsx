@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Link, useSearchParams, useParams } from 'react-router-dom';
 import { PRODUCTS, CATEGORIES, BRANDS } from '../constants';
 import { Search, Filter, ChevronRight, X, Check, SlidersHorizontal, Award } from 'lucide-react';
 import ProductCard from './ProductCard';
@@ -16,15 +16,12 @@ interface Props {
 
 const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  // ... (resto del código igual)
-  // Asegurarse de pasar onAddToQuote al renderizar ProductCard más abajo
+  const { categorySlug, subcategorySlug, brandSlug } = useParams();
 
   const searchUrl = searchParams.get('search') || '';
   const categoryUrl = searchParams.get('category') || '';
   const brandUrl = searchParams.get('brand') || '';
 
-  const [activeCategory, setActiveCategory] = useState<string | null>(categoryUrl || null);
-  const [selectedBrands, setSelectedBrands] = useState<string[]>(brandUrl ? [brandUrl] : []);
   const [sortBy, setSortBy] = useState('A a la Z');
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const productsTopRef = useRef<HTMLDivElement>(null);
@@ -34,6 +31,10 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
   const [sanityCategories, setSanityCategories] = useState<any[]>([]);
   const [sanityBrands, setSanityBrands] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [activeBrand, setActiveBrand] = useState<string | null>(null);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>(brandUrl ? [brandUrl] : []);
 
   useEffect(() => {
     const loadData = async () => {
@@ -53,20 +54,49 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
     loadData();
   }, []);
 
-  useEffect(() => {
-    if (categoryUrl) setActiveCategory(categoryUrl);
-  }, [categoryUrl]);
-
-  useEffect(() => {
-    if (brandUrl) setSelectedBrands([brandUrl]);
-  }, [brandUrl]);
-
   // Usar datos de Sanity si existen, sino usar hardcodeados
   const products = sanityProducts.length > 0 ? sanityProducts : PRODUCTS;
   const categories = sanityCategories.length > 0 ? sanityCategories : CATEGORIES;
   const brands = sanityBrands.length > 0 ? sanityBrands : BRANDS;
 
-  // Obtener subcategorías de una categoría padre
+  // Sincronizar activeCategory y activeBrand basado en URL (slug o params)
+  useEffect(() => {
+    if (subcategorySlug) {
+      const subCat = categories.find((c: any) => c.slug === subcategorySlug);
+      if (subCat) {
+        setActiveCategory(subCat.name);
+        setActiveBrand(null);
+        setSelectedBrands([]);
+      }
+    } else if (categorySlug) {
+      const cat = categories.find((c: any) => c.slug === categorySlug);
+      if (cat) {
+        setActiveCategory(cat.name);
+        setActiveBrand(null);
+        setSelectedBrands([]);
+      }
+    } else if (brandSlug) {
+      const brand = brands.find((b: any) => b.slug === brandSlug);
+      if (brand) {
+        setActiveBrand(brand.name);
+        setSelectedBrands([brand.name]);
+        setActiveCategory(null);
+      }
+    } else if (categoryUrl) {
+      setActiveCategory(categoryUrl);
+      setActiveBrand(null);
+    } else if (brandUrl) {
+      setSelectedBrands([brandUrl]);
+      setActiveBrand(brandUrl);
+      setActiveCategory(null);
+    } else {
+      setActiveCategory(null);
+      setActiveBrand(null);
+      setSelectedBrands([]);
+    }
+  }, [categorySlug, subcategorySlug, brandSlug, categoryUrl, brandUrl, categories, brands]);
+
+  // Obtener nombres de subcategorías de una categoría padre
   const getSubcategoryNames = (parentCategoryName: string): string[] => {
     const parentCat = categories.find((c: any) => c.name === parentCategoryName);
     if (!parentCat) return [];
@@ -75,29 +105,29 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
     return subcategories.map((c: any) => c.name);
   };
 
-  const filteredProducts = products.filter((p: any) => {
-    const productCategory = p.category?.name || p.category || '';
-    const productBrand = p.brand?.name || p.brand || '';
+  const filteredProducts = useMemo(() => {
+    return products.filter((p: any) => {
+      const productCategory = p.category?.name || p.category || '';
+      const productBrand = p.brand?.name || p.brand || '';
 
-    // Si hay una categoría activa, verificar si es categoría padre o subcategoría
-    let categoryMatch = !activeCategory;
-    if (activeCategory) {
-      // Verificar si el producto pertenece a la categoría activa
-      if (productCategory === activeCategory) {
-        categoryMatch = true;
-      } else {
-        // Verificar si la categoría activa es padre y el producto pertenece a una subcategoría
-        const subcategoryNames = getSubcategoryNames(activeCategory);
-        categoryMatch = subcategoryNames.includes(productCategory);
+      let categoryMatch = !activeCategory;
+      if (activeCategory) {
+        if (productCategory === activeCategory) {
+          categoryMatch = true;
+        } else {
+          const subcategoryNames = getSubcategoryNames(activeCategory);
+          categoryMatch = subcategoryNames.includes(productCategory);
+        }
       }
-    }
 
-    const brandMatch = selectedBrands.length === 0 || selectedBrands.includes(productBrand);
-    const searchMatch = !searchUrl ||
-      p.name?.toLowerCase().includes(searchUrl.toLowerCase()) ||
-      productBrand.toLowerCase().includes(searchUrl.toLowerCase());
-    return categoryMatch && brandMatch && searchMatch;
-  });
+      const brandMatch = selectedBrands.length === 0 || selectedBrands.includes(productBrand);
+      const searchMatch = !searchUrl ||
+        p.name?.toLowerCase().includes(searchUrl.toLowerCase()) ||
+        productBrand.toLowerCase().includes(searchUrl.toLowerCase());
+
+      return categoryMatch && brandMatch && searchMatch;
+    });
+  }, [products, activeCategory, selectedBrands, searchUrl, categories]);
 
   if (sortBy === 'A a la Z') filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
   if (sortBy === 'Z a la A') filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
@@ -168,25 +198,25 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
 
             return (
               <div key={parentCat.slug}>
-                <button
-                  onClick={() => setActiveCategory(parentCat.name === activeCategory ? null : parentCat.name)}
+                <Link
+                  to={activeCategory === parentCat.name ? "/productos" : `/productos/${parentCat.slug}`}
                   className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-black uppercase transition-all flex justify-between items-center border ${activeCategory === parentCat.name ? `bg-[${BRAND_COLORS.secondary}] text-[${BRAND_COLORS.primary}] border-[${BRAND_COLORS.secondary}]` : 'text-gray-500 bg-gray-50 border-transparent hover:border-gray-200'}`}
                 >
                   {parentCat.name}
                   {activeCategory === parentCat.name && <Check size={14} />}
-                </button>
+                </Link>
                 {/* Subcategorías */}
                 {subcats.map((subCat: any) => (
-                  <button
+                  <Link
                     key={subCat.slug}
-                    onClick={() => setActiveCategory(subCat.name === activeCategory ? null : subCat.name)}
+                    to={activeCategory === subCat.name ? `/productos/${parentCat.slug}` : `/productos/${parentCat.slug}/${subCat.slug}`}
                     className={`w-full text-left pl-8 pr-4 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all flex justify-between items-center border mt-1 ${activeCategory === subCat.name ? `bg-[${BRAND_COLORS.primary}] text-white border-[${BRAND_COLORS.primary}]` : 'text-gray-400 bg-white border-gray-100 hover:border-gray-200'}`}
                   >
                     <span className="flex items-center gap-2">
                       <span className="text-gray-300">└</span> {subCat.name}
                     </span>
                     {activeCategory === subCat.name && <Check size={12} />}
-                  </button>
+                  </Link>
                 ))}
               </div>
             );
@@ -200,29 +230,99 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
         </h3>
         <div className="grid grid-cols-1 gap-2 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
           {brands.map((brand: any) => (
-            <label key={brand.name} className={`flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all border ${selectedBrands.includes(brand.name) ? `bg-[${BRAND_COLORS.primaryOpacity[5]}] border-[${BRAND_COLORS.primary}]` : 'bg-white border-gray-100 hover:border-gray-200'}`}>
+            <Link
+              key={brand.name}
+              to={activeBrand === brand.name ? "/productos" : `/productos/marca/${brand.slug}`}
+              className={`flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all border ${selectedBrands.includes(brand.name) ? `bg-[${BRAND_COLORS.primaryOpacity[5]}] border-[${BRAND_COLORS.primary}]` : 'bg-white border-gray-100 hover:border-gray-200'}`}
+            >
               <span className={`text-[10px] font-black uppercase ${selectedBrands.includes(brand.name) ? `text-[${BRAND_COLORS.primary}]` : 'text-gray-400'}`}>
                 {brand.name}
               </span>
-              <input
-                type="checkbox"
-                className={`w-4 h-4 accent-[${BRAND_COLORS.primary}]`}
-                onChange={() => toggleBrand(brand.name)}
-                checked={selectedBrands.includes(brand.name)}
-              />
-            </label>
+              <div className={`w-4 h-4 rounded border flex items-center justify-center ${selectedBrands.includes(brand.name) ? `bg-[${BRAND_COLORS.primary}] border-[${BRAND_COLORS.primary}]` : 'border-gray-300'}`}>
+                {selectedBrands.includes(brand.name) && <Check size={10} className="text-white" />}
+              </div>
+            </Link>
           ))}
         </div>
       </div>
     </div>
   );
 
+  const activeCategoryData = useMemo(() => {
+    if (!activeCategory) return null;
+    return categories.find((c: any) => c.name === activeCategory);
+  }, [activeCategory, categories]);
+
+  const activeBrandData = useMemo(() => {
+    if (!activeBrand) return null;
+    return brands.find((b: any) => b.name === activeBrand);
+  }, [activeBrand, brands]);
+
+  const parentCategoryData = useMemo(() => {
+    if (!activeCategoryData || !activeCategoryData.parentCategory) return null;
+    return categories.find((c: any) => c.slug === activeCategoryData.parentCategory);
+  }, [activeCategoryData, categories]);
+
+  const seoTitle = useMemo(() => {
+    if (activeBrandData?.seoTitle) return activeBrandData.seoTitle;
+    if (activeBrandData) {
+      return `${activeBrand && activeBrand.toUpperCase()} - Distribuidor Oficial | Electro Flor`;
+    }
+    if (activeCategoryData?.seoTitle) return activeCategoryData.seoTitle;
+    if (subcategorySlug && activeCategoryData) {
+      return `${activeCategoryData.name} - ${parentCategoryData?.name || 'Catálogo'} | Electro Flor`;
+    }
+    if (categorySlug && activeCategoryData) {
+      return `${activeCategoryData.name} - Especialistas en Material Eléctrico | Electro Flor`;
+    }
+    if (searchUrl) return `Resultados para "${searchUrl}" | Electro Flor`;
+    return "Catálogo de Productos - Material Eléctrico e Iluminación | Electro Flor";
+  }, [activeCategoryData, parentCategoryData, activeBrandData, activeBrand, categorySlug, subcategorySlug, searchUrl]);
+
+  const seoDescription = useMemo(() => {
+    if (activeBrandData?.seoDescription) return activeBrandData.seoDescription;
+    if (activeBrandData?.description) return activeBrandData.description;
+    if (activeCategoryData?.seoDescription) return activeCategoryData.seoDescription;
+    if (activeCategoryData?.description) return activeCategoryData.description;
+    return "Explora nuestro catálogo completo de material eléctrico: iluminación LED industrial, reflectores, conductores, tableros y herramientas. Stock garantizado en Lima, Perú.";
+  }, [activeCategoryData, activeBrandData]);
+
+  const seoKeywords = useMemo(() => {
+    const baseKeywords = "material eléctrico, ferretería, iluminación led, lima perú, electro flor";
+    if (activeBrandData) {
+      return `${activeBrandData.name.toLowerCase()}, ${activeBrandData.name.toLowerCase()} perú, productos ${activeBrandData.name.toLowerCase()}, ${baseKeywords}`;
+    }
+    if (activeCategoryData) {
+      return `${activeCategoryData.name.toLowerCase()}, comprar ${activeCategoryData.name.toLowerCase()}, ${activeCategoryData.name.toLowerCase()} industrial, ${baseKeywords}`;
+    }
+    return baseKeywords;
+  }, [activeCategoryData, activeBrandData]);
+
+  const currentUrl = useMemo(() => {
+    if (brandSlug) return `/productos/marca/${brandSlug}`;
+    if (subcategorySlug && categorySlug) return `/productos/${categorySlug}/${subcategorySlug}`;
+    if (categorySlug) return `/productos/${categorySlug}`;
+    return "/productos";
+  }, [categorySlug, subcategorySlug, brandSlug]);
+
+  const pageTitle = useMemo(() => {
+    if (activeBrandData) return activeBrandData.name;
+    if (activeCategoryData) return activeCategoryData.name;
+    return 'EXPLORA NUESTROS';
+  }, [activeBrandData, activeCategoryData]);
+
+  const pageTitleHighlight = useMemo(() => {
+    if (activeBrandData || activeCategoryData) return '';
+    return 'PRODUCTOS';
+  }, [activeBrandData, activeCategoryData]);
+
   return (
     <div className={`bg-[${BRAND_COLORS.background.alt}] min-h-screen relative pb-10`}>
       <SEOHead
-        title="Catálogo de Productos - Material Eléctrico e Iluminación"
-        description="Explora nuestro catálogo completo de material eléctrico: iluminación LED industrial, reflectores, conductores, tableros y herramientas. Stock garantizado en Lima, Perú."
-        url="/productos"
+        title={seoTitle}
+        description={seoDescription}
+        url={currentUrl}
+        keywords={seoKeywords}
       />
       <div className={`bg-[${BRAND_COLORS.primary}] py-12 relative overflow-hidden`}>
         <div className="absolute inset-0 opacity-10">
@@ -234,9 +334,34 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
           <div className={`flex items-center gap-2 text-[${BRAND_COLORS.secondary}] text-[10px] font-black uppercase tracking-widest mb-2`}>
             <Link to="/" className="hover:underline">Inicio</Link>
             <ChevronRight size={12} />
-            <span>Catálogo</span>
+            <Link to="/productos" className="hover:underline">Catálogo</Link>
+            {activeBrandData && (
+              <>
+                <ChevronRight size={12} />
+                <span className="opacity-60">MARCA: {activeBrandData.name}</span>
+              </>
+            )}
+            {parentCategoryData && (
+              <>
+                <ChevronRight size={12} />
+                <Link to={`/productos/${parentCategoryData.slug}`} className="hover:underline">{parentCategoryData.name}</Link>
+              </>
+            )}
+            {!activeBrandData && activeCategoryData && (
+              <>
+                <ChevronRight size={12} />
+                <span className="opacity-60">{activeCategoryData.name}</span>
+              </>
+            )}
           </div>
-          <h1 className={`text-4xl md:text-5xl font-black text-white uppercase tracking-tighter`}>EXPLORA NUESTRO <span className={`text-[${BRAND_COLORS.secondary}]`}>PRODUCTOS</span></h1>
+          <h1 className={`text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4`}>
+            {pageTitle} <span className={`text-[${BRAND_COLORS.secondary}]`}>{pageTitleHighlight}</span>
+          </h1>
+          {seoDescription && (
+            <p className="text-white/70 text-sm max-w-2xl font-medium leading-relaxed">
+              {seoDescription}
+            </p>
+          )}
         </div>
       </div>
 
@@ -304,10 +429,13 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 md:gap-8">
           {brands.map((brand: any) => (
-            <button
+            <Link
               key={brand.name}
-              onClick={() => selectSingleBrand(brand.name)}
+              to={`/productos/marca/${brand.slug}`}
               className={`bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl hover:border-[${BRAND_COLORS.secondary}] transition-all flex items-center justify-center group h-32`}
+              onClick={() => {
+                productsTopRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
             >
               <img
                 src={brand.logo}
@@ -317,7 +445,7 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
                 height={48}
                 className="max-h-12 max-w-full object-contain grayscale group-hover:grayscale-0 transition-all duration-500"
               />
-            </button>
+            </Link>
           ))}
         </div>
       </section>

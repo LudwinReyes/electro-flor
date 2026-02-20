@@ -234,7 +234,7 @@ const ContactPage: React.FC = () => {
         <div className="bg-white rounded-[3rem] overflow-hidden border-8 border-white shadow-2xl">
           <div className="relative">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d975.5082548834!2d-77.04490407006182!3d-12.044196254288837!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c5f0866f76d7%3A0x8c8c8c8c8c8c8c8c!2sCentro%20Comercial%20Nicolini!5e0!3m2!1ses!2spe!4v1706729000000!5m2!1ses!2spe"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2400.6371190058762!2d-77.0448248!3d-12.0443497!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c9271df300f9%3A0xecd04d8178f2597e!2sElectro%20Flor%20E.I.R.L.!5e0!3m2!1ses!2spe!4v1771613011760!5m2!1ses!2spe"
               width="100%"
               height="400"
               style={{ border: 0 }}
@@ -243,14 +243,14 @@ const ContactPage: React.FC = () => {
               referrerPolicy="no-referrer-when-downgrade"
               className="w-full"
             ></iframe>
-            <div className="absolute bottom-4 left-4 bg-white p-4 rounded-2xl shadow-xl border-2 border-[#8CC63F]">
+            <div className="absolute bottom-4 left-4 bg-white p-4 rounded-2xl shadow-xl border-2 border-red-500">
               <div className="flex items-center gap-3">
-                <div className="bg-[#8CC63F] p-3 rounded-xl">
-                  <MapPin className="text-[#002D62]" size={24} />
+                <div className="bg-red-500 p-3 rounded-xl shadow-lg shadow-red-200">
+                  <MapPin className="text-white" size={24} />
                 </div>
                 <div>
-                  <p className="font-black text-[#002D62] uppercase text-xs">Centro Comercial Nicolini</p>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase">Av. Argentina 245, Pasaje 2, Puesto AR12</p>
+                  <p className="font-black text-red-600 uppercase text-[13px] tracking-tight">Electro Flor E.I.R.L.</p>
+                  <p className="text-[10px] font-bold text-gray-500 uppercase">C.C. Nicolini - Pasaje 2, Puesto AR12</p>
                 </div>
               </div>
             </div>

@@ -8,6 +8,7 @@ interface SEOHeadProps {
     url?: string;
     type?: string;
     noindex?: boolean;
+    keywords?: string;
 }
 
 const SITE_NAME = 'ELECTRO FLOR';
@@ -22,7 +23,8 @@ const SEOHead: React.FC<SEOHeadProps> = ({
     image = DEFAULT_IMAGE,
     url,
     type = 'website',
-    noindex = false
+    noindex = false,
+    keywords
 }) => {
     const fullTitle = title ? `${title} | ${SITE_NAME}` : DEFAULT_TITLE;
     const fullUrl = url ? `${SITE_URL}${url}` : SITE_URL;
@@ -32,6 +34,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
             {/* Básicos */}
             <title>{fullTitle}</title>
             <meta name="description" content={description} />
+            {keywords && <meta name="keywords" content={keywords} />}
             {noindex && <meta name="robots" content="noindex, nofollow" />}
             <link rel="canonical" href={fullUrl} />
 

@@ -48,7 +48,7 @@ const Home: React.FC<HomeProps> = ({ onAddToQuote, products, categories, promoBa
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
                     {categories.length > 0 ? (
                         categories.filter(c => c.featured !== false).map((cat) => (
-                            <Link to={`/productos?category=${encodeURIComponent(cat.name)}`} key={cat.slug} className="bg-white p-5 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] shadow-lg text-center flex flex-col items-center group transition-all hover:-translate-y-1 border-b-4 border-transparent hover:border-[#8CC63F]">
+                            <Link to={`/productos/${cat.slug}`} key={cat.slug} className="bg-white p-5 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] shadow-lg text-center flex flex-col items-center group transition-all hover:-translate-y-1 border-b-4 border-transparent hover:border-[#8CC63F]">
                                 <div className="bg-[#002D62] w-14 h-14 md:w-24 md:h-24 rounded-2xl md:rounded-3xl flex items-center justify-center mb-4 md:mb-6 shadow-xl transition-transform group-hover:scale-105">
                                     <i className={`fas ${cat.icon} text-xl md:text-4xl text-[#8CC63F]`}></i>
                                 </div>

@@ -110,7 +110,7 @@ const ProductDetail: React.FC<Props> = ({ onAddToQuote }) => {
     }, {}) : (product.specifications || {});
 
   const whatsappMessage = SITE_MESSAGES.whatsapp.stockInquiry(product.name);
-  const whatsappUrl = `https://wa.me/51948198701?text=${encodeURIComponent(whatsappMessage)}`;
+  const whatsappUrl = `https://wa.me/${contact.phone.whatsapp}?text=${encodeURIComponent(whatsappMessage)}`;
 
   // Extraer ID del video de YouTube
   const getYouTubeEmbedUrl = (url: string) => {
@@ -302,7 +302,7 @@ const ProductDetail: React.FC<Props> = ({ onAddToQuote }) => {
                   <i className="fab fa-whatsapp text-2xl"></i>
                   <div className="flex flex-col items-start leading-none">
                     <span className="text-[8px] opacity-90 mb-1">WHATSAPP VENTAS:</span>
-                    <span className="text-sm md:text-base">948 198 701</span>
+                    <span className="text-sm md:text-base">{contact.phone.display}</span>
                   </div>
                 </a>
 

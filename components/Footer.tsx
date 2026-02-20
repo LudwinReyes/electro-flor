@@ -101,17 +101,16 @@ const Footer: React.FC = () => {
             {(footerSettings as any)?.featuredCategories?.length > 0 ? (
               (footerSettings as any).featuredCategories.map((cat: any) => (
                 <li key={cat._id}>
-                  <Link to={`/productos?category=${encodeURIComponent(cat.name)}`} className="flex items-center gap-3 hover:opacity-80 group">
+                  <Link to={`/productos/${cat.slug}`} className="flex items-center gap-3 hover:opacity-80 group">
                     <ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> {cat.name}
                   </Link>
                 </li>
               ))
             ) : (
               <>
-                <li><Link to="/productos" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Iluminación Industrial</Link></li>
+                <li><Link to="/productos" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Iluminación</Link></li>
                 <li><Link to="/productos" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Conductores Eléctricos</Link></li>
                 <li><Link to="/productos" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Baja Tensión</Link></li>
-                <li><Link to="/productos" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Gasfitería Técnica</Link></li>
               </>
             )}
           </ul>

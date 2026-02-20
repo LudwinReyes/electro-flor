@@ -143,6 +143,9 @@ const App: React.FC = () => {
                 />
               } />
               <Route path="/productos" element={<ProductsPage onAddToQuote={addToQuote} />} />
+              <Route path="/productos/:categorySlug" element={<ProductsPage onAddToQuote={addToQuote} />} />
+              <Route path="/productos/:categorySlug/:subcategorySlug" element={<ProductsPage onAddToQuote={addToQuote} />} />
+              <Route path="/productos/marca/:brandSlug" element={<ProductsPage onAddToQuote={addToQuote} />} />
               <Route path="/marcas" element={<BrandsPage />} />
               <Route path="/producto/:id" element={<ProductDetail onAddToQuote={addToQuote} />} />
               <Route path="/nosotros" element={<AboutUsPage />} />

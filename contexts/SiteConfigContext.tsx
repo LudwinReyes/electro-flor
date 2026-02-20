@@ -86,19 +86,13 @@ export const SiteConfigProvider: React.FC<{ children: ReactNode }> = ({ children
           getFooterSettings()
         ]);
 
-        console.log('📦 Datos recibidos de Sanity:', { site, header, footer });
-        console.log('🔍 Site settings COMPLETO:', JSON.stringify(site, null, 2));
-
         if (site) {
-          console.log('✅ Site settings cargados:', site);
           setSiteSettings(site);
-        } else {
-          console.warn('⚠️ No se encontró documento de Site Settings en Sanity');
         }
         if (header) setHeaderSettings(header);
         if (footer) setFooterSettings(footer);
       } catch (error) {
-        console.error('❌ Error loading Sanity config, using defaults:', error);
+        console.error('Error loading Sanity config:', error);
       } finally {
         setIsLoading(false);
       }
@@ -107,14 +101,19 @@ export const SiteConfigProvider: React.FC<{ children: ReactNode }> = ({ children
     loadConfig();
   }, []);
 
-  // Merge Sanity colors with defaults
+  // Centralized dynamic colors
+  const primaryColor = siteSettings.primaryColor || BRAND_COLORS.primary;
+  const secondaryColor = siteSettings.secondaryColor || BRAND_COLORS.secondary;
+
   const colors = {
     ...BRAND_COLORS,
-    primary: siteSettings.primaryColor || BRAND_COLORS.primary,
-    secondary: siteSettings.secondaryColor || BRAND_COLORS.secondary,
+    primary: primaryColor,
+    secondary: secondaryColor,
+    // Generar variantes ligeras basadas en el color de Sanity si es posible, 
+    // o mantener las de config si no hay color en Sanity
+    primaryLight: siteSettings.primaryColor ? `${primaryColor}CC` : BRAND_COLORS.primaryLight,
+    secondaryLight: siteSettings.secondaryColor ? `${secondaryColor}CC` : BRAND_COLORS.secondaryLight,
   };
-
-  console.log('🎨 Colores finales:', colors);
 
   // Merge Sanity contact info with defaults
   const contact = {
@@ -124,11 +123,9 @@ export const SiteConfigProvider: React.FC<{ children: ReactNode }> = ({ children
       display: siteSettings.phone || CONTACT_INFO.phone.display,
       whatsapp: siteSettings.whatsapp || CONTACT_INFO.phone.whatsapp,
     },
-    email: siteSettings.email || CONTACT_INFO.email,
-    address: typeof siteSettings.address === 'string' ? siteSettings.address : CONTACT_INFO.address,
+    email: siteSettings.email || (typeof CONTACT_INFO.email === 'string' ? CONTACT_INFO.email : CONTACT_INFO.email.sales),
+    address: siteSettings.address || CONTACT_INFO.address,
   };
-
-  console.log('📞 Contacto final:', contact);
 
   const value: SiteConfig = {
     siteSettings,
