@@ -284,7 +284,7 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
     if (activeBrandData?.description) return activeBrandData.description;
     if (activeCategoryData?.seoDescription) return activeCategoryData.seoDescription;
     if (activeCategoryData?.description) return activeCategoryData.description;
-    return "Explora nuestro catálogo completo de material eléctrico: iluminación LED industrial, reflectores, conductores, tableros y herramientas. Stock garantizado en Lima, Perú.";
+    return "Catálogo completo de material eléctrico: iluminación LED, conductores y herramientas. Stock garantizado en Lima, Perú con entrega inmediata.";
   }, [activeCategoryData, activeBrandData]);
 
   const seoKeywords = useMemo(() => {

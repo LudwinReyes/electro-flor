@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run build:frontend && npm run build:studio && npm run postbuild",
+    "build": "npm run build:frontend && npm run build:studio && npm run postbuild && npm run sitemap",
     "build:frontend": "vite build",
     "build:studio": "npx sanity build dist/admin --yes",
     "postbuild": "cp -r dist/admin/static dist/static || xcopy /E /I /Y dist\\admin\\static dist\\static",
     "preview": "vite preview",
-    "studio": "npx sanity dev --port 3333"
+    "studio": "npx sanity dev --port 3333",
+    "sitemap": "node scripts/generate-sitemap.mjs"
   },
   "dependencies": {
     "@google/genai": "^1.35.0",

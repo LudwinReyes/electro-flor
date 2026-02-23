@@ -13,7 +13,7 @@ interface SEOHeadProps {
 
 const SITE_NAME = 'ELECTRO FLOR';
 const DEFAULT_TITLE = 'ELECTRO FLOR | Iluminación y Material Eléctrico en Perú';
-const DEFAULT_DESCRIPTION = 'Distribuidor oficial de material eléctrico en Perú. Especialistas en iluminación LED industrial, conductores eléctricos, herramientas Bosch y Schneider Electric. Stock garantizado y entrega inmediata en Lima.';
+const DEFAULT_DESCRIPTION = 'Distribuidor líder de material eléctrico en Perú. Iluminación LED, conductores, tableros y herramientas. Marcas líderes con stock garantizado y entrega inmediata.';
 const DEFAULT_IMAGE = 'https://electroflorperu.com/media/Logo%20Electro%20Flor.png';
 const SITE_URL = 'https://electroflorperu.com';
 
@@ -27,7 +27,10 @@ const SEOHead: React.FC<SEOHeadProps> = ({
     keywords
 }) => {
     const fullTitle = title ? `${title} | ${SITE_NAME}` : DEFAULT_TITLE;
-    const fullUrl = url ? `${SITE_URL}${url}` : SITE_URL;
+
+    // Si la URL es la home (/), usamos SITE_URL directamente
+    const cleanUrl = url === '/' ? '' : (url || '');
+    const fullUrl = `${SITE_URL}${cleanUrl}`;
 
     return (
         <Helmet>
@@ -44,6 +47,9 @@ const SEOHead: React.FC<SEOHeadProps> = ({
             <meta property="og:type" content={type} />
             <meta property="og:url" content={fullUrl} />
             <meta property="og:image" content={image} />
+            <meta property="og:image:secure_url" content={image} />
+            <meta property="og:image:width" content="1200" />
+            <meta property="og:image:height" content="630" />
             <meta property="og:site_name" content={SITE_NAME} />
             <meta property="og:locale" content="es_PE" />
 

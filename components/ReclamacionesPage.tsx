@@ -47,7 +47,8 @@ const ReclamacionesPage: React.FC = () => {
         <div className="bg-white min-h-screen">
             <SEOHead
                 title="Libro de Reclamaciones | ELECTRO FLOR"
-                description="Pone a su disposición nuestro Libro de Reclamaciones virtual."
+                description="Pone a su disposición nuestro Libro de Reclamaciones virtual conforme al código de protección al consumidor."
+                url="/libro-de-reclamaciones"
             />
 
             <div className="pt-32 pb-20 px-4">
