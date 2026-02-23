@@ -21,6 +21,7 @@ const BrandsPage = lazy(() => import('./components/BrandsPage'));
 const AboutUsPage = lazy(() => import('./components/AboutUsPage'));
 const ContactPage = lazy(() => import('./components/ContactPage'));
 const FaqPage = lazy(() => import('./components/FaqPage'));
+const ReclamacionesPage = lazy(() => import('./components/ReclamacionesPage'));
 
 // Lazy-loaded Modals
 const QuoteCart = lazy(() => import('./components/QuoteCart'));
@@ -151,6 +152,7 @@ const App: React.FC = () => {
               <Route path="/nosotros" element={<AboutUsPage />} />
               <Route path="/contacto" element={<ContactPage />} />
               <Route path="/faq" element={<FaqPage />} />
+              <Route path="/libro-de-reclamaciones" element={<ReclamacionesPage />} />
             </Routes>
           </Suspense>
         </main>

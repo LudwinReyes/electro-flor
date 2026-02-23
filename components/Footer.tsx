@@ -127,6 +127,30 @@ const Footer: React.FC = () => {
             <li><Link to="/contacto" className="hover:opacity-80">Contacto Corporativo</Link></li>
             <li><Link to="/faq" className="hover:opacity-80">Garantías y Cambios</Link></li>
           </ul>
+
+          <div className="mt-8 pt-8 border-t border-gray-100 italic">
+            <p className="text-[10px] font-black uppercase text-gray-400">RUC</p>
+            <p className="text-xs font-black mb-2" style={{ color: colors.primary }}>20611899972</p>
+
+            <p className="text-[10px] font-black uppercase text-gray-400">Razón Social</p>
+            <p className="text-[11px] font-black leading-tight mb-6 uppercase" style={{ color: colors.primary }}>
+              ELECTRICIDAD ELECTRONICA FLORES E.I.R.L.
+            </p>
+
+            <Link
+              to="/libro-de-reclamaciones"
+              className="inline-flex items-center gap-3 p-4 rounded-2xl border-2 transition-all hover:scale-105 active:scale-95 group"
+              style={{ borderColor: colors.secondaryOpacity[20], backgroundColor: 'white' }}
+            >
+              <div className="bg-amber-500 p-2 rounded-lg text-white shadow-md group-hover:rotate-12 transition-transform">
+                <i className="fas fa-book-open text-lg"></i>
+              </div>
+              <div>
+                <p className="text-[9px] font-black text-gray-400 uppercase tracking-tighter">Libro de</p>
+                <p className="text-[11px] font-black uppercase leading-none" style={{ color: colors.primary }}>Reclamaciones</p>
+              </div>
+            </Link>
+          </div>
         </div>
 
         {/* Contacto */}

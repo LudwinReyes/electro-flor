@@ -13,6 +13,7 @@ import programaEspecialista from './programaEspecialista'
 import promoBanner from './promoBanner'
 import urgencyBar from './urgencyBar'
 import deliveryBanner from './deliveryBanner'
+import reclamacion from './reclamacion'
 
 export const schemaTypes = [
   product,
@@ -29,5 +30,6 @@ export const schemaTypes = [
   programaEspecialista,
   promoBanner,
   urgencyBar,
-  deliveryBanner
+  deliveryBanner,
+  reclamacion
 ]

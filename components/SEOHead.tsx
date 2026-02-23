@@ -14,8 +14,8 @@ interface SEOHeadProps {
 const SITE_NAME = 'ELECTRO FLOR';
 const DEFAULT_TITLE = 'ELECTRO FLOR | Iluminación y Material Eléctrico en Perú';
 const DEFAULT_DESCRIPTION = 'Distribuidor oficial de material eléctrico en Perú. Especialistas en iluminación LED industrial, conductores eléctricos, herramientas Bosch y Schneider Electric. Stock garantizado y entrega inmediata en Lima.';
-const DEFAULT_IMAGE = 'https://www.electroflor.com.pe/media/Logo%20Electro%20Flor.png';
-const SITE_URL = 'https://www.electroflor.com.pe';
+const DEFAULT_IMAGE = 'https://electroflorperu.com/media/Logo%20Electro%20Flor.png';
+const SITE_URL = 'https://electroflorperu.com';
 
 const SEOHead: React.FC<SEOHeadProps> = ({
     title,

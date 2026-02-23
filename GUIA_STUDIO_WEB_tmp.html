@@ -2,404 +2,413 @@
 <html>
 
 <head>
-    <title>GUIA_STUDIO_WEB.md</title>
-    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-    
-<style>
-/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
-/*---------------------------------------------------------------------------------------------
+	<title>GUIA_STUDIO_WEB.md</title>
+	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+	<style>
+		/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+		/*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-body {
-	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
-	font-size: var(--vscode-markdown-font-size, 14px);
-	padding: 0 26px;
-	line-height: var(--vscode-markdown-line-height, 22px);
-	word-wrap: break-word;
-}
+		body {
+			font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+			font-size: var(--vscode-markdown-font-size, 14px);
+			padding: 0 26px;
+			line-height: var(--vscode-markdown-line-height, 22px);
+			word-wrap: break-word;
+		}
 
-html,footer,header{
-	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
-	font-size: var(--vscode-markdown-font-size, 14px);
-}
+		html,
+		footer,
+		header {
+			font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+			font-size: var(--vscode-markdown-font-size, 14px);
+		}
 
-#code-csp-warning {
-	position: fixed;
-	top: 0;
-	right: 0;
-	color: white;
-	margin: 16px;
-	text-align: center;
-	font-size: 12px;
-	font-family: sans-serif;
-	background-color:#444444;
-	cursor: pointer;
-	padding: 6px;
-	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
-}
+		#code-csp-warning {
+			position: fixed;
+			top: 0;
+			right: 0;
+			color: white;
+			margin: 16px;
+			text-align: center;
+			font-size: 12px;
+			font-family: sans-serif;
+			background-color: #444444;
+			cursor: pointer;
+			padding: 6px;
+			box-shadow: 1px 1px 1px rgba(0, 0, 0, .25);
+		}
 
-#code-csp-warning:hover {
-	text-decoration: none;
-	background-color:#007acc;
-	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
-}
+		#code-csp-warning:hover {
+			text-decoration: none;
+			background-color: #007acc;
+			box-shadow: 2px 2px 2px rgba(0, 0, 0, .25);
+		}
 
-body.scrollBeyondLastLine {
-	margin-bottom: calc(100vh - 22px);
-}
+		body.scrollBeyondLastLine {
+			margin-bottom: calc(100vh - 22px);
+		}
 
-body.showEditorSelection .code-line {
-	position: relative;
-}
+		body.showEditorSelection .code-line {
+			position: relative;
+		}
 
-body.showEditorSelection .code-active-line:before,
-body.showEditorSelection .code-line:hover:before {
-	content: "";
-	display: block;
-	position: absolute;
-	top: 0;
-	left: -12px;
-	height: 100%;
-}
+		body.showEditorSelection .code-active-line:before,
+		body.showEditorSelection .code-line:hover:before {
+			content: "";
+			display: block;
+			position: absolute;
+			top: 0;
+			left: -12px;
+			height: 100%;
+		}
 
-body.showEditorSelection li.code-active-line:before,
-body.showEditorSelection li.code-line:hover:before {
-	left: -30px;
-}
+		body.showEditorSelection li.code-active-line:before,
+		body.showEditorSelection li.code-line:hover:before {
+			left: -30px;
+		}
 
-.vscode-light.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.15);
-}
+		.vscode-light.showEditorSelection .code-active-line:before {
+			border-left: 3px solid rgba(0, 0, 0, 0.15);
+		}
 
-.vscode-light.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.40);
-}
+		.vscode-light.showEditorSelection .code-line:hover:before {
+			border-left: 3px solid rgba(0, 0, 0, 0.40);
+		}
 
-.vscode-light.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
+		.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+			border-left: none;
+		}
 
-.vscode-dark.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.4);
-}
+		.vscode-dark.showEditorSelection .code-active-line:before {
+			border-left: 3px solid rgba(255, 255, 255, 0.4);
+		}
 
-.vscode-dark.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.60);
-}
+		.vscode-dark.showEditorSelection .code-line:hover:before {
+			border-left: 3px solid rgba(255, 255, 255, 0.60);
+		}
 
-.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
+		.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+			border-left: none;
+		}
 
-.vscode-high-contrast.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 160, 0, 0.7);
-}
+		.vscode-high-contrast.showEditorSelection .code-active-line:before {
+			border-left: 3px solid rgba(255, 160, 0, 0.7);
+		}
 
-.vscode-high-contrast.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 160, 0, 1);
-}
+		.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+			border-left: 3px solid rgba(255, 160, 0, 1);
+		}
 
-.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
+		.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+			border-left: none;
+		}
 
-img {
-	max-width: 100%;
-	max-height: 100%;
-}
+		img {
+			max-width: 100%;
+			max-height: 100%;
+		}
 
-a {
-	text-decoration: none;
-}
+		a {
+			text-decoration: none;
+		}
 
-a:hover {
-	text-decoration: underline;
-}
+		a:hover {
+			text-decoration: underline;
+		}
 
-a:focus,
-input:focus,
-select:focus,
-textarea:focus {
-	outline: 1px solid -webkit-focus-ring-color;
-	outline-offset: -1px;
-}
+		a:focus,
+		input:focus,
+		select:focus,
+		textarea:focus {
+			outline: 1px solid -webkit-focus-ring-color;
+			outline-offset: -1px;
+		}
 
-hr {
-	border: 0;
-	height: 2px;
-	border-bottom: 2px solid;
-}
+		hr {
+			border: 0;
+			height: 2px;
+			border-bottom: 2px solid;
+		}
 
-h1 {
-	padding-bottom: 0.3em;
-	line-height: 1.2;
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-}
+		h1 {
+			padding-bottom: 0.3em;
+			line-height: 1.2;
+			border-bottom-width: 1px;
+			border-bottom-style: solid;
+		}
 
-h1, h2, h3 {
-	font-weight: normal;
-}
+		h1,
+		h2,
+		h3 {
+			font-weight: normal;
+		}
 
-table {
-	border-collapse: collapse;
-}
+		table {
+			border-collapse: collapse;
+		}
 
-table > thead > tr > th {
-	text-align: left;
-	border-bottom: 1px solid;
-}
+		table>thead>tr>th {
+			text-align: left;
+			border-bottom: 1px solid;
+		}
 
-table > thead > tr > th,
-table > thead > tr > td,
-table > tbody > tr > th,
-table > tbody > tr > td {
-	padding: 5px 10px;
-}
+		table>thead>tr>th,
+		table>thead>tr>td,
+		table>tbody>tr>th,
+		table>tbody>tr>td {
+			padding: 5px 10px;
+		}
 
-table > tbody > tr + tr > td {
-	border-top: 1px solid;
-}
+		table>tbody>tr+tr>td {
+			border-top: 1px solid;
+		}
 
-blockquote {
-	margin: 0 7px 0 5px;
-	padding: 0 16px 0 10px;
-	border-left-width: 5px;
-	border-left-style: solid;
-}
+		blockquote {
+			margin: 0 7px 0 5px;
+			padding: 0 16px 0 10px;
+			border-left-width: 5px;
+			border-left-style: solid;
+		}
 
-code {
-	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
-	font-size: 1em;
-	line-height: 1.357em;
-}
+		code {
+			font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+			font-size: 1em;
+			line-height: 1.357em;
+		}
 
-body.wordWrap pre {
-	white-space: pre-wrap;
-}
+		body.wordWrap pre {
+			white-space: pre-wrap;
+		}
 
-pre:not(.hljs),
-pre.hljs code > div {
-	padding: 16px;
-	border-radius: 3px;
-	overflow: auto;
-}
+		pre:not(.hljs),
+		pre.hljs code>div {
+			padding: 16px;
+			border-radius: 3px;
+			overflow: auto;
+		}
 
-pre code {
-	color: var(--vscode-editor-foreground);
-	tab-size: 4;
-}
+		pre code {
+			color: var(--vscode-editor-foreground);
+			tab-size: 4;
+		}
 
-/** Theming */
+		/** Theming */
 
-.vscode-light pre {
-	background-color: rgba(220, 220, 220, 0.4);
-}
+		.vscode-light pre {
+			background-color: rgba(220, 220, 220, 0.4);
+		}
 
-.vscode-dark pre {
-	background-color: rgba(10, 10, 10, 0.4);
-}
+		.vscode-dark pre {
+			background-color: rgba(10, 10, 10, 0.4);
+		}
 
-.vscode-high-contrast pre {
-	background-color: rgb(0, 0, 0);
-}
+		.vscode-high-contrast pre {
+			background-color: rgb(0, 0, 0);
+		}
 
-.vscode-high-contrast h1 {
-	border-color: rgb(0, 0, 0);
-}
+		.vscode-high-contrast h1 {
+			border-color: rgb(0, 0, 0);
+		}
 
-.vscode-light table > thead > tr > th {
-	border-color: rgba(0, 0, 0, 0.69);
-}
+		.vscode-light table>thead>tr>th {
+			border-color: rgba(0, 0, 0, 0.69);
+		}
 
-.vscode-dark table > thead > tr > th {
-	border-color: rgba(255, 255, 255, 0.69);
-}
+		.vscode-dark table>thead>tr>th {
+			border-color: rgba(255, 255, 255, 0.69);
+		}
 
-.vscode-light h1,
-.vscode-light hr,
-.vscode-light table > tbody > tr + tr > td {
-	border-color: rgba(0, 0, 0, 0.18);
-}
+		.vscode-light h1,
+		.vscode-light hr,
+		.vscode-light table>tbody>tr+tr>td {
+			border-color: rgba(0, 0, 0, 0.18);
+		}
 
-.vscode-dark h1,
-.vscode-dark hr,
-.vscode-dark table > tbody > tr + tr > td {
-	border-color: rgba(255, 255, 255, 0.18);
-}
+		.vscode-dark h1,
+		.vscode-dark hr,
+		.vscode-dark table>tbody>tr+tr>td {
+			border-color: rgba(255, 255, 255, 0.18);
+		}
+	</style>
 
-</style>
+	<style>
+		/* Tomorrow Theme */
+		/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+		/* Original theme - https://github.com/chriskempson/tomorrow-theme */
 
-<style>
-/* Tomorrow Theme */
-/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
-/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+		/* Tomorrow Comment */
+		.hljs-comment,
+		.hljs-quote {
+			color: #8e908c;
+		}
 
-/* Tomorrow Comment */
-.hljs-comment,
-.hljs-quote {
-	color: #8e908c;
-}
+		/* Tomorrow Red */
+		.hljs-variable,
+		.hljs-template-variable,
+		.hljs-tag,
+		.hljs-name,
+		.hljs-selector-id,
+		.hljs-selector-class,
+		.hljs-regexp,
+		.hljs-deletion {
+			color: #c82829;
+		}
 
-/* Tomorrow Red */
-.hljs-variable,
-.hljs-template-variable,
-.hljs-tag,
-.hljs-name,
-.hljs-selector-id,
-.hljs-selector-class,
-.hljs-regexp,
-.hljs-deletion {
-	color: #c82829;
-}
+		/* Tomorrow Orange */
+		.hljs-number,
+		.hljs-built_in,
+		.hljs-builtin-name,
+		.hljs-literal,
+		.hljs-type,
+		.hljs-params,
+		.hljs-meta,
+		.hljs-link {
+			color: #f5871f;
+		}
 
-/* Tomorrow Orange */
-.hljs-number,
-.hljs-built_in,
-.hljs-builtin-name,
-.hljs-literal,
-.hljs-type,
-.hljs-params,
-.hljs-meta,
-.hljs-link {
-	color: #f5871f;
-}
+		/* Tomorrow Yellow */
+		.hljs-attribute {
+			color: #eab700;
+		}
 
-/* Tomorrow Yellow */
-.hljs-attribute {
-	color: #eab700;
-}
+		/* Tomorrow Green */
+		.hljs-string,
+		.hljs-symbol,
+		.hljs-bullet,
+		.hljs-addition {
+			color: #718c00;
+		}
 
-/* Tomorrow Green */
-.hljs-string,
-.hljs-symbol,
-.hljs-bullet,
-.hljs-addition {
-	color: #718c00;
-}
+		/* Tomorrow Blue */
+		.hljs-title,
+		.hljs-section {
+			color: #4271ae;
+		}
 
-/* Tomorrow Blue */
-.hljs-title,
-.hljs-section {
-	color: #4271ae;
-}
+		/* Tomorrow Purple */
+		.hljs-keyword,
+		.hljs-selector-tag {
+			color: #8959a8;
+		}
 
-/* Tomorrow Purple */
-.hljs-keyword,
-.hljs-selector-tag {
-	color: #8959a8;
-}
+		.hljs {
+			display: block;
+			overflow-x: auto;
+			color: #4d4d4c;
+			padding: 0.5em;
+		}
 
-.hljs {
-	display: block;
-	overflow-x: auto;
-	color: #4d4d4c;
-	padding: 0.5em;
-}
+		.hljs-emphasis {
+			font-style: italic;
+		}
 
-.hljs-emphasis {
-	font-style: italic;
-}
+		.hljs-strong {
+			font-weight: bold;
+		}
+	</style>
 
-.hljs-strong {
-	font-weight: bold;
-}
-</style>
-
-<style>
-/*
+	<style>
+		/*
  * Custom MD PDF CSS
  */
-html,footer,header{
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+		html,
+		footer,
+		header {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
 
- }
-body {
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
-	padding: 0 12px;
-}
+		}
 
-pre {
-	background-color: #f8f8f8;
-	border: 1px solid #cccccc;
-	border-radius: 3px;
-	overflow-x: auto;
-	white-space: pre-wrap;
-	overflow-wrap: break-word;
-}
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+			padding: 0 12px;
+		}
 
-pre:not(.hljs) {
-	padding: 23px;
-	line-height: 19px;
-}
+		pre {
+			background-color: #f8f8f8;
+			border: 1px solid #cccccc;
+			border-radius: 3px;
+			overflow-x: auto;
+			white-space: pre-wrap;
+			overflow-wrap: break-word;
+		}
 
-blockquote {
-	background: rgba(127, 127, 127, 0.1);
-	border-color: rgba(0, 122, 204, 0.5);
-}
+		pre:not(.hljs) {
+			padding: 23px;
+			line-height: 19px;
+		}
 
-.emoji {
-	height: 1.4em;
-}
+		blockquote {
+			background: rgba(127, 127, 127, 0.1);
+			border-color: rgba(0, 122, 204, 0.5);
+		}
 
-code {
-	font-size: 14px;
-	line-height: 19px;
-}
+		.emoji {
+			height: 1.4em;
+		}
 
-/* for inline code */
-:not(pre):not(.hljs) > code {
-	color: #C9AE75; /* Change the old color so it seems less like an error */
-	font-size: inherit;
-}
+		code {
+			font-size: 14px;
+			line-height: 19px;
+		}
 
-/* Page Break : use <div class="page"/> to insert page break
+		/* for inline code */
+		:not(pre):not(.hljs)>code {
+			color: #C9AE75;
+			/* Change the old color so it seems less like an error */
+			font-size: inherit;
+		}
+
+		/* Page Break : use <div class="page"/> to insert page break
 -------------------------------------------------------- */
-.page {
-	page-break-after: always;
-}
-
-</style>
-<link rel="stylesheet" href="file:///r%3A/2.Travail/1.Enseignement/Cours/_1.Outils/2.Developpement/1.SCSS/main.css" type="text/css"><link rel="stylesheet" href="file:///d%3A/rdaros/Cours/_1.Outils/2.Developpement/1.SCSS/main.css" type="text/css">
+		.page {
+			page-break-after: always;
+		}
+	</style>
+	<link rel="stylesheet" href="file:///r%3A/2.Travail/1.Enseignement/Cours/_1.Outils/2.Developpement/1.SCSS/main.css"
+		type="text/css">
+	<link rel="stylesheet" href="file:///d%3A/rdaros/Cours/_1.Outils/2.Developpement/1.SCSS/main.css" type="text/css">
 </head>
 
 <body>
-    <h1 id="%F0%9F%8C%90-usar-sanity-studio-en-la-nube">🌐 Usar Sanity Studio en la Nube</h1>
-<p>Ya que tu versión de Node.js (v20.14.0) no es compatible con Sanity Studio local, <strong>puedes usar Sanity Studio directamente en el navegador</strong> mientras actualizas Node.js.</p>
-<hr>
-<h2 id="%F0%9F%9A%80-acceso-r%C3%A1pido-3-pasos">🚀 Acceso Rápido (3 pasos)</h2>
-<h3 id="1-ir-al-dashboard-de-sanity">1. Ir al Dashboard de Sanity</h3>
-<p>Abre en tu navegador:</p>
-<pre class="hljs"><code><div>https://www.sanity.io/manage
+	<h1 id="%F0%9F%8C%90-usar-sanity-studio-en-la-nube">🌐 Usar Sanity Studio en la Nube</h1>
+	<p>Ya que tu versión de Node.js (v20.14.0) no es compatible con Sanity Studio local, <strong>puedes usar Sanity
+			Studio directamente en el navegador</strong> mientras actualizas Node.js.</p>
+	<hr>
+	<h2 id="%F0%9F%9A%80-acceso-r%C3%A1pido-3-pasos">🚀 Acceso Rápido (3 pasos)</h2>
+	<h3 id="1-ir-al-dashboard-de-sanity">1. Ir al Dashboard de Sanity</h3>
+	<p>Abre en tu navegador:</p>
+	<pre class="hljs"><code><div>https://www.sanity.io/manage
 </div></code></pre>
-<h3 id="2-buscar-tu-proyecto">2. Buscar tu Proyecto</h3>
-<ul>
-<li>Busca: <strong>&quot;ELECTRO FLOR&quot;</strong> o el nombre que le pusiste</li>
-<li>O busca por Project ID: <strong>2gy084y4</strong></li>
-</ul>
-<h3 id="3-lanzar-el-studio">3. Lanzar el Studio</h3>
-<ul>
-<li>Haz clic en tu proyecto</li>
-<li>Busca el botón <strong>&quot;Open Studio&quot;</strong> o <strong>&quot;Launch Studio&quot;</strong></li>
-<li>Se abrirá Sanity Studio en el navegador</li>
-</ul>
-<hr>
-<h2 id="%F0%9F%93%9D-empezar-a-poblar-datos">📝 Empezar a Poblar Datos</h2>
-<p>Una vez en el Studio, sigue este orden:</p>
-<h3 id="1-%E2%9A%99%EF%B8%8F-configuraci%C3%B3n-del-sitio-5-min">1. ⚙️ Configuración del Sitio (5 min)</h3>
-<p><strong>Ruta</strong>: Configuración Global &gt; Configuración del Sitio</p>
-<p>Llenar:</p>
-<pre class="hljs"><code><div>Colores de Marca:
+	<h3 id="2-buscar-tu-proyecto">2. Buscar tu Proyecto</h3>
+	<ul>
+		<li>Busca: <strong>&quot;ELECTRO FLOR&quot;</strong> o el nombre que le pusiste</li>
+		<li>O busca por Project ID: <strong>2gy084y4</strong></li>
+	</ul>
+	<h3 id="3-lanzar-el-studio">3. Lanzar el Studio</h3>
+	<ul>
+		<li>Haz clic en tu proyecto</li>
+		<li>Busca el botón <strong>&quot;Open Studio&quot;</strong> o <strong>&quot;Launch Studio&quot;</strong></li>
+		<li>Se abrirá Sanity Studio en el navegador</li>
+	</ul>
+	<hr>
+	<h2 id="%F0%9F%93%9D-empezar-a-poblar-datos">📝 Empezar a Poblar Datos</h2>
+	<p>Una vez en el Studio, sigue este orden:</p>
+	<h3 id="1-%E2%9A%99%EF%B8%8F-configuraci%C3%B3n-del-sitio-5-min">1. ⚙️ Configuración del Sitio (5 min)</h3>
+	<p><strong>Ruta</strong>: Configuración Global &gt; Configuración del Sitio</p>
+	<p>Llenar:</p>
+	<pre class="hljs"><code><div>Colores de Marca:
 - Primario: #002D62
 - Secundario: #8CC63F
 
 Contacto:
 - Teléfono: 999 000 000
 - WhatsApp: 51999000000
-- Email: ventas@electroflor.com
-- Email Ventas: ventas@electroflor.com
+- Email: ventas@electroflorperu.com
+- Email Ventas: ventas@electroflorperu.com
 
 Dirección:
 - Calle: Av. Argentina 245
@@ -430,91 +439,91 @@ Features:
 - ✅ Sistema de Cotización
 - ✅ Entrega Mismo Día
 </div></code></pre>
-<p><strong>Hacer clic en PUBLISH</strong> (esquina superior derecha)</p>
-<hr>
-<h3 id="2-%F0%9F%8F%B7%EF%B8%8F-crear-categor%C3%ADas-10-min">2. 🏷️ Crear Categorías (10 min)</h3>
-<p><strong>Ruta</strong>: Categorías &gt; Create</p>
-<p>Crear estas categorías:</p>
-<h4 id="categor%C3%ADa-1-iluminaci%C3%B3n">Categoría 1: Iluminación</h4>
-<pre class="hljs"><code><div>Nombre: Iluminación
+	<p><strong>Hacer clic en PUBLISH</strong> (esquina superior derecha)</p>
+	<hr>
+	<h3 id="2-%F0%9F%8F%B7%EF%B8%8F-crear-categor%C3%ADas-10-min">2. 🏷️ Crear Categorías (10 min)</h3>
+	<p><strong>Ruta</strong>: Categorías &gt; Create</p>
+	<p>Crear estas categorías:</p>
+	<h4 id="categor%C3%ADa-1-iluminaci%C3%B3n">Categoría 1: Iluminación</h4>
+	<pre class="hljs"><code><div>Nombre: Iluminación
 Slug: iluminacion
 Icono: fa-lightbulb
 Descripción: Lámparas LED, focos, paneles y sistemas de iluminación
 Orden: 1
 </div></code></pre>
-<h4 id="categor%C3%ADa-2-conductores">Categoría 2: Conductores</h4>
-<pre class="hljs"><code><div>Nombre: Conductores
+	<h4 id="categor%C3%ADa-2-conductores">Categoría 2: Conductores</h4>
+	<pre class="hljs"><code><div>Nombre: Conductores
 Slug: conductores
 Icono: fa-plug
 Descripción: Cables eléctricos, conductores y alambres
 Orden: 2
 </div></code></pre>
-<h4 id="categor%C3%ADa-3-tomacorrientes">Categoría 3: Tomacorrientes</h4>
-<pre class="hljs"><code><div>Nombre: Tomacorrientes
+	<h4 id="categor%C3%ADa-3-tomacorrientes">Categoría 3: Tomacorrientes</h4>
+	<pre class="hljs"><code><div>Nombre: Tomacorrientes
 Slug: tomacorrientes
 Icono: fa-plug
 Descripción: Tomacorrientes, enchufes y conexiones
 Orden: 3
 </div></code></pre>
-<h4 id="categor%C3%ADa-4-interruptores">Categoría 4: Interruptores</h4>
-<pre class="hljs"><code><div>Nombre: Interruptores
+	<h4 id="categor%C3%ADa-4-interruptores">Categoría 4: Interruptores</h4>
+	<pre class="hljs"><code><div>Nombre: Interruptores
 Slug: interruptores
 Icono: fa-toggle-on
 Descripción: Interruptores, conmutadores y pulsadores
 Orden: 4
 </div></code></pre>
-<h4 id="categor%C3%ADa-5-automatizaci%C3%B3n">Categoría 5: Automatización</h4>
-<pre class="hljs"><code><div>Nombre: Automatización
+	<h4 id="categor%C3%ADa-5-automatizaci%C3%B3n">Categoría 5: Automatización</h4>
+	<pre class="hljs"><code><div>Nombre: Automatización
 Slug: automatizacion
 Icono: fa-microchip
 Descripción: Sistemas de automatización y control
 Orden: 5
 </div></code></pre>
-<p><strong>Publish cada una después de crearla</strong></p>
-<hr>
-<h3 id="3-%F0%9F%8F%A2-crear-marcas-10-min">3. 🏢 Crear Marcas (10 min)</h3>
-<p><strong>Ruta</strong>: Marcas &gt; Create</p>
-<h4 id="marca-1-bticino">Marca 1: Bticino</h4>
-<pre class="hljs"><code><div>Nombre: Bticino
+	<p><strong>Publish cada una después de crearla</strong></p>
+	<hr>
+	<h3 id="3-%F0%9F%8F%A2-crear-marcas-10-min">3. 🏢 Crear Marcas (10 min)</h3>
+	<p><strong>Ruta</strong>: Marcas &gt; Create</p>
+	<h4 id="marca-1-bticino">Marca 1: Bticino</h4>
+	<pre class="hljs"><code><div>Nombre: Bticino
 Slug: bticino
 Descripción: Líder mundial en sistemas eléctricos
 Website: https://www.bticino.com
 Featured: ✅
 </div></code></pre>
-<h4 id="marca-2-nexans">Marca 2: Nexans</h4>
-<pre class="hljs"><code><div>Nombre: Nexans
+	<h4 id="marca-2-nexans">Marca 2: Nexans</h4>
+	<pre class="hljs"><code><div>Nombre: Nexans
 Slug: nexans
 Descripción: Fabricante de cables y conductores
 Website: https://www.nexans.com
 Featured: ✅
 </div></code></pre>
-<h4 id="marca-3-schneider-electric">Marca 3: Schneider Electric</h4>
-<pre class="hljs"><code><div>Nombre: Schneider Electric
+	<h4 id="marca-3-schneider-electric">Marca 3: Schneider Electric</h4>
+	<pre class="hljs"><code><div>Nombre: Schneider Electric
 Slug: schneider-electric
 Descripción: Automatización y gestión de energía
 Website: https://www.se.com
 Featured: ✅
 </div></code></pre>
-<h4 id="marca-4-legrand">Marca 4: Legrand</h4>
-<pre class="hljs"><code><div>Nombre: Legrand
+	<h4 id="marca-4-legrand">Marca 4: Legrand</h4>
+	<pre class="hljs"><code><div>Nombre: Legrand
 Slug: legrand
 Descripción: Infraestructuras eléctricas y digitales
 Website: https://www.legrand.com
 Featured: ✅
 </div></code></pre>
-<h4 id="marca-5-general-cable">Marca 5: General Cable</h4>
-<pre class="hljs"><code><div>Nombre: General Cable
+	<h4 id="marca-5-general-cable">Marca 5: General Cable</h4>
+	<pre class="hljs"><code><div>Nombre: General Cable
 Slug: general-cable
 Descripción: Cables y conductores de alta calidad
 Website: https://www.generalcable.com
 Featured: ✅
 </div></code></pre>
-<p><strong>Publish cada una</strong></p>
-<hr>
-<h3 id="4-%F0%9F%93%A6-crear-productos-30-60-min">4. 📦 Crear Productos (30-60 min)</h3>
-<p><strong>Ruta</strong>: Productos &gt; Create</p>
-<h4 id="producto-ejemplo-1">Producto Ejemplo 1:</h4>
-<pre class="hljs"><code><div>Nombre: Lámpara LED 9W Luz Blanca
+	<p><strong>Publish cada una</strong></p>
+	<hr>
+	<h3 id="4-%F0%9F%93%A6-crear-productos-30-60-min">4. 📦 Crear Productos (30-60 min)</h3>
+	<p><strong>Ruta</strong>: Productos &gt; Create</p>
+	<h4 id="producto-ejemplo-1">Producto Ejemplo 1:</h4>
+	<pre class="hljs"><code><div>Nombre: Lámpara LED 9W Luz Blanca
 Slug: lampara-led-9w-luz-blanca
 Código: LED-9W-BL
 Marca: Seleccionar &quot;Bticino&quot;
@@ -540,8 +549,8 @@ Flags:
 ✅ Producto Nuevo
 ✅ En Stock
 </div></code></pre>
-<h4 id="producto-ejemplo-2">Producto Ejemplo 2:</h4>
-<pre class="hljs"><code><div>Nombre: Cable THW 2.5mm Rojo
+	<h4 id="producto-ejemplo-2">Producto Ejemplo 2:</h4>
+	<pre class="hljs"><code><div>Nombre: Cable THW 2.5mm Rojo
 Slug: cable-thw-25mm-rojo
 Código: THW-25-RED
 Marca: Nexans
@@ -559,8 +568,8 @@ Especificaciones:
 
 ✅ En Stock
 </div></code></pre>
-<h4 id="producto-ejemplo-3">Producto Ejemplo 3:</h4>
-<pre class="hljs"><code><div>Nombre: Tomacorriente Doble Universal Bticino
+	<h4 id="producto-ejemplo-3">Producto Ejemplo 3:</h4>
+	<pre class="hljs"><code><div>Nombre: Tomacorriente Doble Universal Bticino
 Slug: tomacorriente-doble-universal
 Código: TOMA-DU-BT
 Marca: Bticino
@@ -579,12 +588,12 @@ Especificaciones:
 ✅ Destacado
 ✅ En Stock
 </div></code></pre>
-<p><strong>Continúa creando más productos...</strong></p>
-<hr>
-<h3 id="5-%F0%9F%8F%97%EF%B8%8F-crear-proyectos-15-min">5. 🏗️ Crear Proyectos (15 min)</h3>
-<p><strong>Ruta</strong>: Proyectos Destacados &gt; Create</p>
-<h4 id="proyecto-1">Proyecto 1:</h4>
-<pre class="hljs"><code><div>Título: Iluminación LED Edificio Corporativo
+	<p><strong>Continúa creando más productos...</strong></p>
+	<hr>
+	<h3 id="5-%F0%9F%8F%97%EF%B8%8F-crear-proyectos-15-min">5. 🏗️ Crear Proyectos (15 min)</h3>
+	<p><strong>Ruta</strong>: Proyectos Destacados &gt; Create</p>
+	<h4 id="proyecto-1">Proyecto 1:</h4>
+	<pre class="hljs"><code><div>Título: Iluminación LED Edificio Corporativo
 Slug: iluminacion-edificio-corporativo
 Tipo: Iluminación Técnica
 Ubicación: San Isidro, Lima
@@ -592,8 +601,8 @@ Descripción: Instalación completa de sistema de iluminación LED en edificio d
 Featured: ✅
 Orden: 1
 </div></code></pre>
-<h4 id="proyecto-2">Proyecto 2:</h4>
-<pre class="hljs"><code><div>Título: Sistema Eléctrico Residencial Premium
+	<h4 id="proyecto-2">Proyecto 2:</h4>
+	<pre class="hljs"><code><div>Título: Sistema Eléctrico Residencial Premium
 Slug: sistema-electrico-residencial
 Tipo: Instalación Completa
 Ubicación: Miraflores, Lima
@@ -601,41 +610,41 @@ Descripción: Instalación eléctrica completa con automatización y domótica
 Featured: ✅
 Orden: 2
 </div></code></pre>
-<hr>
-<h3 id="6-%E2%9D%93-crear-faqs-20-min">6. ❓ Crear FAQs (20 min)</h3>
-<p><strong>Ruta</strong>: Preguntas Frecuentes &gt; Create</p>
-<h4 id="faq-1">FAQ 1:</h4>
-<pre class="hljs"><code><div>Pregunta: ¿Hacen entregas el mismo día?
+	<hr>
+	<h3 id="6-%E2%9D%93-crear-faqs-20-min">6. ❓ Crear FAQs (20 min)</h3>
+	<p><strong>Ruta</strong>: Preguntas Frecuentes &gt; Create</p>
+	<h4 id="faq-1">FAQ 1:</h4>
+	<pre class="hljs"><code><div>Pregunta: ¿Hacen entregas el mismo día?
 Respuesta: Sí, realizamos entregas el mismo día en Lima Metropolitana para pedidos antes de las 2:00 PM.
 Categoría: Envíos y Entregas
 Orden: 1
 Publicado: ✅
 </div></code></pre>
-<h4 id="faq-2">FAQ 2:</h4>
-<pre class="hljs"><code><div>Pregunta: ¿Los productos tienen garantía?
+	<h4 id="faq-2">FAQ 2:</h4>
+	<pre class="hljs"><code><div>Pregunta: ¿Los productos tienen garantía?
 Respuesta: Todos nuestros productos cuentan con garantía del fabricante. El tiempo varía según la marca y tipo de producto.
 Categoría: Productos
 Orden: 2
 Publicado: ✅
 </div></code></pre>
-<h4 id="faq-3">FAQ 3:</h4>
-<pre class="hljs"><code><div>Pregunta: ¿Cómo puedo solicitar una cotización?
+	<h4 id="faq-3">FAQ 3:</h4>
+	<pre class="hljs"><code><div>Pregunta: ¿Cómo puedo solicitar una cotización?
 Respuesta: Puedes solicitar cotización por WhatsApp, llamando al 999 000 000, o agregando productos a tu carrito de cotización en el sitio web.
 Categoría: Cotizaciones
 Orden: 3
 Publicado: ✅
 </div></code></pre>
-<p><strong>Continúa agregando más FAQs sobre:</strong></p>
-<ul>
-<li>Pagos</li>
-<li>Devoluciones</li>
-<li>Instalaciones</li>
-<li>Stock de productos</li>
-</ul>
-<hr>
-<h3 id="7-%F0%9F%8F%A0-configurar-p%C3%A1gina-de-inicio">7. 🏠 Configurar Página de Inicio</h3>
-<p><strong>Ruta</strong>: Páginas &gt; Página de Inicio</p>
-<pre class="hljs"><code><div>Hero:
+	<p><strong>Continúa agregando más FAQs sobre:</strong></p>
+	<ul>
+		<li>Pagos</li>
+		<li>Devoluciones</li>
+		<li>Instalaciones</li>
+		<li>Stock de productos</li>
+	</ul>
+	<hr>
+	<h3 id="7-%F0%9F%8F%A0-configurar-p%C3%A1gina-de-inicio">7. 🏠 Configurar Página de Inicio</h3>
+	<p><strong>Ruta</strong>: Páginas &gt; Página de Inicio</p>
+	<pre class="hljs"><code><div>Hero:
 - Título: LA FUERZA DE TU CONSTRUCCIÓN
 - Subtítulo: Material eléctrico profesional con entrega el mismo día
 - CTA Texto: Ver Productos
@@ -670,11 +679,12 @@ Características:
    - Título: Asesoría Técnica
    - Descripción: Te ayudamos a elegir los productos correctos
 </div></code></pre>
-<p><strong>PUBLISH</strong></p>
-<hr>
-<h3 id="8-%E2%84%B9%EF%B8%8F-configurar-p%C3%A1gina-%22nosotros%22">8. ℹ️ Configurar Página &quot;Nosotros&quot;</h3>
-<p><strong>Ruta</strong>: Páginas &gt; Página &quot;Nosotros&quot;</p>
-<pre class="hljs"><code><div>Título: Nosotros
+	<p><strong>PUBLISH</strong></p>
+	<hr>
+	<h3 id="8-%E2%84%B9%EF%B8%8F-configurar-p%C3%A1gina-%22nosotros%22">8. ℹ️ Configurar Página &quot;Nosotros&quot;
+	</h3>
+	<p><strong>Ruta</strong>: Páginas &gt; Página &quot;Nosotros&quot;</p>
+	<pre class="hljs"><code><div>Título: Nosotros
 
 Introducción:
 En ELECTRO FLOR somos distribuidores especializados en material eléctrico de las mejores marcas internacionales. Más de 10 años de experiencia nos respaldan.
@@ -692,54 +702,55 @@ Valores:
 2. Servicio - Atención personalizada y asesoría técnica
 3. Compromiso - Cumplimiento en entregas y garantías
 </div></code></pre>
-<p><strong>PUBLISH</strong></p>
-<hr>
-<h2 id="%E2%9C%85-despu%C3%A9s-de-poblar-datos">✅ Después de Poblar Datos</h2>
-<p>Una vez que tengas datos en Sanity:</p>
-<ol>
-<li>
-<p>El frontend automáticamente podrá obtenerlos vía API</p>
-</li>
-<li>
-<p>Usa las funciones en <code>services/sanity.ts</code>:</p>
-<pre class="hljs"><code><div><span class="hljs-keyword">import</span> { getProducts, getCategories } <span class="hljs-keyword">from</span> <span class="hljs-string">'./services/sanity'</span>
+	<p><strong>PUBLISH</strong></p>
+	<hr>
+	<h2 id="%E2%9C%85-despu%C3%A9s-de-poblar-datos">✅ Después de Poblar Datos</h2>
+	<p>Una vez que tengas datos en Sanity:</p>
+	<ol>
+		<li>
+			<p>El frontend automáticamente podrá obtenerlos vía API</p>
+		</li>
+		<li>
+			<p>Usa las funciones en <code>services/sanity.ts</code>:</p>
+			<pre class="hljs"><code><div><span class="hljs-keyword">import</span> { getProducts, getCategories } <span class="hljs-keyword">from</span> <span class="hljs-string">'./services/sanity'</span>
 </div></code></pre>
-</li>
-<li>
-<p>Los datos estarán disponibles de inmediato</p>
-</li>
-<li>
-<p>No necesitas reiniciar el servidor</p>
-</li>
-</ol>
-<hr>
-<h2 id="%F0%9F%94%84-sincronizaci%C3%B3n">🔄 Sincronización</h2>
-<p>El frontend ya está configurado para:</p>
-<ul>
-<li>✅ Conectarse a tu proyecto: 2gy084y4</li>
-<li>✅ Obtener datos en tiempo real</li>
-<li>✅ Mostrar contenido dinámicamente</li>
-</ul>
-<p>Solo necesitas poblar los datos en Studio (web o local).</p>
-<hr>
-<h2 id="%F0%9F%93%9E-resumen">📞 Resumen</h2>
-<p><strong>URL de Sanity Manage</strong>: https://www.sanity.io/manage<br>
-<strong>Project ID</strong>: 2gy084y4<br>
-<strong>Tiempo estimado</strong>: 1-2 horas para poblar datos básicos</p>
-<p><strong>Orden recomendado</strong>:</p>
-<ol>
-<li>⚙️ Configuración (5 min)</li>
-<li>🏷️ Categorías (10 min)</li>
-<li>🏢 Marcas (10 min)</li>
-<li>📦 Productos (30-60 min)</li>
-<li>🏗️ Proyectos (15 min)</li>
-<li>❓ FAQs (20 min)</li>
-<li>🏠 Página Inicio (10 min)</li>
-<li>ℹ️ Página Nosotros (10 min)</li>
-</ol>
-<p><strong>Total</strong>: ~2 horas para contenido completo</p>
-<hr>
-<p>¡Empieza ahora! 🚀</p>
+		</li>
+		<li>
+			<p>Los datos estarán disponibles de inmediato</p>
+		</li>
+		<li>
+			<p>No necesitas reiniciar el servidor</p>
+		</li>
+	</ol>
+	<hr>
+	<h2 id="%F0%9F%94%84-sincronizaci%C3%B3n">🔄 Sincronización</h2>
+	<p>El frontend ya está configurado para:</p>
+	<ul>
+		<li>✅ Conectarse a tu proyecto: 2gy084y4</li>
+		<li>✅ Obtener datos en tiempo real</li>
+		<li>✅ Mostrar contenido dinámicamente</li>
+	</ul>
+	<p>Solo necesitas poblar los datos en Studio (web o local).</p>
+	<hr>
+	<h2 id="%F0%9F%93%9E-resumen">📞 Resumen</h2>
+	<p><strong>URL de Sanity Manage</strong>: https://www.sanity.io/manage<br>
+		<strong>Project ID</strong>: 2gy084y4<br>
+		<strong>Tiempo estimado</strong>: 1-2 horas para poblar datos básicos
+	</p>
+	<p><strong>Orden recomendado</strong>:</p>
+	<ol>
+		<li>⚙️ Configuración (5 min)</li>
+		<li>🏷️ Categorías (10 min)</li>
+		<li>🏢 Marcas (10 min)</li>
+		<li>📦 Productos (30-60 min)</li>
+		<li>🏗️ Proyectos (15 min)</li>
+		<li>❓ FAQs (20 min)</li>
+		<li>🏠 Página Inicio (10 min)</li>
+		<li>ℹ️ Página Nosotros (10 min)</li>
+	</ol>
+	<p><strong>Total</strong>: ~2 horas para contenido completo</p>
+	<hr>
+	<p>¡Empieza ahora! 🚀</p>
 
 </body>
 

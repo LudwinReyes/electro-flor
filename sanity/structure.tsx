@@ -12,7 +12,8 @@ import {
     Settings,
     LayoutTemplate,
     Database,
-    Zap
+    Zap,
+    Book
 } from 'lucide-react'
 
 // Estructura plana sin dividers
@@ -57,6 +58,10 @@ export const structure = (S: StructureBuilder) =>
                 .title('Banners')
                 .icon(() => <Megaphone size={18} />)
                 .child(S.documentTypeList('promoBanner').title('Banners')),
+            S.listItem()
+                .title('Libro de Reclamaciones')
+                .icon(() => <Book size={18} />)
+                .child(S.documentTypeList('reclamacion').title('Reclamaciones')),
             S.listItem()
                 .title('Delivery')
                 .icon(() => <Truck size={18} />)

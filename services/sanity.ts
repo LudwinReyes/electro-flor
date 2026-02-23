@@ -590,13 +590,26 @@ export const getProgramaEspecialista = async () => {
 
 // ==================== LEADS / PROSPECTOS ====================
 
-// Cliente con token de escritura (necesitas agregar VITE_SANITY_TOKEN en .env)
+// Cliente con token de escritura
+const WRITE_TOKEN = (import.meta as any).env?.VITE_SANITY_TOKEN || (globalThis as any).process?.env?.VITE_SANITY_TOKEN || '';
+
+// Debug log for environment variables
+if ((import.meta as any).env?.DEV) {
+  console.log('🔍 Entorno Vite:', Object.keys((import.meta as any).env || {}).filter(k => k.startsWith('VITE_')));
+
+  if (!WRITE_TOKEN) {
+    console.warn('⚠️ VITE_SANITY_TOKEN no encontrado. Los formularios no funcionarán.');
+  } else if (WRITE_TOKEN.startsWith("'") || WRITE_TOKEN.endsWith("'") || WRITE_TOKEN.startsWith('"') || WRITE_TOKEN.endsWith('"')) {
+    console.error('❌ El VITE_SANITY_TOKEN tiene comillas en el .env. Por favor, quítalas.');
+  }
+}
+
 const sanityWriteClient = createClient({
   projectId: PROJECT_ID,
   dataset: DATASET,
   useCdn: false,
   apiVersion: API_VERSION,
-  token: (import.meta as any).env?.VITE_SANITY_TOKEN || '',
+  token: WRITE_TOKEN.replace(/['"]/g, ''), // Limpiar posibles comillas
 });
 
 export const saveLead = async (whatsapp: string, source: string = 'programa_especialista') => {
@@ -613,7 +626,7 @@ export const saveLead = async (whatsapp: string, source: string = 'programa_espe
       status: 'nuevo',
       createdAt: new Date().toISOString()
     });
-    console.log('✅ Lead guardado:', result);
+    if ((import.meta as any).env?.DEV) console.log('✅ Lead guardado:', result);
     return result;
   } catch (error) {
     console.error('❌ Error al guardar lead:', error);
@@ -647,10 +660,40 @@ export const saveContactForm = async (data: ContactFormData) => {
       status: 'nuevo',
       createdAt: new Date().toISOString()
     });
-    console.log('✅ Formulario de contacto guardado:', result);
+    if ((import.meta as any).env?.DEV) console.log('✅ Formulario de contacto guardado:', result);
     return result;
   } catch (error) {
     console.error('❌ Error al guardar formulario:', error);
+    return null;
+  }
+};
+
+interface ReclamacionData {
+  fullName: string;
+  dni: string;
+  email: string;
+  type: string;
+  message: string;
+}
+
+export const saveReclamacion = async (data: ReclamacionData) => {
+  if (!isSanityConfigured()) return null;
+
+  try {
+    const result = await sanityWriteClient.create({
+      _type: 'reclamacion',
+      fullName: data.fullName,
+      dni: data.dni,
+      email: data.email,
+      type: data.type,
+      message: data.message,
+      status: 'pendiente',
+      createdAt: new Date().toISOString()
+    });
+    if ((import.meta as any).env?.DEV) console.log('✅ Libro de Reclamaciones guardado:', result);
+    return result;
+  } catch (error) {
+    console.error('❌ Error al guardar reclamación:', error);
     return null;
   }
 };

@@ -306,8 +306,8 @@ Este proyecto es privado y pertenece a ELECTRO FLOR.
 **ELECTRO FLOR**
 - 📍 Av. Argentina 245, Lima, Perú
 - 📱 WhatsApp: [+51 999 000 000](https://wa.me/51999000000)
-- 📧 Email: ventas@electroflor.com
-- 🌐 Web: [www.electroflor.com](https://www.electroflor.com)
+- 📧 Email: ventas@electroflorperu.com
+- 🌐 Web: [www.electroflorperu.com](https://www.electroflorperu.com)
 - 📘 Facebook: [/electroflor](https://facebook.com/electroflor)
 - 📸 Instagram: [@electroflor](https://instagram.com/electroflor)
 

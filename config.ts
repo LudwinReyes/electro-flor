@@ -31,9 +31,9 @@ export const CONTACT_INFO = {
     whatsapp: 'https://wa.me/51948198701'
   },
   email: {
-    sales: 'ventas@electroflor.com.pe',
-    support: 'soporte@electroflor.com.pe',
-    general: 'info@electroflor.com.pe'
+    sales: 'ventas@electroflorperu.com',
+    support: 'soporte@electroflorperu.com',
+    general: 'info@electroflorperu.com'
   },
   address: {
     street: 'Av. Argentina 245',

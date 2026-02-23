@@ -6,4 +6,4 @@ Disallow: /admin/
 Disallow: /studio/
 
 # Sitemap
-Sitemap: https://www.electroflor.com.pe/sitemap.xml
+Sitemap: https://electroflorperu.com/sitemap.xml
