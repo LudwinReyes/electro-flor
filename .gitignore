@@ -53,7 +53,7 @@ Thumbs.db
 # yarn.lock
 
 # Scripts locales
-scripts/
+# scripts/
 
 # Archivos de documentación pesados (PDFs generados)
 *.pdf
