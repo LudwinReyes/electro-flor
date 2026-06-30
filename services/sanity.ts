@@ -121,6 +121,7 @@ export const getProducts = async () => {
   return getCachedData('products', async () => {
     const query = `*[_type == "product"] | order(featured desc, name asc) {
       _id,
+      _updatedAt,
       name,
       "slug": slug.current,
       "brand": brand->name,
@@ -245,6 +246,7 @@ export const getCategories = async () => {
   return getCachedData('categories_v2', async () => {
     const query = `*[_type == "category"] | order(order asc, name asc) {
       _id,
+      _updatedAt,
       name,
       "slug": slug.current,
       "image": image.asset->url,
@@ -299,6 +301,7 @@ export const getBrands = async () => {
   return getCachedData('brands', async () => {
     const query = `*[_type == "brand"] | order(name asc) {
       _id,
+      _updatedAt,
       name,
       "slug": slug.current,
       "logo": logo.asset->url,

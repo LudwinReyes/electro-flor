@@ -13,6 +13,8 @@ import { CONTACT_INFO } from '../config';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  title: 'Iluminación y Material Eléctrico en Perú | ELECTRO FLOR',
+  description: 'Distribuidor líder de material eléctrico e iluminación LED en Lima, Perú. Venta de cables, tableros, reflectores y herramientas (Bosch, Schneider, Philips). Cotiza en línea con stock garantizado.',
   alternates: {
     canonical: '/',
   },
