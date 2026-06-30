@@ -1,9 +1,10 @@
+"use client";
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+import Image from 'next/image';
 import { Building2, ArrowRight, Sparkles } from 'lucide-react';
 import { getBrands } from '../services/sanity';
 import { useSiteConfig } from '../contexts/SiteConfigContext';
-import SEOHead from './SEOHead';
 import { optimizeImage } from '../utils/optimizeImage';
 
 interface Brand {
@@ -83,11 +84,7 @@ const BrandsPage: React.FC = () => {
 
     return (
         <div className="min-h-screen" style={{ backgroundColor: '#f8fafc' }}>
-            <SEOHead
-                title="Nuestras Marcas - Distribuidores Autorizados"
-                description="Distribuidores autorizados de las mejores marcas de material eléctrico: Bosch, Schneider Electric, Philips, Donilux, Daxso y más. Garantía oficial en Lima, Perú."
-                url="/marcas"
-            />
+            
             {/* Hero Section */}
             <div
                 className="relative py-20 overflow-hidden"
@@ -130,7 +127,7 @@ const BrandsPage: React.FC = () => {
                     {brands.map((brand) => (
                         <Link
                             key={brand._id}
-                            to={`/productos/marca/${brand.slug}`}
+                            href={`/productos/marca/${brand.slug}`}
                             className="group relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:border-transparent transition-all duration-300 flex flex-col items-center justify-center min-h-[160px]"
                             style={{
                                 '--hover-border': colors.secondary
@@ -148,11 +145,9 @@ const BrandsPage: React.FC = () => {
                             {/* Logo */}
                             <div className="relative z-10 w-full h-20 flex items-center justify-center mb-4">
                                 {brand.logo ? (
-                                    <img
+                                    <Image
                                         src={optimizeImage(brand.logo, 300)}
                                         alt={brand.name}
-                                        loading="lazy"
-                                        decoding="async"
                                         width={160}
                                         height={80}
                                         className="max-h-full max-w-full object-contain group-hover:scale-105 transition-all duration-300"
@@ -208,7 +203,7 @@ const BrandsPage: React.FC = () => {
                         Contáctanos y te ayudamos a encontrar el producto que necesitas de tu marca favorita.
                     </p>
                     <Link
-                        to="/contacto"
+                        href="/contacto"
                         className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-sm uppercase tracking-wide transition-all hover:scale-105"
                         style={{
                             backgroundColor: colors.secondary,

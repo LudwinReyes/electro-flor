@@ -4,14 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "npm run build:frontend && npm run build:studio && npm run postbuild && npm run sitemap",
-    "build:frontend": "vite build",
-    "build:studio": "npx sanity build dist/admin --yes",
-    "postbuild": "cp -r dist/admin/static dist/static || xcopy /E /I /Y dist\\admin\\static dist\\static",
-    "preview": "vite preview",
-    "studio": "npx sanity dev --port 3333",
-    "sitemap": "node scripts/generate-sitemap.mjs"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@google/genai": "^1.35.0",
@@ -20,9 +16,14 @@
     "@sanity/icons": "^3.7.4",
     "@sanity/presentation": "^2.0.0",
     "@sanity/vision": "^5.2.0",
+    "@tailwindcss/postcss": "^4.3.1",
     "csv-parse": "^6.1.0",
     "lucide-react": "^0.562.0",
+    "magic-string": "^0.30.21",
+    "next": "^16.2.9",
+    "next-sanity": "^13.1.1",
     "pdf-parse": "^2.4.5",
+    "postcss": "^8.5.15",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-helmet-async": "^2.0.5",

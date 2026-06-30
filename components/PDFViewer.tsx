@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from 'react';
 import { FileText, ZoomIn, ZoomOut, X, Maximize2 } from 'lucide-react';
 
@@ -90,7 +91,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, productName = 'Ficha Téc
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10">
                         <img
                             src="/media/Logo Electro Flor.png"
-                            alt=""
+                            alt="Logo Electro Flor Decorativo"
                             className="w-48 h-auto"
                             draggable={false}
                         />
@@ -99,7 +100,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, productName = 'Ficha Téc
                     <div className="absolute bottom-4 right-4 opacity-30">
                         <img
                             src="/media/Logo Electro Flor.png"
-                            alt=""
+                            alt="Logo Electro Flor Decorativo"
                             className="w-24 h-auto"
                             draggable={false}
                         />
@@ -163,7 +164,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, productName = 'Ficha Téc
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10">
                             <img
                                 src="/media/Logo Electro Flor.png"
-                                alt=""
+                                alt="Logo Electro Flor Decorativo"
                                 className="w-64 h-auto"
                                 draggable={false}
                             />

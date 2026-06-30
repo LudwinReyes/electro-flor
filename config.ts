@@ -28,23 +28,25 @@ export const CONTACT_INFO = {
     full: '51948198701',
     formatted: '+51 948 198 701',
     link: 'tel:51948198701',
-    whatsapp: 'https://wa.me/51948198701'
+    whatsapp: 'https://wa.me/51948198701',
+    secondary: '+51 904 162 516',
+    secondaryLink: 'tel:51904162516'
   },
   email: {
-    sales: 'ventas@electroflorperu.com',
-    support: 'soporte@electroflorperu.com',
-    general: 'info@electroflorperu.com'
+    sales: 'ventas.electroflor@gmail.com',
+    support: 'ventas.electroflor@gmail.com',
+    general: 'ventas.electroflor@gmail.com'
   },
   address: {
-    street: 'Av. Argentina 245',
+    street: 'Av. Argentina 245, Pasaje 2, Puesto AR12, C.C. Nicolini',
     city: 'Lima',
     district: 'Cercado de Lima',
     country: 'Perú',
-    full: 'Av. Argentina 245, Lima, Perú',
-    maps: 'https://maps.google.com/?q=Av.+Argentina+245+Lima'
+    full: 'Av. Argentina 245, Pasaje 2, Puesto AR12, Centro Comercial Nicolini, Lima, Perú',
+    maps: 'https://share.google/huOv6gxoYpjgx7mXa'
   },
   social: {
-    facebook: 'https://facebook.com/electroflor',
+    facebook: 'https://www.facebook.com/p/Electro-Flor-EIRL-61552203052431/',
     instagram: 'https://instagram.com/electroflor',
     linkedin: 'https://linkedin.com/company/electroflor',
     youtube: 'https://youtube.com/@electroflor'

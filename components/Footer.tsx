@@ -1,6 +1,8 @@
+"use client";
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+import Image from 'next/image';
 import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin, ArrowRight, Construction, CheckCircle2 } from 'lucide-react';
 import { BRAND_COLORS, CONTACT_INFO } from '../config';
 import { useSiteConfig } from '../contexts/SiteConfigContext';
@@ -101,16 +103,16 @@ const Footer: React.FC = () => {
             {(footerSettings as any)?.featuredCategories?.length > 0 ? (
               (footerSettings as any).featuredCategories.map((cat: any) => (
                 <li key={cat._id}>
-                  <Link to={`/productos/${cat.slug}`} className="flex items-center gap-3 hover:opacity-80 group">
+                  <Link href={`/productos/${cat.slug}`} className="flex items-center gap-3 hover:opacity-80 group">
                     <ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> {cat.name}
                   </Link>
                 </li>
               ))
             ) : (
               <>
-                <li><Link to="/productos" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Iluminación</Link></li>
-                <li><Link to="/productos" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Conductores Eléctricos</Link></li>
-                <li><Link to="/productos" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Baja Tensión</Link></li>
+                <li><Link href="/productos" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Iluminación</Link></li>
+                <li><Link href="/productos" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Conductores Eléctricos</Link></li>
+                <li><Link href="/productos" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Baja Tensión</Link></li>
               </>
             )}
           </ul>
@@ -122,23 +124,18 @@ const Footer: React.FC = () => {
             <span className="w-8 h-1 rounded-full" style={{ backgroundColor: colors.secondary }}></span> INSTITUCIONAL
           </h4>
           <ul className="space-y-4 text-xs text-gray-500 font-bold uppercase">
-            <li><Link to="/nosotros" className="hover:opacity-80">Sobre Nosotros</Link></li>
-            <li><Link to="/faq" className="hover:opacity-80">Preguntas Frecuentes</Link></li>
-            <li><Link to="/contacto" className="hover:opacity-80">Contacto Corporativo</Link></li>
-            <li><Link to="/faq" className="hover:opacity-80">Garantías y Cambios</Link></li>
+            <li><Link href="/nosotros" className="hover:opacity-80">Sobre Nosotros</Link></li>
+            <li><Link href="/faq" className="hover:opacity-80">Preguntas Frecuentes</Link></li>
+            <li><Link href="/contacto" className="hover:opacity-80">Contacto Corporativo</Link></li>
+            <li><Link href="/faq" className="hover:opacity-80">Garantías y Cambios</Link></li>
           </ul>
 
           <div className="mt-8 pt-8 border-t border-gray-100 italic">
             <p className="text-[10px] font-black uppercase text-gray-400">RUC</p>
-            <p className="text-xs font-black mb-2" style={{ color: colors.primary }}>20611899972</p>
-
-            <p className="text-[10px] font-black uppercase text-gray-400">Razón Social</p>
-            <p className="text-[11px] font-black leading-tight mb-6 uppercase" style={{ color: colors.primary }}>
-              ELECTRICIDAD ELECTRONICA FLORES E.I.R.L.
-            </p>
+            <p className="text-xs font-black mb-6" style={{ color: colors.primary }}>10773519523</p>
 
             <Link
-              to="/libro-de-reclamaciones"
+              href="/libro-de-reclamaciones"
               className="inline-flex items-center gap-3 p-4 rounded-2xl border-2 transition-all hover:scale-105 active:scale-95 group"
               style={{ borderColor: colors.secondaryOpacity[20], backgroundColor: 'white' }}
             >
@@ -158,11 +155,9 @@ const Footer: React.FC = () => {
           <div className="flex items-center gap-2 group cursor-pointer">
             {/* Logo: usa siteSettings.logo si existe */}
             {siteSettings.logo ? (
-              <img
+              <Image
                 src={optimizeImage(siteSettings.logo, 300)}
                 alt={siteSettings.siteName || 'ELECTRO FLOR'}
-                loading="lazy"
-                decoding="async"
                 width={150}
                 height={48}
                 className="h-12 w-auto object-contain"
@@ -184,14 +179,20 @@ const Footer: React.FC = () => {
               <div className="bg-gray-100 p-3 rounded-2xl" style={{ color: colors.primary }}><Phone size={20} /></div>
               <div>
                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Central:</p>
-                <a href={`tel:${contact.phone.whatsapp}`} className="text-sm font-black hover:opacity-80" style={{ color: colors.primary }}>{contact.phone.display}</a>
+                <div className="flex flex-col gap-0.5">
+                  <a href={`tel:51948198701`} className="text-sm font-black hover:opacity-80" style={{ color: colors.primary }}>948 198 701</a>
+                  <a href={`tel:51904162516`} className="text-sm font-black hover:opacity-80" style={{ color: colors.primary }}>904 162 516</a>
+                </div>
               </div>
             </div>
             <div className="flex gap-4">
               <div className="bg-gray-100 p-3 rounded-2xl" style={{ color: colors.primary }}><Mail size={20} /></div>
               <div>
                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Email:</p>
-                <a href={`mailto:${siteSettings.email || (typeof contact.email === 'string' ? contact.email : contact.email.sales)}`} className="text-sm font-black hover:opacity-80" style={{ color: colors.primary }}>{siteSettings.email || (typeof contact.email === 'string' ? contact.email : contact.email.sales)}</a>
+                <div className="flex flex-col gap-0.5">
+                  <a href={`mailto:ventas.electroflor@gmail.com`} className="text-[13px] font-black hover:opacity-80 break-all" style={{ color: colors.primary }}>ventas.electroflor@gmail.com</a>
+                  <a href={`mailto:elmervazquezguevara@gmail.com`} className="text-[13px] font-black hover:opacity-80 break-all" style={{ color: colors.primary }}>elmervazquezguevara@gmail.com</a>
+                </div>
               </div>
             </div>
             <div className="flex gap-4">

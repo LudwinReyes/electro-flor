@@ -1,22 +1,24 @@
+"use client";
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Link, useSearchParams, useParams } from 'react-router-dom';
+import Link from 'next/link';
+import Image from 'next/image';
+import { optimizeImage } from '../utils/optimizeImage';
+import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { PRODUCTS, CATEGORIES, BRANDS } from '../constants';
 import { Search, Filter, ChevronRight, X, Check, SlidersHorizontal, Award } from 'lucide-react';
 import ProductCard from './ProductCard';
 import { Product } from '../types';
 import { BRAND_COLORS } from '../config';
 import { getProducts, getCategories, getBrands } from '../services/sanity';
-import SEOHead from './SEOHead';
 
 
-interface Props {
-  onAddToQuote?: (product: Product) => void;
-}
+interface Props {}
 
-const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { categorySlug, subcategorySlug, brandSlug } = useParams();
+const ProductsPage: React.FC<Props> = () => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const { categorySlug, subcategorySlug, brandSlug } = useParams<{ categorySlug?: string; subcategorySlug?: string; brandSlug?: string }>();
 
   const searchUrl = searchParams.get('search') || '';
   const categoryUrl = searchParams.get('category') || '';
@@ -147,7 +149,7 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
   const clearFilters = () => {
     setActiveCategory(null);
     setSelectedBrands([]);
-    setSearchParams({});
+    router.push(window.location.pathname);
   };
 
   useEffect(() => {
@@ -199,7 +201,7 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
             return (
               <div key={parentCat.slug}>
                 <Link
-                  to={activeCategory === parentCat.name ? "/productos" : `/productos/${parentCat.slug}`}
+                  href={activeCategory === parentCat.name ? "/productos" : `/productos/${parentCat.slug}`}
                   className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-black uppercase transition-all flex justify-between items-center border ${activeCategory === parentCat.name ? `bg-[${BRAND_COLORS.secondary}] text-[${BRAND_COLORS.primary}] border-[${BRAND_COLORS.secondary}]` : 'text-gray-500 bg-gray-50 border-transparent hover:border-gray-200'}`}
                 >
                   {parentCat.name}
@@ -209,7 +211,7 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
                 {subcats.map((subCat: any) => (
                   <Link
                     key={subCat.slug}
-                    to={activeCategory === subCat.name ? `/productos/${parentCat.slug}` : `/productos/${parentCat.slug}/${subCat.slug}`}
+                    href={activeCategory === subCat.name ? `/productos/${parentCat.slug}` : `/productos/${parentCat.slug}/${subCat.slug}`}
                     className={`w-full text-left pl-8 pr-4 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all flex justify-between items-center border mt-1 ${activeCategory === subCat.name ? `bg-[${BRAND_COLORS.primary}] text-white border-[${BRAND_COLORS.primary}]` : 'text-gray-400 bg-white border-gray-100 hover:border-gray-200'}`}
                   >
                     <span className="flex items-center gap-2">
@@ -232,7 +234,7 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
           {brands.map((brand: any) => (
             <Link
               key={brand.name}
-              to={activeBrand === brand.name ? "/productos" : `/productos/marca/${brand.slug}`}
+              href={activeBrand === brand.name ? "/productos" : `/productos/marca/${brand.slug}`}
               className={`flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all border ${selectedBrands.includes(brand.name) ? `bg-[${BRAND_COLORS.primaryOpacity[5]}] border-[${BRAND_COLORS.primary}]` : 'bg-white border-gray-100 hover:border-gray-200'}`}
             >
               <span className={`text-[10px] font-black uppercase ${selectedBrands.includes(brand.name) ? `text-[${BRAND_COLORS.primary}]` : 'text-gray-400'}`}>
@@ -318,12 +320,7 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
 
   return (
     <div className={`bg-[${BRAND_COLORS.background.alt}] min-h-screen relative pb-10`}>
-      <SEOHead
-        title={seoTitle}
-        description={seoDescription}
-        url={currentUrl}
-        keywords={seoKeywords}
-      />
+      
       <div className={`bg-[${BRAND_COLORS.primary}] py-12 relative overflow-hidden`}>
         <div className="absolute inset-0 opacity-10">
           <div className="grid grid-cols-6 h-full">
@@ -332,9 +329,9 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
         </div>
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className={`flex items-center gap-2 text-[${BRAND_COLORS.secondary}] text-[10px] font-black uppercase tracking-widest mb-2`}>
-            <Link to="/" className="hover:underline">Inicio</Link>
+            <Link href="/" className="hover:underline">Inicio</Link>
             <ChevronRight size={12} />
-            <Link to="/productos" className="hover:underline">Catálogo</Link>
+            <Link href="/productos" className="hover:underline">Catálogo</Link>
             {activeBrandData && (
               <>
                 <ChevronRight size={12} />
@@ -344,7 +341,7 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
             {parentCategoryData && (
               <>
                 <ChevronRight size={12} />
-                <Link to={`/productos/${parentCategoryData.slug}`} className="hover:underline">{parentCategoryData.name}</Link>
+                <Link href={`/productos/${parentCategoryData.slug}`} className="hover:underline">{parentCategoryData.name}</Link>
               </>
             )}
             {!activeBrandData && activeCategoryData && (
@@ -405,7 +402,7 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
           ) : filteredProducts.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 md:gap-8">
               {filteredProducts.map((product: any) => (
-                <ProductCard key={product._id || product.id} product={product} onAddToQuote={onAddToQuote} />
+                <ProductCard key={product._id || product.id} product={product} />
               ))}
             </div>
           ) : (
@@ -431,16 +428,15 @@ const ProductsPage: React.FC<Props> = ({ onAddToQuote }) => {
           {brands.map((brand: any) => (
             <Link
               key={brand.name}
-              to={`/productos/marca/${brand.slug}`}
+              href={`/productos/marca/${brand.slug}`}
               className={`bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl hover:border-[${BRAND_COLORS.secondary}] transition-all flex items-center justify-center group h-32`}
               onClick={() => {
                 productsTopRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }}
             >
-              <img
-                src={brand.logo}
+              <Image
+                src={optimizeImage(brand.logo, 300)}
                 alt={brand.name}
-                loading="lazy"
                 width={120}
                 height={48}
                 className="max-h-12 max-w-full object-contain grayscale group-hover:grayscale-0 transition-all duration-500"

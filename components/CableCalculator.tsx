@@ -1,13 +1,9 @@
+"use client";
 
 import React, { useState } from 'react';
 import { X, Zap, Ruler, Calculator, AlertTriangle, ShieldCheck } from 'lucide-react';
 
-interface Props {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const CableCalculator: React.FC<Props> = ({ isOpen, onClose }) => {
+const CableCalculator: React.FC = () => {
   const [distance, setDistance] = useState<number>(0);
   const [voltage, setVoltage] = useState<'220' | '380'>('220');
   const [power, setPower] = useState<number>(0);
@@ -23,13 +19,8 @@ const CableCalculator: React.FC<Props> = ({ isOpen, onClose }) => {
     setResult(gauge);
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 md:p-4">
-      <div className="absolute inset-0 bg-[#002D62]/95 backdrop-blur-md" onClick={onClose}></div>
-      
-      <div className="relative w-full max-w-2xl bg-white rounded-[2rem] md:rounded-[3rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 border-4 border-[#8CC63F] max-h-[95vh] flex flex-col">
+    <div className="w-full max-w-4xl mx-auto my-12 bg-white rounded-[2rem] shadow-xl overflow-hidden border-4 border-[#8CC63F] flex flex-col">
         <div className="bg-[#002D62] p-6 md:p-8 text-white flex justify-between items-start shrink-0">
           <div className="flex items-center gap-3 md:gap-4">
             <div className="bg-[#8CC63F] p-3 md:p-4 rounded-2xl shrink-0">
@@ -40,9 +31,6 @@ const CableCalculator: React.FC<Props> = ({ isOpen, onClose }) => {
               <p className="text-[10px] font-bold text-[#8CC63F] uppercase tracking-widest">Conductores Eléctricos</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition text-[#8CC63F]">
-            <X size={24} />
-          </button>
         </div>
 
         <div className="p-6 md:p-8 overflow-y-auto overflow-x-hidden space-y-8 flex-grow">
@@ -127,7 +115,6 @@ const CableCalculator: React.FC<Props> = ({ isOpen, onClose }) => {
             </div>
           </div>
         </div>
-      </div>
     </div>
   );
 };

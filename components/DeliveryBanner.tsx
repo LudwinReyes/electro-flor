@@ -1,5 +1,7 @@
+"use client";
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { getDeliveryBanner } from '../services/sanity';
 import { optimizeImage } from '../utils/optimizeImage';
 
@@ -37,11 +39,9 @@ const DeliveryBanner: React.FC = () => {
 
         {/* Camión con animación */}
         <div className="flex justify-center md:justify-start order-2 md:order-1">
-          <img
+          <Image
             src={optimizeImage(config?.truckImage || "https://loganelectricperu.com/wp-content/uploads/2024/07/descarga-15-1.png", 600)}
             alt="Vehículo de carga"
-            loading="lazy"
-            decoding="async"
             width={400}
             height={300}
             className="h-28 md:h-44 lg:h-56 object-contain drop-shadow-2xl animate-truck"

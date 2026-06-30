@@ -1,8 +1,8 @@
+"use client";
 
 import React from 'react';
 import { BRAND_COLORS } from '../config';
 import { useSiteConfig } from '../contexts/SiteConfigContext';
-import SEOHead from './SEOHead';
 import { Book, FileText, Send, User, AtSign, Clock } from 'lucide-react';
 import { saveReclamacion } from '../services/sanity';
 
@@ -45,11 +45,7 @@ const ReclamacionesPage: React.FC = () => {
 
     return (
         <div className="bg-white min-h-screen">
-            <SEOHead
-                title="Libro de Reclamaciones | ELECTRO FLOR"
-                description="Pone a su disposición nuestro Libro de Reclamaciones virtual conforme al código de protección al consumidor."
-                url="/libro-de-reclamaciones"
-            />
+            
 
             <div className="pt-32 pb-20 px-4">
                 <div className="max-w-4xl mx-auto">
@@ -178,12 +174,8 @@ const ReclamacionesPage: React.FC = () => {
                                 <h3 className="font-black uppercase text-xs tracking-widest text-amber-500 mb-4">Información Legal</h3>
                                 <div className="space-y-4 text-white">
                                     <div>
-                                        <p className="text-[9px] font-bold text-white/50 uppercase">Razón Social</p>
-                                        <p className="text-xs font-black">ELECTRICIDAD ELECTRONICA FLORES E.I.R.L.</p>
-                                    </div>
-                                    <div>
                                         <p className="text-[9px] font-bold text-white/50 uppercase">RUC</p>
-                                        <p className="text-xs font-black">20611899972</p>
+                                        <p className="text-xs font-black">10773519523</p>
                                     </div>
                                     <div className="pt-4 border-t border-white/10">
                                         <div className="flex items-center gap-3 mb-2">
@@ -201,7 +193,7 @@ const ReclamacionesPage: React.FC = () => {
                                 <p className="text-amber-800/70 text-xs font-bold leading-relaxed mb-4">
                                     Si prefieres contactarnos directamente por una incidencia, también puedes escribirnos a:
                                 </p>
-                                <a href="mailto:elmervazquezguevara@gmail.com" className="text-sm font-black text-amber-900 underline">elmervazquezguevara@gmail.com</a>
+                                <a href="mailto:ventas.electroflor@gmail.com" className="text-sm font-black text-amber-900 underline">ventas.electroflor@gmail.com</a>
                             </div>
                         </div>
                     </form>

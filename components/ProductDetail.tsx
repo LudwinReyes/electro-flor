@@ -1,6 +1,9 @@
+"use client";
 
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
 import { PRODUCTS } from '../constants';
 import { getProductBySlug } from '../services/sanity';
 import { PortableText } from '@portabletext/react';
@@ -8,33 +11,17 @@ import PDFViewer from './PDFViewer';
 import { Star, ChevronLeft, Mail, Facebook, Twitter, Linkedin, ChevronRight, PlayCircle, FileText, Image as ImageIcon, Search, Download, Share2, ExternalLink, Plus } from 'lucide-react';
 import { BRAND_COLORS, CONTACT_INFO, SITE_MESSAGES } from '../config';
 import { useSiteConfig } from '../contexts/SiteConfigContext';
-import SEOHead from './SEOHead';
-import { Helmet } from 'react-helmet-async';
+import { Product } from '../types';
+
+
 import { optimizeImage, optimizeImages } from '../utils/optimizeImage';
 
-interface Product {
-  id?: string;
-  _id?: string;
-  slug?: string;
-  name: string;
-  description: any;
-  shortDescription?: string;
-  image: string;
-  images?: string[];
-  category: string;
-  brand: string;
-  code?: string;
-  specifications: Record<string, string> | Array<{ _key?: string; label: string; value: string }>;
-  pdfFile?: string;
-  pdfUrl?: string;
-  youtubeVideo?: string;
-}
+import { useQuote } from '../contexts/QuoteContext';
 
-interface Props {
-  onAddToQuote?: (product: any) => void;
-}
+interface Props {}
 
-const ProductDetail: React.FC<Props> = ({ onAddToQuote }) => {
+const ProductDetail: React.FC<Props> = () => {
+  const { addToQuote } = useQuote();
   const { id } = useParams(); // id es realmente el slug
   const { siteSettings, contact } = useSiteConfig();
   const [product, setProduct] = useState<Product | null>(null);
@@ -49,7 +36,8 @@ const ProductDetail: React.FC<Props> = ({ onAddToQuote }) => {
       setLoading(true);
       try {
         // Intentar cargar desde Sanity usando el slug
-        const sanityProduct = await getProductBySlug(id || '');
+        const idStr = Array.isArray(id) ? id[0] : id;
+        const sanityProduct = await getProductBySlug(idStr || '');
         if (sanityProduct) {
           setProduct(sanityProduct);
           setSelectedImage(sanityProduct.image);
@@ -88,7 +76,7 @@ const ProductDetail: React.FC<Props> = ({ onAddToQuote }) => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h2 className={`text-2xl font-black text-[${BRAND_COLORS.primary}] mb-4`}>Producto no encontrado</h2>
-          <Link to="/productos" className={`text-[${BRAND_COLORS.secondary}] hover:underline`}>
+          <Link href="/productos" className={`text-[${BRAND_COLORS.secondary}] hover:underline`}>
             Volver al catálogo
           </Link>
         </div>
@@ -132,64 +120,21 @@ const ProductDetail: React.FC<Props> = ({ onAddToQuote }) => {
     setZoomStyle({ display: 'none', transformOrigin: '0% 0%' });
   };
 
-  // Extraer texto plano para description SEO
-  const seoDescription = (() => {
-    if (product.shortDescription) return product.shortDescription;
-    if (typeof product.description === 'string') return product.description.slice(0, 160);
-    if (Array.isArray(product.description)) {
-      return product.description
-        .filter((b: any) => b._type === 'block')
-        .map((b: any) => b.children?.map((c: any) => c.text).join(''))
-        .join(' ')
-        .slice(0, 160);
-    }
-    return `${product.name} - ${product.brand}. Disponible con stock garantizado en ELECTRO FLOR.`;
-  })();
 
   return (
     <div className="bg-white pb-20 relative font-sans">
-      <SEOHead
-        title={`${product.name} - ${product.brand}`}
-        description={seoDescription}
-        image={product.image}
-        url={`/producto/${product.slug || id}`}
-        type="product"
-      />
-      {/* Product JSON-LD Structured Data */}
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Product",
-          "name": product.name,
-          "image": product.image,
-          "description": seoDescription,
-          "brand": {
-            "@type": "Brand",
-            "name": product.brand
-          },
-          "category": product.category,
-          "sku": product.code || product.slug || '',
-          "offers": {
-            "@type": "Offer",
-            "availability": "https://schema.org/InStock",
-            "seller": {
-              "@type": "Organization",
-              "name": "ELECTRO FLOR"
-            }
-          }
-        })}</script>
-      </Helmet>
+
       {/* Breadcrumbs - Verde (Captura) */}
       <div className="bg-[#8CC63F] py-2">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-2 text-[10px] md:text-[11px] font-black text-[#002D62] uppercase tracking-tighter">
-            <Link to="/" className="hover:opacity-80">INICIO</Link>
+            <Link href="/" className="hover:opacity-80">INICIO</Link>
             <ChevronRight size={12} strokeWidth={3} />
-            <Link to="/productos" className="hover:opacity-80">{product.category.toUpperCase()}</Link>
+            <Link href="/productos" className="hover:opacity-80">{product.category.toUpperCase()}</Link>
             <ChevronRight size={12} strokeWidth={3} />
             <span className="opacity-60 truncate max-w-[150px] md:max-w-none">{product.name}</span>
           </div>
-          <Link to="/" className="bg-white px-4 py-1.5 rounded-sm flex items-center gap-1.5 text-[10px] font-black text-[#002D62] shadow-sm hover:bg-gray-50 transition-all uppercase tracking-tighter">
+          <Link href="/" className="bg-white px-4 py-1.5 rounded-sm flex items-center gap-1.5 text-[10px] font-black text-[#002D62] shadow-sm hover:bg-gray-50 transition-all uppercase tracking-tighter">
             <ChevronLeft size={14} strokeWidth={3} /> REGRESAR
           </Link>
         </div>
@@ -205,13 +150,14 @@ const ProductDetail: React.FC<Props> = ({ onAddToQuote }) => {
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
             >
-              <img
+              <Image
                 src={optimizeImage(selectedImage, 1200)}
                 alt={product.name}
                 width={600}
                 height={450}
                 className="max-w-[75%] h-auto object-contain transition-transform duration-200"
                 style={zoomStyle.display === 'block' ? { transform: 'scale(2)', transformOrigin: zoomStyle.transformOrigin } : {}}
+                priority
               />
 
               <div className="absolute top-4 right-4 bg-gray-50 p-1.5 rounded-full border border-gray-100 text-gray-400">
@@ -232,7 +178,7 @@ const ProductDetail: React.FC<Props> = ({ onAddToQuote }) => {
                   onClick={() => setSelectedImage(img)}
                   className={`w-20 h-20 md:w-24 md:h-24 shrink-0 rounded-lg border-2 p-1.5 transition-all bg-white ${selectedImage === img ? 'border-[#8CC63F]' : 'border-gray-100'}`}
                 >
-                  <img src={optimizeImage(img, 400)} alt={`Vista ${idx + 1} de ${product.name}`} loading="lazy" decoding="async" width={96} height={96} className="w-full h-full object-contain" />
+                  <Image src={optimizeImage(img, 400)} alt={`Vista ${idx + 1} de ${product.name}`} width={96} height={96} className="w-full h-full object-contain" />
                 </button>
               ))}
             </div>
@@ -289,7 +235,7 @@ const ProductDetail: React.FC<Props> = ({ onAddToQuote }) => {
 
               <div className="flex flex-col gap-4">
                 <button
-                  onClick={() => onAddToQuote?.(product)}
+                  onClick={() => addToQuote(product)}
                   className="bg-white border-2 border-[#002D62] text-[#002D62] px-8 py-5 rounded-2xl flex items-center justify-center gap-4 font-black uppercase text-xs hover:bg-[#002D62] hover:text-white transition-all shadow-sm group"
                 >
                   <Plus size={24} className="text-[#8CC63F] group-hover:text-white transition-colors" />

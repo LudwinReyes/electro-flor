@@ -1,5 +1,7 @@
 
 import React from 'react';
+import Image from 'next/image';
+import { optimizeImage } from '../utils/optimizeImage';
 import { Product } from '../types';
 import { X, Trash2, MessageCircle, FileText } from 'lucide-react';
 import { BRAND_COLORS, CONTACT_INFO, SITE_MESSAGES } from '../config';
@@ -54,7 +56,13 @@ const QuoteCart: React.FC<Props> = ({ isOpen, onClose, items, onRemove, onClear 
             items.map(item => (
               <div key={item._id || item.id} className="flex gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-100 group">
                 <div className="w-16 h-16 bg-white rounded-xl p-2 flex-shrink-0">
-                  <img src={item.image} alt={item.name} loading="lazy" width={64} height={64} className="w-full h-full object-contain" />
+                  <Image 
+                    src={optimizeImage(item.image, 100)} 
+                    alt={item.name} 
+                    width={64} 
+                    height={64} 
+                    className="w-full h-full object-contain" 
+                  />
                 </div>
                 <div className="flex-grow">
                   <h4 className={`text-[11px] font-black text-[${BRAND_COLORS.primary}] uppercase leading-tight line-clamp-2`}>{item.name}</h4>

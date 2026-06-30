@@ -1,17 +1,20 @@
+"use client";
 
 import React from 'react';
 import { Product } from '../types';
 import { Star, Plus, CheckCircle2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+import Image from 'next/image';
 import { BRAND_COLORS, CONTACT_INFO, SITE_MESSAGES } from '../config';
 import { optimizeImage } from '../utils/optimizeImage';
+import { useQuote } from '../contexts/QuoteContext';
 
 interface Props {
   product: Product;
-  onAddToQuote?: (product: Product) => void;
 }
 
-const ProductCard: React.FC<Props> = ({ product, onAddToQuote }) => {
+const ProductCard: React.FC<Props> = ({ product }) => {
+  const { addToQuote } = useQuote();
   return (
     <div className="bg-white rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-lg transition-all group flex flex-col h-full overflow-hidden relative p-4">
       {/* Badges Superiores */}
@@ -29,12 +32,10 @@ const ProductCard: React.FC<Props> = ({ product, onAddToQuote }) => {
 
       {/* Imagen del Producto - Cubre todo el ancho */}
       <div className="relative h-52 md:h-64 flex items-center justify-center bg-gradient-to-b from-gray-50 to-white mb-4 w-full rounded-2xl overflow-hidden">
-        <Link to={`/producto/${product.slug || product.id}`} className="w-full h-full flex items-center justify-center p-2">
-          <img
+        <Link href={`/producto/${product.slug || product.id}`} className="w-full h-full flex items-center justify-center p-2">
+          <Image
             src={optimizeImage(product.image, 600)}
             alt={product.name}
-            loading="lazy"
-            decoding="async"
             width={300}
             height={300}
             className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
@@ -49,7 +50,7 @@ const ProductCard: React.FC<Props> = ({ product, onAddToQuote }) => {
           <span className="text-[10px] text-gray-300 font-bold uppercase tracking-tight">{product.code}</span>
         </div>
 
-        <Link to={`/producto/${product.slug || product.id}`}>
+        <Link href={`/producto/${product.slug || product.id}`}>
           <h3 className={`text-[14px] font-black text-[${BRAND_COLORS.primary}] line-clamp-2 mb-3 h-[42px] leading-[1.2] uppercase tracking-tighter hover:text-[${BRAND_COLORS.secondary}] transition-colors`}>
             {product.name}
           </h3>
@@ -79,7 +80,7 @@ const ProductCard: React.FC<Props> = ({ product, onAddToQuote }) => {
             <button
               onClick={(e) => {
                 e.preventDefault();
-                onAddToQuote?.(product);
+                addToQuote(product);
               }}
               aria-label={`Agregar ${product.name} a la cotización`}
               className={`w-12 bg-[${BRAND_COLORS.primary}] text-[${BRAND_COLORS.secondary}] rounded-2xl flex items-center justify-center hover:bg-blue-950 transition-all shadow-sm group/btn`}
@@ -89,7 +90,7 @@ const ProductCard: React.FC<Props> = ({ product, onAddToQuote }) => {
           </div>
 
           <Link
-            to={`/producto/${product.slug || product.id}`}
+            href={`/producto/${product.slug || product.id}`}
             className="w-full block text-center text-[#002D62] text-[11px] font-black hover:bg-gray-100 transition-colors uppercase tracking-widest py-3 bg-[#f8f9fa] rounded-2xl"
           >
             Ver mas

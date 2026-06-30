@@ -1,6 +1,6 @@
 
 export interface Product {
-  id: string;
+  id?: string;
   _id?: string; // ID de Sanity
   slug?: string; // Slug para URLs amigables
   name: string;
@@ -8,11 +8,18 @@ export interface Product {
   code: string;
   category: string;
   image: string;
-  description: string;
+  description: any;
   shortDescription?: string;
   specifications: Record<string, string> | Array<{ _key?: string; label: string; value: string }>;
   isFeatured?: boolean;
   isNew?: boolean;
+  images?: string[];
+  pdfFile?: string;
+  pdfUrl?: string;
+  youtubeVideo?: string;
+  features?: string[];
+  gallery?: string[];
+  specs?: any[];
   seo?: {
     title?: string;
     description?: string;

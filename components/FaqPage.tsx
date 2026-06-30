@@ -1,10 +1,9 @@
+"use client";
 
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp, HelpCircle, Truck, ShieldCheck, CreditCard, FileText } from 'lucide-react';
 import { CONTACT_INFO } from '../config';
 import { getFAQs } from '../services/sanity';
-import SEOHead from './SEOHead';
-import { Helmet } from 'react-helmet-async';
 
 const FaqPage: React.FC = () => {
   const [activeIdx, setActiveIdx] = useState<number | null>(0);
@@ -53,27 +52,32 @@ const FaqPage: React.FC = () => {
     }
   ];
 
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: (sanityFaqs.length > 0 ? sanityFaqs.map((faq: any) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer
+      }
+    })) : faqs.map((faq: any) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.a
+      }
+    })))
+  };
+
   return (
     <div className="bg-white min-h-screen">
-      <SEOHead
-        title="Preguntas Frecuentes - Envíos, Garantías y Pagos"
-        description="Resuelve tus dudas sobre envíos a provincias, garantías de fábrica, medios de pago y devoluciones en ELECTRO FLOR. Atención inmediata por WhatsApp."
-        url="/faq"
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          "mainEntity": faqs.map(faq => ({
-            "@type": "Question",
-            "name": faq.q,
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": faq.a
-            }
-          }))
-        })}</script>
-      </Helmet>
       <section className="bg-[#8CC63F] py-20 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-black text-[#002D62] uppercase tracking-tighter">PREGUNTAS <span className="text-white">FRECUENTES</span></h1>

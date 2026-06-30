@@ -1,6 +1,11 @@
+"use client";
+
+"use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Search, Menu, Phone, MapPin, Calculator, FileText, LayoutList, X, ArrowUpRight, ChevronDown, LayoutGrid } from 'lucide-react';
 import { CATEGORIES } from '../constants';
 import { Product } from '../types';
@@ -12,13 +17,12 @@ import { optimizeImage } from '../utils/optimizeImage';
 interface Props {
   quoteCount: number;
   onOpenQuote: () => void;
-  onOpenCalc: () => void;
   onOpenPriceList: () => void;
   onSearch?: (query: string) => void;
   products?: Product[];
 }
 
-const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPriceList, onSearch, products = [] }) => {
+const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenPriceList, onSearch, products = [] }) => {
   const { siteSettings, headerSettings, colors, contact } = useSiteConfig();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
@@ -28,7 +32,7 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
   const [sanityCategories, setSanityCategories] = useState<any[]>([]);
   const searchRef = useRef<HTMLDivElement>(null);
   const categoryMenuRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   // Cargar categorías desde Sanity
   useEffect(() => {
@@ -71,16 +75,20 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (onSearch && searchQuery.trim()) {
-      onSearch(searchQuery);
+    if (searchQuery.trim()) {
+      if (onSearch) {
+        onSearch(searchQuery);
+      } else {
+        router.push(`/productos?search=${encodeURIComponent(searchQuery.trim())}`);
+      }
       setShowSuggestions(false);
     }
   };
 
-  const handleSuggestionClick = (product: Product) => {
+  const handleSuggestionClick = (product: any) => {
     setSearchQuery('');
     setShowSuggestions(false);
-    navigate(`/producto/${product.id}`);
+    router.push(`/producto/${product.slug || product.id || product._id}`);
   };
 
   return (
@@ -92,9 +100,9 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
             <a href={`tel:${contact.phone.whatsapp}`} className="flex items-center gap-1.5 font-medium hover:underline"><Phone size={14} style={{ color: colors.secondary }} /> CENTRAL: {contact.phone.display}</a>
           </div>
           <div className="flex gap-4 font-bold uppercase tracking-widest text-[9px]">
-            <button onClick={onOpenCalc} className="flex items-center gap-1.5 hover:text-white transition group" style={{ color: colors.secondary }}>
+            <Link href="/calculadora-conductores-electricos" className="flex items-center gap-1.5 hover:text-white transition group" style={{ color: colors.secondary }}>
               <Calculator size={14} /> Calculadora
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -104,10 +112,10 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
           <Menu size={28} />
         </button>
 
-        <Link to="/" className="flex-shrink-0 flex items-center gap-1 md:gap-2">
+        <Link href="/" className="flex-shrink-0 flex items-center gap-1 md:gap-2">
           {/* Logo: usa siteSettings.logo si existe, sino muestra icono de fallback */}
           {siteSettings.logo ? (
-            <img
+            <Image
               src={optimizeImage(siteSettings.logo, 400)}
               alt={siteSettings.siteName || 'ELECTRO FLOR'}
               width={180}
@@ -159,7 +167,7 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
                 {categories.filter((cat: any) => !cat.parentCategory).map((cat: any) => (
                   <Link
                     key={cat.slug}
-                    to={`/productos/${cat.slug}`}
+                    href={`/productos/${cat.slug}`}
                     onClick={() => setIsCategoryMenuOpen(false)}
                     className="flex items-center justify-between px-6 py-3 transition-colors group"
                     style={{ color: colors.primary }}
@@ -207,12 +215,18 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
                 <div className="max-h-96 overflow-y-auto py-2">
                   {suggestions.map((p) => (
                     <button
-                      key={p.id}
+                      key={p.slug || p._id || p.id}
                       onClick={() => handleSuggestionClick(p)}
                       className={`w-full flex items-center gap-4 px-4 py-3 hover:bg-[${BRAND_COLORS.secondaryOpacity[10]}] text-left transition-colors group`}
                     >
                       <div className="w-10 h-10 bg-white rounded-lg p-1 border border-gray-100 shrink-0">
-                        <img src={p.image} alt={p.name} className="w-full h-full object-contain" />
+                        <Image 
+                          src={optimizeImage(p.image, 100)} 
+                          alt={p.name} 
+                          width={40} 
+                          height={40} 
+                          className="w-full h-full object-contain" 
+                        />
                       </div>
                       <div className="flex-grow overflow-hidden">
                         <p className={`text-[11px] font-black text-[${BRAND_COLORS.primary}] uppercase truncate group-hover:text-[${BRAND_COLORS.secondary}] transition-colors`}>{p.name}</p>
@@ -254,12 +268,12 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
 
       <nav className="hidden lg:block max-w-7xl mx-auto px-4 border-t border-gray-50 overflow-x-auto">
         <div className="flex py-3 gap-8 text-[11px] font-black uppercase tracking-widest" style={{ color: colors.primary }}>
-          <Link to="/" className="hover:opacity-80 transition-opacity" style={{ borderBottom: `2px solid transparent` }}>Inicio</Link>
-          <Link to="/productos" className="hover:opacity-80 transition-opacity">Productos</Link>
-          <Link to="/marcas" className="hover:opacity-80 transition-opacity">Marcas</Link>
-          <Link to="/nosotros" className="hover:opacity-80 transition-opacity">Nosotros</Link>
-          <Link to="/contacto" className="hover:opacity-80 transition-opacity">Contacto</Link>
-          <Link to="/faq" className="hover:opacity-80 transition-opacity">Preguntas</Link>
+          <Link href="/" className="hover:opacity-80 transition-opacity" style={{ borderBottom: `2px solid transparent` }}>Inicio</Link>
+          <Link href="/productos" className="hover:opacity-80 transition-opacity">Productos</Link>
+          <Link href="/marcas" className="hover:opacity-80 transition-opacity">Marcas</Link>
+          <Link href="/nosotros" className="hover:opacity-80 transition-opacity">Nosotros</Link>
+          <Link href="/contacto" className="hover:opacity-80 transition-opacity">Contacto</Link>
+          <Link href="/faq" className="hover:opacity-80 transition-opacity">Preguntas</Link>
         </div>
       </nav>
 
@@ -281,7 +295,7 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
                 {categories.filter((cat: any) => !cat.parentCategory).map((cat: any) => (
                   <Link
                     key={cat.slug}
-                    to={`/productos?category=${encodeURIComponent(cat.name)}`}
+                    href={`/productos?category=${encodeURIComponent(cat.name)}`}
                     onClick={() => setIsMenuOpen(false)}
                     className={`flex items-center gap-3 hover:text-[${BRAND_COLORS.secondary}]`}
                   >
@@ -290,14 +304,14 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenCalc, onOpenPr
                 ))}
               </div>
               <div className="h-px bg-gray-100 my-2"></div>
-              <Link to="/" onClick={() => setIsMenuOpen(false)}>Inicio</Link>
-              <Link to="/productos" onClick={() => setIsMenuOpen(false)}>Catálogo completo</Link>
-              <Link to="/marcas" onClick={() => setIsMenuOpen(false)}>Marcas</Link>
-              <Link to="/nosotros" onClick={() => setIsMenuOpen(false)}>Nosotros</Link>
-              <Link to="/contacto" onClick={() => setIsMenuOpen(false)}>Contacto</Link>
-              <button onClick={() => { onOpenCalc(); setIsMenuOpen(false); }} className="flex items-center gap-3 text-left">
+              <Link href="/" onClick={() => setIsMenuOpen(false)}>Inicio</Link>
+              <Link href="/productos" onClick={() => setIsMenuOpen(false)}>Catálogo completo</Link>
+              <Link href="/marcas" onClick={() => setIsMenuOpen(false)}>Marcas</Link>
+              <Link href="/nosotros" onClick={() => setIsMenuOpen(false)}>Nosotros</Link>
+              <Link href="/contacto" onClick={() => setIsMenuOpen(false)}>Contacto</Link>
+              <Link href="/calculadora-conductores-electricos" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 text-left">
                 <Calculator size={18} className={`text-[${BRAND_COLORS.secondary}]`} /> Calculadora Técnica
-              </button>
+              </Link>
             </div>
           </div>
         </div>

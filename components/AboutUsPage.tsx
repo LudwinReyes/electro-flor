@@ -1,8 +1,9 @@
+"use client";
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Target, Eye, ShieldCheck, History, Users, Globe } from 'lucide-react';
 import { getAboutPage } from '../services/sanity';
-import SEOHead from './SEOHead';
 
 const AboutUsPage: React.FC = () => {
   const [aboutData, setAboutData] = useState<any>(null);
@@ -30,15 +31,11 @@ const AboutUsPage: React.FC = () => {
   const vision = aboutData?.vision?.content || defaultContent.vision;
   return (
     <div className="bg-white">
-      <SEOHead
-        title="Sobre Nosotros - Distribuidores de Material Eléctrico"
-        description="ELECTRO FLOR: Más de 15 años como distribuidores líderes de material eléctrico e iluminación técnica en Perú. Marcas certificadas, garantía oficial y entrega en 24h."
-        url="/nosotros"
-      />
+      
       {/* Hero Section */}
       <section className="bg-[#002D62] py-24 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=1600" alt="" loading="lazy" width={1600} height={900} className="w-full h-full object-cover" />
+          <Image src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=1600" alt="Fábrica e infraestructura de Electro Flor" width={1600} height={900} className="w-full h-full object-cover" />
         </div>
         <div className="max-w-7xl mx-auto px-4 relative z-10 text-center">
           <span className="text-[#8CC63F] font-black text-xs uppercase tracking-widest mb-4 block">Más de 15 años de experiencia</span>

@@ -2,9 +2,9 @@ import { createClient } from '@sanity/client';
 
 // CONFIGURACIÓN DE SANITY
 // TODO: Reemplaza con tu Project ID real de Sanity Manage
-const PROJECT_ID = (import.meta as any).env?.VITE_SANITY_PROJECT_ID || 'your-project-id';
-const DATASET = (import.meta as any).env?.VITE_SANITY_DATASET || 'production';
-const API_VERSION = (import.meta as any).env?.VITE_SANITY_API_VERSION || '2024-01-01';
+const PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'your-project-id';
+const DATASET = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
+const API_VERSION = process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01';
 
 export const sanityClient = createClient({
   projectId: PROJECT_ID,
@@ -47,7 +47,10 @@ const getCachedData = async <T>(
   const cacheKey = `sanity_cache_v2_${key}`;
 
   try {
-    const cached = sessionStorage.getItem(cacheKey);
+    let cached = null;
+    if (typeof window !== 'undefined') {
+      cached = sessionStorage.getItem(cacheKey);
+    }
 
     if (cached) {
       const { data, expiry }: CacheEntry<T> = JSON.parse(cached);
@@ -66,10 +69,12 @@ const getCachedData = async <T>(
 
   if (data !== null && data !== undefined) {
     try {
-      sessionStorage.setItem(cacheKey, JSON.stringify({
-        data,
-        expiry: Date.now() + (ttlMinutes * 60 * 1000)
-      }));
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem(cacheKey, JSON.stringify({
+          data,
+          expiry: Date.now() + (ttlMinutes * 60 * 1000)
+        }));
+      }
     } catch (e) {
       // Si sessionStorage está lleno, limpiar caché viejo
       clearOldCache();
@@ -83,6 +88,7 @@ const getCachedData = async <T>(
  * Limpiar caché viejo cuando sessionStorage está lleno
  */
 const clearOldCache = () => {
+  if (typeof window === 'undefined') return;
   const keysToRemove: string[] = [];
   for (let i = 0; i < sessionStorage.length; i++) {
     const key = sessionStorage.key(i);
@@ -97,7 +103,8 @@ const clearOldCache = () => {
 /**
  * Forzar recarga de datos (útil después de publicar en Sanity Studio)
  */
-export const invalidateCache = (key?: string) => {
+export const clearSanityCache = (key?: string) => {
+  if (typeof window === 'undefined') return;
   if (key) {
     sessionStorage.removeItem(`sanity_cache_${key}`);
   } else {
@@ -591,16 +598,14 @@ export const getProgramaEspecialista = async () => {
 // ==================== LEADS / PROSPECTOS ====================
 
 // Cliente con token de escritura
-const WRITE_TOKEN = (import.meta as any).env?.VITE_SANITY_TOKEN || (globalThis as any).process?.env?.VITE_SANITY_TOKEN || '';
+const WRITE_TOKEN = process.env.NEXT_PUBLIC_SANITY_TOKEN || process.env.SANITY_TOKEN || '';
 
 // Debug log for environment variables
-if ((import.meta as any).env?.DEV) {
-  console.log('🔍 Entorno Vite:', Object.keys((import.meta as any).env || {}).filter(k => k.startsWith('VITE_')));
-
+if (process.env.NODE_ENV === 'development') {
   if (!WRITE_TOKEN) {
-    console.warn('⚠️ VITE_SANITY_TOKEN no encontrado. Los formularios no funcionarán.');
+    console.warn('⚠️ NEXT_PUBLIC_SANITY_TOKEN no encontrado. Los formularios no funcionarán.');
   } else if (WRITE_TOKEN.startsWith("'") || WRITE_TOKEN.endsWith("'") || WRITE_TOKEN.startsWith('"') || WRITE_TOKEN.endsWith('"')) {
-    console.error('❌ El VITE_SANITY_TOKEN tiene comillas en el .env. Por favor, quítalas.');
+    console.error('❌ El NEXT_PUBLIC_SANITY_TOKEN tiene comillas en el .env. Por favor, quítalas.');
   }
 }
 
@@ -626,7 +631,7 @@ export const saveLead = async (whatsapp: string, source: string = 'programa_espe
       status: 'nuevo',
       createdAt: new Date().toISOString()
     });
-    if ((import.meta as any).env?.DEV) console.log('✅ Lead guardado:', result);
+    if (process.env.NODE_ENV === 'development') console.log('✅ Lead guardado:', result);
     return result;
   } catch (error) {
     console.error('❌ Error al guardar lead:', error);
@@ -660,7 +665,7 @@ export const saveContactForm = async (data: ContactFormData) => {
       status: 'nuevo',
       createdAt: new Date().toISOString()
     });
-    if ((import.meta as any).env?.DEV) console.log('✅ Formulario de contacto guardado:', result);
+    if (process.env.NODE_ENV === 'development') console.log('✅ Formulario de contacto guardado:', result);
     return result;
   } catch (error) {
     console.error('❌ Error al guardar formulario:', error);
@@ -690,7 +695,7 @@ export const saveReclamacion = async (data: ReclamacionData) => {
       status: 'pendiente',
       createdAt: new Date().toISOString()
     });
-    if ((import.meta as any).env?.DEV) console.log('✅ Libro de Reclamaciones guardado:', result);
+    if (process.env.NODE_ENV === 'development') console.log('✅ Libro de Reclamaciones guardado:', result);
     return result;
   } catch (error) {
     console.error('❌ Error al guardar reclamación:', error);

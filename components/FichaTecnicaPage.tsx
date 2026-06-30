@@ -1,5 +1,7 @@
+"use client";
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
 import { getProductBySlug } from '../services/sanity';
 import { ChevronLeft, ZoomIn, ZoomOut, FileText, Home, ExternalLink } from 'lucide-react';
 
@@ -51,7 +53,7 @@ const FichaTecnicaPage: React.FC = () => {
             <div className="min-h-screen bg-[#0a0b0d] flex flex-col items-center justify-center text-white">
                 <FileText size={80} className="text-[#8CC63F] mb-6 opacity-50" />
                 <h1 className="text-2xl font-bold mb-4">Producto no encontrado</h1>
-                <Link to="/" className="text-[#8CC63F] hover:underline flex items-center gap-2">
+                <Link href="/" className="text-[#8CC63F] hover:underline flex items-center gap-2">
                     <Home size={18} /> Volver al inicio
                 </Link>
             </div>
@@ -66,7 +68,7 @@ const FichaTecnicaPage: React.FC = () => {
                 <FileText size={80} className="text-[#8CC63F] mb-6 opacity-50" />
                 <h1 className="text-2xl font-bold mb-4">Ficha técnica no disponible</h1>
                 <p className="text-gray-400 mb-6">Este producto aún no tiene ficha técnica cargada.</p>
-                <Link to={`/productos/${slug}`} className="text-[#8CC63F] hover:underline flex items-center gap-2">
+                <Link href={`/productos/${slug}`} className="text-[#8CC63F] hover:underline flex items-center gap-2">
                     <ChevronLeft size={18} /> Volver al producto
                 </Link>
             </div>
@@ -84,7 +86,7 @@ const FichaTecnicaPage: React.FC = () => {
             <header className="bg-[#002D62] px-4 py-3 flex items-center justify-between sticky top-0 z-50">
                 <div className="flex items-center gap-4">
                     <Link
-                        to={`/producto/${slug}`}
+                        href={`/producto/${slug}`}
                         className="flex items-center gap-2 text-white hover:text-[#8CC63F] transition-colors"
                     >
                         <ChevronLeft size={20} />
@@ -126,7 +128,7 @@ const FichaTecnicaPage: React.FC = () => {
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10">
                         <img
                             src="/media/Logo Electro Flor.png"
-                            alt=""
+                            alt="Logo Electro Flor"
                             className="w-64 h-auto"
                             draggable={false}
                         />
@@ -134,8 +136,8 @@ const FichaTecnicaPage: React.FC = () => {
                     {/* Logo esquina inferior derecha */}
                     <div className="absolute bottom-8 right-8 opacity-40">
                         <img
-                            src="/media/Logo Electro Flor.png"
-                            alt=""
+                            src="/media/logos/logotipo.png"
+                            alt="Logo Electro Flor Decorativo"
                             className="w-32 h-auto"
                             draggable={false}
                         />

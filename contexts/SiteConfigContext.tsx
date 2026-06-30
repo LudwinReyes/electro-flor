@@ -1,3 +1,4 @@
+"use client";
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { getSiteSettings, getHeaderSettings, getFooterSettings } from '../services/sanity';
 import { BRAND_COLORS, CONTACT_INFO, SITE_MESSAGES } from '../config';

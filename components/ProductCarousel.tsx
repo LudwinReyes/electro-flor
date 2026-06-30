@@ -1,3 +1,4 @@
+"use client";
 
 import React, { useRef, useState, useEffect } from 'react';
 import { Product } from '../types';
@@ -6,12 +7,11 @@ import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 
 interface Props {
   products: Product[];
-  title: string;
-  subtitle: string;
-  onAddToQuote: (p: Product) => void;
+  title?: string;
+  subtitle?: string;
 }
 
-const ProductCarousel: React.FC<Props> = ({ products, title, subtitle, onAddToQuote }) => {
+const ProductCarousel: React.FC<Props> = ({ products, title, subtitle }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -99,7 +99,7 @@ const ProductCarousel: React.FC<Props> = ({ products, title, subtitle, onAddToQu
               key={product._id || product.id || index}
               className="w-full md:w-[calc(50%-16px)] lg:w-[calc(25%-24px)] snap-start shrink-0 h-full flex-none"
             >
-              <ProductCard product={product} onAddToQuote={onAddToQuote} />
+              <ProductCard product={product} />
             </div>
           ))}
         </div>

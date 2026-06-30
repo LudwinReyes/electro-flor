@@ -1,6 +1,9 @@
+"use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronRight, ChevronLeft, Lightbulb, Zap, Waves, Building2 } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const SLIDES = [
   {
@@ -9,7 +12,8 @@ const SLIDES = [
     description: "Diseños modernos que transforman tus espacios interiores con eficiencia energética y calidez.",
     image: "/media/hogar.webp",
     icon: <Lightbulb size={24} />,
-    color: "#8CC63F"
+    color: "#8CC63F",
+    link: "/productos/iluminacion/paneles-y-downlights"
   },
   {
     title: "Iluminación <br/> Pública",
@@ -17,7 +21,8 @@ const SLIDES = [
     description: "Sistemas LED de alta potencia para avenidas, parques e industrias con máxima durabilidad.",
     image: "/media/publico.webp",
     icon: <Building2 size={24} />,
-    color: "#002D62"
+    color: "#002D62",
+    link: "/productos/iluminacion/alumbrado-publico"
   },
   {
     title: "Luminarias <br/> para Piscina",
@@ -25,7 +30,8 @@ const SLIDES = [
     description: "Equipos subacuáticos IP68 con tecnología RGB para ambientes acuáticos espectaculares.",
     image: "/media/piscina.webp",
     icon: <Waves size={24} />,
-    color: "#00E5FF"
+    color: "#00E5FF",
+    link: "/productos/iluminacion"
   }
 ];
 
@@ -51,20 +57,18 @@ const Hero: React.FC = () => {
       {SLIDES.map((slide, index) => (
         <div
           key={index}
-          className={`absolute inset-0 transition-all duration-1000 ease-in-out ${index === current ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
+          className={`absolute inset-0 transition-all duration-1000 ease-in-out ${index === current ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 translate-x-10 pointer-events-none'
             }`}
         >
           {/* Background Image */}
           <div className="absolute inset-0">
-            <img
+            <Image
               src={slide.image}
               alt={slide.title.replace(/<br\/>/g, ' ')}
               width={1920}
               height={750}
               className="absolute inset-0 w-full h-full object-cover"
-              fetchPriority={index === 0 ? 'high' : 'auto'}
-              loading={index === 0 ? 'eager' : 'lazy'}
-              decoding={index === 0 ? 'auto' : 'async'}
+              priority={index === 0}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-[#002D62] via-[#002D62]/70 to-transparent"></div>
           </div>
@@ -92,12 +96,20 @@ const Hero: React.FC = () => {
               </p>
 
               <div className="flex flex-wrap gap-4">
-                <button className="bg-[#8CC63F] text-[#002D62] px-8 py-4 rounded-xl font-black flex items-center justify-center gap-2 transition-all shadow-xl uppercase text-xs hover:scale-105 active:scale-95 group">
+                <Link 
+                  href={slide.link} 
+                  className="bg-[#8CC63F] text-[#002D62] px-8 py-4 rounded-xl font-black flex items-center justify-center gap-2 transition-all shadow-xl uppercase text-xs hover:scale-105 active:scale-95 group"
+                >
                   Ver Colección <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                </button>
-                <button className="bg-white/10 border-2 border-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-black uppercase text-xs hover:bg-white/20 transition-colors">
+                </Link>
+                <a 
+                  href="https://wa.me/51948198701?text=Hola,%20me%20gustaría%20solicitar%20asesoría%20sobre%20sus%20productos." 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-white/10 border-2 border-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-black flex items-center justify-center transition-colors hover:bg-white/20 uppercase text-xs"
+                >
                   Solicitar Asesoría
-                </button>
+                </a>
               </div>
             </div>
           </div>

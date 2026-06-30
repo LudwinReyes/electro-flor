@@ -1,6 +1,8 @@
+"use client";
 
 import React, { useState, useEffect } from 'react';
 import { LayoutGrid, MapPin, Building } from 'lucide-react';
+import Image from 'next/image';
 import { BRAND_COLORS } from '../config';
 import { getProjects } from '../services/sanity';
 import { optimizeImage } from '../utils/optimizeImage';
@@ -76,11 +78,9 @@ const ProjectsGallery: React.FC = () => {
               className="group relative h-[400px] md:h-[500px] min-w-[280px] w-[80vw] md:min-w-0 md:w-full rounded-[2.5rem] md:rounded-[3rem] overflow-hidden shadow-2xl cursor-pointer snap-center shrink-0 md:shrink"
             >
               {/* Imagen con zoom sutil */}
-              <img
+              <Image
                 src={optimizeImage(proj.image, 800)}
                 alt={proj.title}
-                loading="lazy"
-                decoding="async"
                 width={800}
                 height={600}
                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"

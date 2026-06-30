@@ -1,45 +1,80 @@
-
-import React, { Suspense, lazy } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Suspense } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 import { Zap, Trophy, ShieldCheck, Clock, Building2 } from 'lucide-react';
-import { Product, Category } from '../types';
-import SEOHead from './SEOHead';
+import { getProducts, getCategories, getPromoBanners } from '../services/sanity';
 import { optimizeImage } from '../utils/optimizeImage';
-import Hero from './Hero';
-import ProductCard from './ProductCard';
+import Hero from '../components/Hero';
+import ProductCard from '../components/ProductCard';
+import ProductCarousel from '../components/ProductCarousel';
+import DeliveryBanner from '../components/DeliveryBanner';
+import ProjectsGallery from '../components/ProjectsGallery';
+import { CONTACT_INFO } from '../config';
+import { Metadata } from 'next';
 
-// Lazy load heavy components
-const ProductCarousel = lazy(() => import('./ProductCarousel'));
-const DeliveryBanner = lazy(() => import('./DeliveryBanner'));
-const ProjectsGallery = lazy(() => import('./ProjectsGallery'));
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/',
+  },
+};
 
-export interface PromoBanner {
-    _id: string;
-    badge?: string;
-    title?: string;
-    titleHighlight?: string;
-    description?: string;
-    image?: string;
-    buttonText?: string;
-    buttonUrl?: string;
-}
+export default async function HomePage() {
+    const [productsData, categoriesData, promoBannersData] = await Promise.all([
+        getProducts(),
+        getCategories(),
+        getPromoBanners()
+    ]);
 
-interface HomeProps {
-    onAddToQuote: (p: Product) => void;
-    products: Product[];
-    categories: Category[];
-    promoBanner: PromoBanner | null;
-}
+    const products = productsData || [];
+    const categories = categoriesData || [];
+    const promoBanner = promoBannersData && promoBannersData.length > 0 ? promoBannersData[0] : null;
 
-const Home: React.FC<HomeProps> = ({ onAddToQuote, products, categories, promoBanner }) => {
+    const localBusinessSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'HardwareStore',
+        name: 'Electro Flor E.I.R.L.',
+        alternateName: 'Electro Flor',
+        image: 'https://electroflorperu.com/media/logo.png',
+        '@id': 'https://electroflorperu.com/#localbusiness',
+        url: 'https://electroflorperu.com',
+        telephone: ['+51 948 198 701', '+51 904 162 516'],
+        email: ['ventas.electroflor@gmail.com', 'elmervazquezguevara@gmail.com'],
+        priceRange: '$$',
+        address: {
+            '@type': 'PostalAddress',
+            streetAddress: 'Av. Argentina 245, Pasaje 2, Puesto AR12, Centro Comercial Nicolini',
+            addressLocality: 'Cercado de Lima',
+            addressRegion: 'Lima',
+            postalCode: '15082',
+            addressCountry: 'PE'
+        },
+        hasMap: 'https://share.google/huOv6gxoYpjgx7mXa',
+        openingHoursSpecification: {
+            '@type': 'OpeningHoursSpecification',
+            dayOfWeek: [
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday'
+            ],
+            opens: '08:30',
+            closes: '19:30'
+        },
+        sameAs: [
+            'https://www.facebook.com/p/Electro-Flor-EIRL-61552203052431/'
+        ],
+        vatID: '10773519523'
+    };
+
     return (
         <>
-            <SEOHead
-                title="Iluminación y Material Eléctrico en Perú"
-                description="Distribuidor oficial de material eléctrico en Perú. Iluminación LED industrial, conductores eléctricos, herramientas Bosch, Schneider Electric. Stock garantizado y entrega inmediata en Lima."
-                url="/"
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
             />
-
+            <h1 className="sr-only">Electro Flor - Distribuidor oficial de material eléctrico en Perú. Iluminación LED, conductores eléctricos y herramientas.</h1>
             {/* Hero Section - Crucial for LCP, eager loaded */}
             <Hero />
 
@@ -47,8 +82,8 @@ const Home: React.FC<HomeProps> = ({ onAddToQuote, products, categories, promoBa
             <section className="max-w-7xl mx-auto px-4 -mt-10 md:-mt-20 relative z-30">
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
                     {categories.length > 0 ? (
-                        categories.filter(c => c.featured !== false).map((cat) => (
-                            <Link to={`/productos/${cat.slug}`} key={cat.slug} className="bg-white p-5 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] shadow-lg text-center flex flex-col items-center group transition-all hover:-translate-y-1 border-b-4 border-transparent hover:border-[#8CC63F]">
+                        categories.filter((c: any) => c.featured !== false).map((cat: any) => (
+                            <Link href={`/productos/${cat.slug}`} key={cat.slug} className="bg-white p-5 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] shadow-lg text-center flex flex-col items-center group transition-all hover:-translate-y-1 border-b-4 border-transparent hover:border-[#8CC63F]">
                                 <div className="bg-[#002D62] w-14 h-14 md:w-24 md:h-24 rounded-2xl md:rounded-3xl flex items-center justify-center mb-4 md:mb-6 shadow-xl transition-transform group-hover:scale-105">
                                     <i className={`fas ${cat.icon} text-xl md:text-4xl text-[#8CC63F]`}></i>
                                 </div>
@@ -58,7 +93,6 @@ const Home: React.FC<HomeProps> = ({ onAddToQuote, products, categories, promoBa
                             </Link>
                         ))
                     ) : (
-                        // Skeleton Loader for Categories - 5 items
                         Array.from({ length: 5 }).map((_, i) => (
                             <div key={i} className="bg-white p-5 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] shadow-lg h-32 md:h-48 animate-pulse flex flex-col items-center justify-center">
                                 <div className="w-14 h-14 md:w-24 md:h-24 bg-gray-200 rounded-2xl md:rounded-3xl mb-4 md:mb-6"></div>
@@ -73,23 +107,22 @@ const Home: React.FC<HomeProps> = ({ onAddToQuote, products, categories, promoBa
             <section className="max-w-7xl mx-auto px-4 py-12 md:py-20">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 md:mb-12 gap-4">
                     <div>
-                        <span className="text-[#8CC63F] font-black uppercase text-[10px] md:text-xs tracking-widest mb-2 block flex items-center gap-2">
+                        <span className="text-[#8CC63F] font-black uppercase text-[10px] md:text-xs tracking-widest mb-2 flex items-center gap-2">
                             <Trophy size={14} /> TOP VENTAS SEMANAL
                         </span>
                         <h2 className="text-2xl md:text-5xl font-black text-[#002D62] uppercase tracking-tighter leading-none">LO MÁS <span className="text-[#8CC63F]">PEDIDO</span></h2>
                     </div>
-                    <Link to="/productos" className="text-[#002D62] font-black text-xs uppercase border-b-2 border-[#8CC63F] pb-1 hover:text-[#8CC63F] transition-colors">
+                    <Link href="/productos" className="text-[#002D62] font-black text-xs uppercase border-b-2 border-[#8CC63F] pb-1 hover:text-[#8CC63F] transition-colors">
                         Ver todo el catálogo
                     </Link>
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-8">
                     {products.length > 0 ? (
-                        products.slice(0, 5).map(product => (
-                            <ProductCard key={product._id || product.slug || product.id} product={product} onAddToQuote={onAddToQuote} />
+                        products.slice(0, 5).map((product: any) => (
+                            <ProductCard key={product._id || product.slug || product.id} product={product} />
                         ))
                     ) : (
-                        // Skeleton Loader for Products - 5 items
                         Array.from({ length: 5 }).map((_, i) => (
                             <div key={i} className="animate-pulse bg-white rounded-2xl p-4 shadow-sm h-[300px]">
                                 <div className="bg-gray-200 h-40 w-full rounded-xl mb-4"></div>
@@ -101,7 +134,7 @@ const Home: React.FC<HomeProps> = ({ onAddToQuote, products, categories, promoBa
                 </div>
             </section>
 
-            {/* Promo Banner - Can be heavy, optimize image */}
+            {/* Promo Banner */}
             {promoBanner && (
                 <section className="max-w-7xl mx-auto px-4 mb-20">
                     <div className="bg-gradient-to-r from-[#002D62] to-[#00408B] rounded-[2rem] md:rounded-[3rem] p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 border-b-8 border-[#8CC63F]">
@@ -121,7 +154,7 @@ const Home: React.FC<HomeProps> = ({ onAddToQuote, products, categories, promoBa
                             )}
                             {promoBanner.buttonText && promoBanner.buttonUrl && (
                                 <Link
-                                    to={promoBanner.buttonUrl}
+                                    href={promoBanner.buttonUrl}
                                     className="bg-[#8CC63F] text-[#002D62] px-8 py-4 rounded-xl font-black uppercase text-xs hover:scale-105 transition shadow-lg inline-block"
                                 >
                                     {promoBanner.buttonText}
@@ -130,12 +163,10 @@ const Home: React.FC<HomeProps> = ({ onAddToQuote, products, categories, promoBa
                         </div>
                         {promoBanner.image && (
                             <div className="relative z-10 group">
-                                <img
+                                <Image
                                     src={optimizeImage(promoBanner.image, 800)}
                                     className="h-48 md:h-80 object-contain drop-shadow-2xl rounded-3xl rotate-3 group-hover:rotate-0 transition-transform duration-500"
                                     alt={promoBanner.title || 'Promoción'}
-                                    loading="lazy"
-                                    decoding="async"
                                     width={400}
                                     height={320}
                                 />
@@ -150,24 +181,23 @@ const Home: React.FC<HomeProps> = ({ onAddToQuote, products, categories, promoBa
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 md:mb-12 gap-4">
                         <div>
-                            <span className="text-[#002D62] font-black uppercase text-[10px] md:text-xs tracking-widest mb-2 block flex items-center gap-2">
+                            <span className="text-[#002D62] font-black uppercase text-[10px] md:text-xs tracking-widest mb-2 flex items-center gap-2">
                                 <Zap size={14} className="text-[#8CC63F]" /> ÚLTIMO INGRESO
                             </span>
                             <h2 className="text-2xl md:text-5xl font-black text-[#002D62] uppercase tracking-tighter leading-none">NUEVA <span className="text-[#8CC63F]">MERCADERÍA</span></h2>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-8">
-                        {(products.filter(p => p.displaySections?.includes('ultimo_ingreso')).length > 0
-                            ? products.filter(p => p.displaySections?.includes('ultimo_ingreso'))
+                        {(products.filter((p: any) => p.displaySections?.includes('ultimo_ingreso')).length > 0
+                            ? products.filter((p: any) => p.displaySections?.includes('ultimo_ingreso'))
                             : products
-                        ).slice(0, 5).map(product => (
-                            <ProductCard key={product._id || product.slug || product.id} product={product} onAddToQuote={onAddToQuote} />
+                        ).slice(0, 5).map((product: any) => (
+                            <ProductCard key={product._id || product.slug || product.id} product={product} />
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* Lazy Loaded Sections Below the Fold */}
             <Suspense fallback={<div className="h-64 flex justify-center items-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div></div>}>
                 <section className="mt-8 md:mt-16">
                     <DeliveryBanner />
@@ -177,13 +207,11 @@ const Home: React.FC<HomeProps> = ({ onAddToQuote, products, categories, promoBa
                     products={products.slice(0, 7)}
                     title="RECOMENDACIONES PRO"
                     subtitle="SOLUCIONES DESTACADAS"
-                    onAddToQuote={onAddToQuote}
                 />
 
                 <ProjectsGallery />
             </Suspense>
 
-            {/* Static Footer Info - Can be lazy if desired, but small enough */}
             <section className="bg-[#002D62] py-16">
                 <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-12">
                     <div className="flex flex-col items-center text-center p-6 bg-white/5 rounded-[2rem] border border-white/10">
@@ -211,6 +239,4 @@ const Home: React.FC<HomeProps> = ({ onAddToQuote, products, categories, promoBa
             </section>
         </>
     );
-};
-
-export default Home;
+}
