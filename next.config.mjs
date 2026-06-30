@@ -8,6 +8,7 @@ const nextConfig = {
     NEXT_PUBLIC_SANITY_TOKEN: process.env.VITE_SANITY_TOKEN || process.env.NEXT_PUBLIC_SANITY_TOKEN,
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
