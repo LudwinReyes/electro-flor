@@ -1,6 +1,5 @@
 import { MetadataRoute } from 'next';
-import { getProducts, getCategories, getBrands } from '../services/sanity';
-import { PRODUCTS } from '../constants';
+import { sanityServerClient } from '../services/sanity';
 
 // Forzar que el sitemap se regenere en cada petición (no cacheado en build)
 export const revalidate = 0;
@@ -9,11 +8,33 @@ export const dynamic = 'force-dynamic';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://electroflorperu.com';
 
-  let products = await getProducts();
-  if (!products || products.length === 0) products = PRODUCTS;
+  // Consultas directas a Sanity SIN caché CDN para datos siempre frescos
+  let products: any[] = [];
+  let categories: any[] = [];
+  let brands: any[] = [];
 
-  const categories = await getCategories() || [];
-  const brands = await getBrands() || [];
+  try {
+    [products, categories, brands] = await Promise.all([
+      sanityServerClient.fetch(`*[_type == "product"] | order(name asc) {
+        _id,
+        _updatedAt,
+        "slug": slug.current
+      }`),
+      sanityServerClient.fetch(`*[_type == "category"] | order(order asc, name asc) {
+        _id,
+        _updatedAt,
+        "slug": slug.current,
+        "parentCategory": parentCategory->slug.current
+      }`),
+      sanityServerClient.fetch(`*[_type == "brand"] | order(name asc) {
+        _id,
+        _updatedAt,
+        "slug": slug.current
+      }`),
+    ]);
+  } catch (error) {
+    console.error('Error fetching sitemap data from Sanity:', error);
+  }
 
   // Separar categorías padre y subcategorías
   const parentCategories = categories.filter((c: any) => !c.parentCategory);
@@ -79,7 +100,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     // Todos los productos
     ...products.map((p: any) => ({
-      url: `${baseUrl}/producto/${p.slug || p.id}`,
+      url: `${baseUrl}/producto/${p.slug || p._id}`,
       lastModified: p._updatedAt ? new Date(p._updatedAt) : new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.9,

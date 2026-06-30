@@ -17,6 +17,18 @@ export const sanityClient = createClient({
   },
 });
 
+// Cliente sin CDN para datos que necesitan ser siempre frescos (sitemap, metadata)
+export const sanityServerClient = createClient({
+  projectId: PROJECT_ID,
+  dataset: DATASET,
+  useCdn: false, // ❌ Sin CDN para datos frescos en tiempo real
+  apiVersion: API_VERSION,
+  perspective: 'published',
+  stega: {
+    enabled: false,
+  },
+});
+
 // Helper para verificar si Sanity está configurado
 const isSanityConfigured = () => PROJECT_ID !== 'your-project-id';
 
