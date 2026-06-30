@@ -1,16 +1,14 @@
 import React from 'react';
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import './globals.css';
 import { SiteConfigProvider } from '../contexts/SiteConfigContext';
 import { QuoteProvider } from '../contexts/QuoteContext';
-import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ShipmentUrgencyBar from '../components/ShipmentUrgencyBar';
 import ScrollToTop from '../components/ScrollToTop';
-import QuoteCart from '../components/QuoteCart';
-import PriceListModal from '../components/PriceListModal';
 import { getProducts } from '../services/sanity';
-import GlobalModalsWrapper from '../components/GlobalModalsWrapper'; // We'll create this to wrap the client-side modals state
+import GlobalModalsWrapper from '../components/GlobalModalsWrapper';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://electroflorperu.com'),
@@ -28,6 +26,22 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const headersList = await headers();
+  const pathname = headersList.get('x-pathname') || '';
+  const isStudio = pathname.startsWith('/admin');
+
+  // Si es Sanity Studio, renderizar layout limpio sin Header/Footer
+  if (isStudio) {
+    return (
+      <html lang="es">
+        <body style={{ margin: 0, padding: 0, overflow: 'auto' }}>
+          {children}
+        </body>
+      </html>
+    );
+  }
+
+  // Layout normal del sitio web
   const products = await getProducts() || [];
 
   return (
@@ -71,3 +85,4 @@ export default async function RootLayout({
     </html>
   );
 }
+
