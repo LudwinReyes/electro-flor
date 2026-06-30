@@ -1,34 +1,10 @@
-# Configuración de Netlify para ELECTRO FLOR
-# Frontend + Sanity Studio en /admin
+# Configuración de Netlify para ELECTRO FLOR (Next.js)
 
 [build]
-  publish = "dist"
   command = "npm run build"
+  publish = ".next"
 
-# Servir archivos estáticos del admin directamente (NO redirigir)
-[[redirects]]
-  from = "/static/*"
-  to = "/static/:splat"
-  status = 200
-
-[[redirects]]
-  from = "/admin/static/*"
-  to = "/admin/static/:splat"
-  status = 200
-
-# SPA fallback para rutas del admin
-[[redirects]]
-  from = "/admin/*"
-  to = "/admin/index.html"
-  status = 200
-  force = false
-
-# SPA fallback para el frontend
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  force = false
+# Next.js Netlify runtime maneja las rutas de App Router automáticamente.
 
 # Headers de seguridad
 [[headers]]
@@ -38,13 +14,3 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-# Cache de assets estáticos
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/admin/static/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
