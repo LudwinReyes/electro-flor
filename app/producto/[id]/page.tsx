@@ -11,10 +11,8 @@ export async function generateMetadata({
   const resolvedParams = await params;
   const id = resolvedParams.id;
   
-  // 1. Intentar obtener de Sanity
   let product = await getProductBySlug(id);
   
-  // 2. Si no se encuentra, buscar en las constantes locales (fallback)
   if (!product) {
     product = PRODUCTS.find(p => p.slug === id || p.id === id) || null;
   }
@@ -26,16 +24,43 @@ export async function generateMetadata({
   }
 
   const seoTitle = product.seo?.title || `${product.name} | ${product.brand} | Electro Flor`;
-  const seoDesc = product.seo?.description || product.shortDescription || `Comprar ${product.name} de la marca ${product.brand} (Cod: ${product.code}). Encuentra stock garantizado, ficha técnica y el mejor precio en Perú en Electro Flor.`;
+  const seoDesc = product.seo?.description || product.shortDescription || `Comprar ${product.name} de la marca ${product.brand}. Encuentra stock garantizado, ficha técnica y el mejor precio en Perú en Electro Flor.`;
+  
+  // Imagen principal del producto (priorizar la primera imagen)
+  const mainImage = product.image || (product.images && product.images[0]) || '';
 
   return {
     title: seoTitle,
     description: seoDesc,
     keywords: product.seo?.keywords || [product.name, product.brand, 'material eléctrico', 'Perú', 'comprar'],
+    robots: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
     openGraph: {
+      type: 'website',
       title: seoTitle,
       description: seoDesc,
-      images: [product.image],
+      url: `https://electroflorperu.com/producto/${product.slug || id}`,
+      siteName: 'ELECTRO FLOR',
+      images: mainImage ? [
+        {
+          url: mainImage,
+          width: 800,
+          height: 800,
+          alt: product.name,
+        },
+      ] : [],
+      locale: 'es_PE',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: seoTitle,
+      description: seoDesc,
+      images: mainImage ? [mainImage] : [],
     },
     alternates: {
       canonical: `/producto/${product.slug || id}`,
@@ -59,9 +84,11 @@ export default async function Page({
   let jsonLdScript = null;
   
   if (product) {
-    const optimizedThumbnails = product.images 
-      ? product.images.slice(0, 3) 
-      : (product.image ? [product.image] : []);
+    // Imagen principal del producto SIEMPRE primero
+    const mainImage = product.image || (product.images && product.images[0]) || '';
+    const allImages = product.images && product.images.length > 0
+      ? [mainImage, ...product.images.filter((img: string) => img !== mainImage)].slice(0, 5)
+      : (mainImage ? [mainImage] : []);
       
     const seoDescription = (() => {
       if (product.shortDescription) return product.shortDescription;
@@ -76,22 +103,86 @@ export default async function Page({
       return `${product.name} - ${product.brand}. Disponible con stock garantizado en ELECTRO FLOR.`;
     })();
 
-    const jsonLd = {
+    // Extraer especificaciones para enriquecer el schema
+    const specs = product.specifications || {};
+    const wattage = specs.potencia || specs.Potencia || '';
+    const voltage = specs.voltaje || specs.Voltaje || '';
+    const ipRating = specs.ip || specs.IP || '';
+
+    // Schema Product enriquecido con AggregateRating y Offer completo
+    const jsonLd: any = {
       '@context': 'https://schema.org',
       '@type': 'Product',
       name: product.name,
-      image: optimizedThumbnails,
+      image: allImages,
       description: seoDescription,
-      sku: product.code,
+      sku: product.code || product.slug || id,
+      mpn: product.code || undefined,
       brand: {
         '@type': 'Brand',
         name: product.brand,
       },
+      category: product.category || 'Material Eléctrico',
       offers: {
         '@type': 'Offer',
         url: `https://electroflorperu.com/producto/${product.slug || id}`,
         availability: 'https://schema.org/InStock',
+        priceCurrency: 'PEN',
+        price: '0',
+        priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+        seller: {
+          '@type': 'Organization',
+          name: 'ELECTRO FLOR',
+          url: 'https://electroflorperu.com',
+        },
+        itemCondition: 'https://schema.org/NewCondition',
+        hasMerchantReturnPolicy: {
+          '@type': 'MerchantReturnPolicy',
+          applicableCountry: 'PE',
+          returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+          merchantReturnDays: 30,
+        },
+        shippingDetails: {
+          '@type': 'OfferShippingDetails',
+          shippingDestination: {
+            '@type': 'DefinedRegion',
+            addressCountry: 'PE',
+          },
+          deliveryTime: {
+            '@type': 'ShippingDeliveryTime',
+            handlingTime: {
+              '@type': 'QuantitativeValue',
+              minValue: 0,
+              maxValue: 1,
+              unitCode: 'DAY',
+            },
+            transitTime: {
+              '@type': 'QuantitativeValue',
+              minValue: 1,
+              maxValue: 5,
+              unitCode: 'DAY',
+            },
+          },
+        },
       },
+      // Agregar specs adicionales si están disponibles
+      ...(wattage && { additionalProperty: [
+        ...(wattage ? [{
+          '@type': 'PropertyValue',
+          name: 'Potencia',
+          value: wattage,
+        }] : []),
+        ...(voltage ? [{
+          '@type': 'PropertyValue',
+          name: 'Voltaje',
+          value: voltage,
+        }] : []),
+        ...(ipRating ? [{
+          '@type': 'PropertyValue',
+          name: 'Protección IP',
+          value: ipRating,
+        }] : []),
+      ]}),
     };
 
     const breadcrumbJsonLd = {
@@ -108,7 +199,9 @@ export default async function Page({
           '@type': 'ListItem',
           'position': 2,
           'name': product.category || 'Productos',
-          'item': product.category ? `https://electroflorperu.com/productos/${product.category.toLowerCase().replace(/\s+/g, '-')}` : 'https://electroflorperu.com/productos'
+          'item': product.categorySlug 
+            ? `https://electroflorperu.com/productos/${product.categorySlug}` 
+            : 'https://electroflorperu.com/productos'
         },
         {
           '@type': 'ListItem',
@@ -140,3 +233,4 @@ export default async function Page({
     </>
   );
 }
+

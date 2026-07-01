@@ -12,8 +12,23 @@ import GlobalModalsWrapper from '../components/GlobalModalsWrapper';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://electroflorperu.com'),
-  title: 'Electro Flor - Ferretería y Material Eléctrico',
+  title: {
+    default: 'ELECTRO FLOR | Material Eléctrico e Iluminación LED en Perú',
+    template: '%s | Electro Flor',
+  },
   description: 'Distribuidor oficial de material eléctrico en Perú. Iluminación LED industrial, conductores eléctricos, herramientas Bosch, Schneider Electric. Stock garantizado y entrega inmediata en Lima.',
+  robots: {
+    index: true,
+    follow: true,
+    'max-image-preview': 'large',
+    'max-snippet': -1,
+    'max-video-preview': -1,
+  },
+  openGraph: {
+    type: 'website',
+    siteName: 'ELECTRO FLOR',
+    locale: 'es_PE',
+  },
   icons: {
     icon: '/media/favicon.png',
     shortcut: '/media/favicon.png',
