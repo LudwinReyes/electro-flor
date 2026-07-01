@@ -1,9 +1,0 @@
-User-agent: *
-Allow: /
-
-# Bloquear acceso al studio admin
-Disallow: /admin/
-Disallow: /studio/
-
-# Sitemap
-Sitemap: https://electroflorperu.com/sitemap.xml

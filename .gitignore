@@ -75,3 +75,8 @@ SOLUCION_*.md
 
 # Plantillas de productos
 plantilla_productos.csv
+
+# Archivos generados dinámicamente por Next.js (NO deben existir como estáticos)
+sitemap.xml
+public/sitemap.xml
+public/robots.txt
