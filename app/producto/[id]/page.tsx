@@ -127,42 +127,11 @@ export default async function Page({
         '@type': 'Offer',
         url: `https://electroflorperu.com/producto/${product.slug || id}`,
         availability: 'https://schema.org/InStock',
-        priceCurrency: 'PEN',
-        price: '0',
-        priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+        itemCondition: 'https://schema.org/NewCondition',
         seller: {
           '@type': 'Organization',
           name: 'ELECTRO FLOR',
           url: 'https://electroflorperu.com',
-        },
-        itemCondition: 'https://schema.org/NewCondition',
-        hasMerchantReturnPolicy: {
-          '@type': 'MerchantReturnPolicy',
-          applicableCountry: 'PE',
-          returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
-          merchantReturnDays: 30,
-        },
-        shippingDetails: {
-          '@type': 'OfferShippingDetails',
-          shippingDestination: {
-            '@type': 'DefinedRegion',
-            addressCountry: 'PE',
-          },
-          deliveryTime: {
-            '@type': 'ShippingDeliveryTime',
-            handlingTime: {
-              '@type': 'QuantitativeValue',
-              minValue: 0,
-              maxValue: 1,
-              unitCode: 'DAY',
-            },
-            transitTime: {
-              '@type': 'QuantitativeValue',
-              minValue: 1,
-              maxValue: 5,
-              unitCode: 'DAY',
-            },
-          },
         },
       },
       // Agregar specs adicionales si están disponibles
