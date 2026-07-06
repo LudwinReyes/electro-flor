@@ -109,49 +109,26 @@ export default async function Page({
     const voltage = specs.voltaje || specs.Voltaje || '';
     const ipRating = specs.ip || specs.IP || '';
 
-    // Schema Product enriquecido con AggregateRating y Offer completo
+    // Schema Product - sin Offer para evitar validación de "Fichas de comerciantes" (requiere precio)
+    const additionalProps = [
+      ...(wattage ? [{ '@type': 'PropertyValue', name: 'Potencia', value: wattage }] : []),
+      ...(voltage ? [{ '@type': 'PropertyValue', name: 'Voltaje', value: voltage }] : []),
+      ...(ipRating ? [{ '@type': 'PropertyValue', name: 'Protección IP', value: ipRating }] : []),
+    ];
+
     const jsonLd: any = {
       '@context': 'https://schema.org',
       '@type': 'Product',
       name: product.name,
       image: allImages,
       description: seoDescription,
-      sku: product.code || product.slug || id,
-      mpn: product.code || undefined,
+      ...(product.code ? { sku: product.code, mpn: product.code } : {}),
       brand: {
         '@type': 'Brand',
         name: product.brand,
       },
       category: product.category || 'Material Eléctrico',
-      offers: {
-        '@type': 'Offer',
-        url: `https://electroflorperu.com/producto/${product.slug || id}`,
-        availability: 'https://schema.org/InStock',
-        itemCondition: 'https://schema.org/NewCondition',
-        seller: {
-          '@type': 'Organization',
-          name: 'ELECTRO FLOR',
-          url: 'https://electroflorperu.com',
-        },
-      },
-      // Agregar specs adicionales si están disponibles
-      ...(wattage && { additionalProperty: [
-        ...(wattage ? [{
-          '@type': 'PropertyValue',
-          name: 'Potencia',
-          value: wattage,
-        }] : []),
-        ...(voltage ? [{
-          '@type': 'PropertyValue',
-          name: 'Voltaje',
-          value: voltage,
-        }] : []),
-        ...(ipRating ? [{
-          '@type': 'PropertyValue',
-          name: 'Protección IP',
-          value: ipRating,
-        }] : []),
-      ]}),
+      ...(additionalProps.length > 0 ? { additionalProperty: additionalProps } : {}),
     };
 
     const breadcrumbJsonLd = {
