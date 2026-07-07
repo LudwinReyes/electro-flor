@@ -97,7 +97,8 @@ const ProductDetail: React.FC<Props> = () => {
       return acc;
     }, {}) : (product.specifications || {});
 
-  const whatsappMessage = SITE_MESSAGES.whatsapp.stockInquiry(product.name);
+  const productPageUrl = `https://electroflorperu.com/producto/${product.slug}`;
+  const whatsappMessage = SITE_MESSAGES.whatsapp.stockInquiry(product.name, productPageUrl);
   const whatsappUrl = `https://wa.me/${contact.phone.whatsapp}?text=${encodeURIComponent(whatsappMessage)}`;
 
   // Extraer ID del video de YouTube

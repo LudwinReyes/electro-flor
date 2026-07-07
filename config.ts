@@ -66,7 +66,7 @@ export const SITE_MESSAGES = {
   whatsapp: {
     defaultGreeting: 'Hola, tengo una consulta sobre materiales eléctricos.',
     quoteRequest: (productName: string) => `Hola, solicito cotización inmediata para: ${productName}`,
-    stockInquiry: (productName: string) => `Hola, me interesa el ${productName}, ¿tienen stock para envío?`,
+    stockInquiry: (productName: string, productUrl?: string) => `Hola, me interesa el ${productName}, ¿tienen stock para envío?${productUrl ? '\n' + productUrl : ''}`,
     bulkQuote: 'Hola ELECTRO FLOR, solicito cotización corporativa para la siguiente lista de productos:'
   },
   urgency: {
