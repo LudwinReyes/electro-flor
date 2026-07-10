@@ -128,6 +128,11 @@ export default async function Page({
         name: product.brand,
       },
       category: product.category || 'Material Eléctrico',
+      offers: {
+        '@type': 'Offer',
+        url: `https://electroflorperu.com/producto/${product.slug || id}`,
+        availability: 'https://schema.org/InStock',
+      },
       ...(additionalProps.length > 0 ? { additionalProperty: additionalProps } : {}),
     };
 
