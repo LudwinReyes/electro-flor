@@ -5,10 +5,11 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PRODUCTS } from '../constants';
-import { getProductBySlug } from '../services/sanity';
+import { getProductBySlug, getProducts } from '../services/sanity';
 import { PortableText } from '@portabletext/react';
 import PDFViewer from './PDFViewer';
 import { Star, ChevronLeft, Mail, Facebook, Twitter, Linkedin, ChevronRight, PlayCircle, FileText, Image as ImageIcon, Search, Download, Share2, ExternalLink, Plus } from 'lucide-react';
+import ProductCard from './ProductCard';
 import { BRAND_COLORS, CONTACT_INFO, SITE_MESSAGES } from '../config';
 import { useSiteConfig } from '../contexts/SiteConfigContext';
 import { Product } from '../types';
@@ -25,36 +26,60 @@ const ProductDetail: React.FC<Props> = () => {
   const { id } = useParams(); // id es realmente el slug
   const { siteSettings, contact } = useSiteConfig();
   const [product, setProduct] = useState<Product | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('especificaciones');
   const [selectedImage, setSelectedImage] = useState('');
   const [zoomStyle, setZoomStyle] = useState({ display: 'none', transformOrigin: '0% 0%' });
 
-  // Cargar producto desde Sanity o usar fallback de constantes
+  // Cargar producto y relacionados desde Sanity o fallback
   useEffect(() => {
     const loadProduct = async () => {
       setLoading(true);
       try {
-        // Intentar cargar desde Sanity usando el slug
         const idStr = Array.isArray(id) ? id[0] : id;
         const sanityProduct = await getProductBySlug(idStr || '');
+        let loadedProduct = null;
         if (sanityProduct) {
           setProduct(sanityProduct);
           setSelectedImage(sanityProduct.image);
+          loadedProduct = sanityProduct;
         } else {
-          // Fallback: buscar en productos hardcodeados
           const fallbackProduct = PRODUCTS.find(p => p.slug === id || p.id === id);
           if (fallbackProduct) {
             setProduct(fallbackProduct);
             setSelectedImage(fallbackProduct.image);
+            loadedProduct = fallbackProduct;
           }
         }
+
+        if (loadedProduct) {
+          const allProducts = await getProducts();
+          const list = allProducts || PRODUCTS;
+          const filtered = list.filter((p: any) => (p.slug || p._id || p.id) !== idStr);
+          const categoryRelated = filtered.filter((p: any) => p.category === loadedProduct.category);
+          let finalRelated = categoryRelated;
+          if (finalRelated.length < 5) {
+            const others = filtered.filter((p: any) => !categoryRelated.some((cr: any) => (cr.slug || cr._id || cr.id) === (p.slug || p._id || p.id)));
+            finalRelated = [...categoryRelated, ...others];
+          }
+          setRelatedProducts(finalRelated.slice(0, 5));
+        }
       } catch (error) {
-        console.error('Error al cargar producto:', error);
-        // Usar producto hardcodeado como fallback
+        console.error('Error al cargar producto y relacionados:', error);
+        const idStr = Array.isArray(id) ? id[0] : id;
         const fallbackProduct = PRODUCTS.find(p => p.slug === id || p.id === id) || PRODUCTS[0];
         setProduct(fallbackProduct);
         setSelectedImage(fallbackProduct.image);
+        
+        const filtered = PRODUCTS.filter((p: any) => (p.slug || p.id) !== idStr);
+        const categoryRelated = filtered.filter((p: any) => p.category === fallbackProduct.category);
+        let finalRelated = categoryRelated;
+        if (finalRelated.length < 5) {
+          const others = filtered.filter((p: any) => !categoryRelated.some((cr: any) => (cr.slug || cr.id) === (p.slug || p.id)));
+          finalRelated = [...categoryRelated, ...others];
+        }
+        setRelatedProducts(finalRelated.slice(0, 5));
       } finally {
         setLoading(false);
       }
@@ -362,6 +387,23 @@ const ProductDetail: React.FC<Props> = () => {
             )}
           </div>
         </div>
+
+        {/* Productos Relacionados */}
+        {relatedProducts.length > 0 && (
+          <div className="mt-16 md:mt-24 border-t border-gray-100 pt-16">
+            <span className="text-[#8CC63F] font-black uppercase text-[10px] md:text-xs tracking-widest mb-2 flex items-center gap-2">
+              <Star size={14} className="fill-[#8CC63F]" /> COMPLEMENTA TU PROYECTO
+            </span>
+            <h2 className="text-xl md:text-4xl font-black text-[#002D62] uppercase tracking-tighter leading-none mb-8 md:mb-12">
+              PRODUCTOS <span className="text-[#8CC63F]">RELACIONADOS</span>
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-8">
+              {relatedProducts.map((p) => (
+                <ProductCard key={p._id || p.slug || p.id} product={p} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div >
   );
