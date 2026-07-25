@@ -1,0 +1,17 @@
+# Electro Flor
+
+> Distribuidor oficial de material eléctrico en Perú. Iluminación LED industrial, conductores eléctricos, herramientas Bosch y Schneider Electric. Stock garantizado y entrega inmediata en Lima.
+
+## Core Pages
+- [Inicio](https://electroflorperu.com/) - Página principal con banners promocionales, categorías de productos, y servicios destacados.
+- [Catálogo de Productos](https://electroflorperu.com/productos) - Catálogo completo de material eléctrico, iluminación, cables y herramientas.
+- [Nosotros](https://electroflorperu.com/nosotros) - Información de la empresa, misión, visión e historia.
+- [Contacto](https://electroflorperu.com/contacto) - Ubicación física, números de teléfono, enlaces de WhatsApp y formulario de contacto.
+- [Preguntas Frecuentes](https://electroflorperu.com/faq) - Respuestas sobre envíos, garantías, facturación y cotizaciones.
+
+## Business Information
+- **Razón Social**: Electro Flor E.I.R.L.
+- **RUC**: 10773519523
+- **Dirección**: Av. Argentina 245, Pasaje 2, Puesto AR12, Centro Comercial Nicolini, Cercado de Lima, 15082, Lima, Perú.
+- **WhatsApp Ventas**: +51 948 198 701
+- **Correo Electrónico**: ventas.electroflor@gmail.com

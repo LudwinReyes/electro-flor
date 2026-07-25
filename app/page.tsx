@@ -14,7 +14,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Iluminación y Material Eléctrico en Perú | ELECTRO FLOR',
-  description: 'Distribuidor líder de material eléctrico e iluminación LED en Lima, Perú. Venta de cables, tableros, reflectores y herramientas (Bosch, Schneider, Philips). Cotiza en línea con stock garantizado.',
+  description: 'Distribuidor de material eléctrico e iluminación LED en Lima, Perú. Venta de cables, reflectores y herramientas. Cotiza en línea con stock garantizado.',
   alternates: {
     canonical: '/',
   },
@@ -36,7 +36,7 @@ export default async function HomePage() {
         '@type': 'HardwareStore',
         name: 'Electro Flor E.I.R.L.',
         alternateName: 'Electro Flor',
-        image: 'https://electroflorperu.com/media/logo.png',
+        image: 'https://electroflorperu.com/media/Logo%20Electro%20Flor.png',
         '@id': 'https://electroflorperu.com/#localbusiness',
         url: 'https://electroflorperu.com',
         telephone: ['+51 948 198 701', '+51 904 162 516'],
@@ -70,11 +70,35 @@ export default async function HomePage() {
         vatID: '10773519523'
     };
 
+    const organizationSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        '@id': 'https://electroflorperu.com/#organization',
+        name: 'Electro Flor E.I.R.L.',
+        alternateName: 'Electro Flor',
+        url: 'https://electroflorperu.com',
+        logo: 'https://electroflorperu.com/media/Logo%20Electro%20Flor.png',
+        contactPoint: {
+            '@type': 'ContactPoint',
+            'telephone': '+51 948 198 701',
+            'contactType': 'sales',
+            'areaServed': 'PE',
+            'availableLanguage': 'Spanish'
+        },
+        sameAs: [
+            'https://www.facebook.com/p/Electro-Flor-EIRL-61552203052431/'
+        ]
+    };
+
     return (
         <>
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
             />
             <h1 className="sr-only">Electro Flor - Distribuidor oficial de material eléctrico en Perú. Iluminación LED, conductores eléctricos y herramientas.</h1>
             {/* Hero Section - Crucial for LCP, eager loaded */}

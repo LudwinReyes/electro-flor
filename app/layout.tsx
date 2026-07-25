@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     default: 'ELECTRO FLOR | Material Eléctrico e Iluminación LED en Perú',
     template: '%s | Electro Flor',
   },
-  description: 'Distribuidor oficial de material eléctrico en Perú. Iluminación LED industrial, conductores eléctricos, herramientas Bosch, Schneider Electric. Stock garantizado y entrega inmediata en Lima.',
+  description: 'Distribuidor de material eléctrico e iluminación LED en Perú. Venta de cables, reflectores y herramientas. Stock garantizado con entrega inmediata en Lima.',
   robots: {
     index: true,
     follow: true,
@@ -26,8 +26,17 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
+    url: 'https://electroflorperu.com',
     siteName: 'ELECTRO FLOR',
     locale: 'es_PE',
+    images: [
+      {
+        url: 'https://electroflorperu.com/media/Logo%20Electro%20Flor.png',
+        width: 1200,
+        height: 630,
+        alt: 'ELECTRO FLOR | Material Eléctrico e Iluminación LED',
+      },
+    ],
   },
   icons: {
     icon: '/media/favicon.png',
