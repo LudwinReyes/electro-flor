@@ -35,16 +35,14 @@ Este plan detalla las prioridades y tareas necesarias para maximizar el posicion
 * **Estado**: **CORREGIDO ✅**
 * **Detalle**: Configuración explícita en `app/robots.ts` para gestionar y dar acceso correcto a indexadores inteligentes (`GPTBot`, `ClaudeBot`, etc.).
 
+### 6. Resolver Enlaces Internos Huérfanos
+* **Prioridad**: 🔴 Crítica (SEO Técnico)
+* **Estado**: **CORREGIDO ✅**
+* **Detalle**: Se creó una sección de **"Productos Relacionados"** en la parte inferior de la página de cada producto. Esto añade enlaces cruzados automáticos entre productos de la misma categoría, facilitando el rastreo e indexación de Google y eliminando la orfandad de páginas.
+
 ---
 
 ## ⏳ Tareas Pendientes (Requieren optimización continua)
-
-### 6. Resolver Enlaces Internos Huérfanos
-* **Prioridad**: 🔴 Crítica (SEO Técnico)
-* **Estado**: **PENDIENTE ⏳**
-* **Acción**: 
-  * Se detectaron 7 páginas con cero enlaces internos entrantes (por ejemplo, algunos productos y subcategorías específicas).
-  * **Solución**: Añadir accesos de enlaces contextuales dentro del catálogo o bloques destacados en la página principal para darles mayor flujo de rastreo.
 
 ### 7. Añadir Textos de Anclaje (Anchor Text) Accesibles
 * **Prioridad**: ⚠️ Advertencia (Enlaces)

@@ -31,7 +31,7 @@
 | --- | --- | --- | --- | --- |
 | 🔴 Crítico | Esquema | No se encontró la entidad de Organización/Persona en el JSON-LD. | Reportado en auditoría de datos estructurados. | **Corregido ✅**: Se agregó el esquema de tipo `Organization` en la página de inicio con logo y datos oficiales. |
 | 🔴 Crítico | Seguridad | Faltan 4 encabezados de seguridad en el servidor. | No se detectaron encabezados de protección contra clickjacking y HSTS. | **Corregido ✅**: Se configuraron HSTS, X-Frame-Options, X-Content-Type-Options y Referrer-Policy en Next.js. |
-| 🔴 Crítico | Perfil de Enlaces | 7 páginas huérfanas detectadas (cero enlaces internos apuntando a ellas). | Mapeadas por el script `internal_links.py`. | **Pendiente ⏳**: Enlazar de forma cruzada estas páginas desde otras secciones relevantes del catálogo. |
+| 🔴 Crítico | Perfil de Enlaces | 7 páginas huérfanas detectadas (cero enlaces internos apuntando a ellas). | Mapeadas por el script `internal_links.py`. | **Corregido ✅**: Se agregó la sección de "Productos Relacionados" al final de cada página de producto para enlace cruzado automático. |
 | 🔴 Crítico | Social | Falta la etiqueta OpenGraph requerida: `og:image` | Sin vista previa de imagen en la Home. | **Corregido ✅**: Agregada la URL del logotipo con dimensiones correctas en los metadatos de Layout. |
 | 🔴 Crítico | Social | Falta la etiqueta OpenGraph requerida: `og:url` | Sin URL canónica social. | **Corregido ✅**: Agregada a la configuración global de Next.js Metadata. |
 | ⚠️ Advertencia | SEO On-Page | La descripción meta está fuera del rango óptimo (demasiado larga). | 196 caracteres en la Home. | **Corregido ✅**: Se optimizó la descripción a 151 caracteres legibles y enfocados. |
