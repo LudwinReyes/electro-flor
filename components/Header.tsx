@@ -274,6 +274,7 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenPriceList, onS
           <Link href="/nosotros" className="hover:opacity-80 transition-opacity">Nosotros</Link>
           <Link href="/contacto" className="hover:opacity-80 transition-opacity">Contacto</Link>
           <Link href="/faq" className="hover:opacity-80 transition-opacity">Preguntas</Link>
+          <Link href="/blog" className="hover:opacity-80 transition-opacity">Blog</Link>
         </div>
       </nav>
 
@@ -309,6 +310,7 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenPriceList, onS
               <Link href="/marcas" onClick={() => setIsMenuOpen(false)}>Marcas</Link>
               <Link href="/nosotros" onClick={() => setIsMenuOpen(false)}>Nosotros</Link>
               <Link href="/contacto" onClick={() => setIsMenuOpen(false)}>Contacto</Link>
+              <Link href="/blog" onClick={() => setIsMenuOpen(false)}>Blog</Link>
               <Link href="/calculadora-conductores-electricos" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 text-left">
                 <Calculator size={18} className={`text-[${BRAND_COLORS.secondary}]`} /> Calculadora Técnica
               </Link>

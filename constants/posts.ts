@@ -16,7 +16,7 @@ export const BLOG_POSTS: BlogPost[] = [
     excerpt: 'Descubre los factores clave para seleccionar la campana industrial LED ideal para tu almacén, optimizando la visibilidad, seguridad y el consumo eléctrico.',
     date: '2026-07-28',
     readTime: '5 min de lectura',
-    image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800',
+    image: '/media/blog/como-elegir-un-high-bay-led-para-almacenes.jpg',
     author: 'Dpto. Técnico Electro Flor',
     content: `
       <div class="space-y-6 text-gray-700 leading-relaxed font-sans">
@@ -52,7 +52,7 @@ export const BLOG_POSTS: BlogPost[] = [
     excerpt: 'Te enseñamos a comparar las potencias más comunes de campanas LED industriales para que elijas la adecuada según las necesidades de tu nave industrial.',
     date: '2026-07-25',
     readTime: '4 min de lectura',
-    image: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=800',
+    image: '/media/blog/diferencias-entre-high-bay-100w-150w-y-200w.jpg',
     author: 'Dpto. Técnico Electro Flor',
     content: `
       <div class="space-y-6 text-gray-700 leading-relaxed font-sans">
@@ -90,7 +90,7 @@ export const BLOG_POSTS: BlogPost[] = [
     excerpt: 'Aprende a posicionar tus campanas de 100W a la altura correcta para lograr un reparto homogéneo de la luz sin sombras ni deslumbramientos.',
     date: '2026-07-22',
     readTime: '4 min de lectura',
-    image: 'https://images.unsplash.com/photo-1581094288338-2314dddb7eed?auto=format&fit=crop&q=80&w=800',
+    image: '/media/blog/que-altura-necesita-un-high-bay-led-de-100w.jpg',
     author: 'Dpto. Técnico Electro Flor',
     content: `
       <div class="space-y-6 text-gray-700 leading-relaxed font-sans">
@@ -121,7 +121,7 @@ export const BLOG_POSTS: BlogPost[] = [
     excerpt: 'Te explicamos paso a paso el método de lúmenes para calcular cuántas campanas necesitas para cumplir con la normativa y mantener seguro tu espacio de trabajo.',
     date: '2026-07-19',
     readTime: '6 min de lectura',
-    image: 'https://images.unsplash.com/photo-1513828729020-56f2295a73cf?auto=format&fit=crop&q=80&w=800',
+    image: '/media/blog/guia-para-calcular-la-iluminacion-de-una-nave-industrial.jpg',
     author: 'Dpto. Técnico Electro Flor',
     content: `
       <div class="space-y-6 text-gray-700 leading-relaxed font-sans">
@@ -158,7 +158,7 @@ export const BLOG_POSTS: BlogPost[] = [
     excerpt: 'Analizamos por qué la inversión en campanas Philips resulta más rentable en el mediano plazo comparada con opciones de menor costo o marcas genéricas.',
     date: '2026-07-16',
     readTime: '5 min de lectura',
-    image: 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?auto=format&fit=crop&q=80&w=800',
+    image: '/media/blog/philips-highbay-vs-otras-marcas-comparativa.jpg',
     author: 'Dpto. Técnico Electro Flor',
     content: `
       <div class="space-y-6 text-gray-700 leading-relaxed font-sans">
