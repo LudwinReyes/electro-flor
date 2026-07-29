@@ -142,6 +142,33 @@ export default defineType({
       title: 'Video Demostrativo (YouTube)',
       type: 'url',
       description: 'URL del video de YouTube (ej: https://www.youtube.com/watch?v=...)'
+    }),
+    defineField({
+      name: 'seo',
+      title: 'SEO y Metatags',
+      type: 'object',
+      description: 'Optimización para motores de búsqueda (Google)',
+      fields: [
+        {
+          name: 'title',
+          title: 'Título SEO (Meta Title)',
+          type: 'string',
+          description: 'Aparece en la pestaña del navegador y Google (ideal 50-60 caracteres)'
+        },
+        {
+          name: 'description',
+          title: 'Meta Descripción',
+          type: 'text',
+          description: 'Resumen persuasivo para Google (ideal 150-160 caracteres)'
+        },
+        {
+          name: 'keywords',
+          title: 'Palabras Clave',
+          type: 'array',
+          of: [{ type: 'string' }],
+          description: 'Lista de palabras clave relevantes para este producto'
+        }
+      ]
     })
   ],
   preview: {

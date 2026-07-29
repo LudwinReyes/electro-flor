@@ -149,7 +149,8 @@ export const getProducts = async () => {
       displaySections,
       "pdfFile": pdfFile.asset->url,
       pdfUrl,
-      youtubeVideo
+      youtubeVideo,
+      seo
     }`;
 
     try {
@@ -217,7 +218,8 @@ export const getProductBySlug = async (slug: string) => {
     displaySections,
     "pdfFile": pdfFile.asset->url,
     pdfUrl,
-    youtubeVideo
+    youtubeVideo,
+    seo
   }`;
 
   try {

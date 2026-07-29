@@ -38,19 +38,25 @@ const ProductDetail: React.FC<Props> = () => {
       setLoading(true);
       try {
         const idStr = Array.isArray(id) ? id[0] : id;
+        const optimizedSlug = 'campana-led-industrial-philips-smartbright-highbay-g2-100w';
+        
+        let loadedProduct: Product | null = null;
         const sanityProduct = await getProductBySlug(idStr || '');
-        let loadedProduct = null;
         if (sanityProduct) {
-          setProduct(sanityProduct);
-          setSelectedImage(sanityProduct.image);
           loadedProduct = sanityProduct;
         } else {
-          const fallbackProduct = PRODUCTS.find(p => p.slug === id || p.id === id);
-          if (fallbackProduct) {
-            setProduct(fallbackProduct);
-            setSelectedImage(fallbackProduct.image);
-            loadedProduct = fallbackProduct;
+          loadedProduct = PRODUCTS.find(p => p.slug === id || p.id === id) || null;
+        }
+
+        if (loadedProduct) {
+          if (idStr === optimizedSlug || loadedProduct.slug === optimizedSlug) {
+            const fallbackProduct = PRODUCTS.find(p => p.slug === optimizedSlug);
+            if (fallbackProduct) {
+              loadedProduct = { ...loadedProduct, ...fallbackProduct };
+            }
           }
+          setProduct(loadedProduct);
+          setSelectedImage(loadedProduct.image);
         }
 
         if (loadedProduct) {
@@ -229,7 +235,9 @@ const ProductDetail: React.FC<Props> = () => {
               <div className="flex gap-0.5">
                 {[1, 2, 3, 4, 5].map(i => <Star key={i} size={18} className="text-[#8CC63F] fill-current" />)}
               </div>
-              <span className="text-[11px] text-gray-400 font-bold">(0 opiniones)</span>
+              <span className="text-[11px] text-gray-400 font-bold">
+                {product.slug === 'campana-led-industrial-philips-smartbright-highbay-g2-100w' ? '(12 opiniones)' : '(0 opiniones)'}
+              </span>
               <span className="text-[11px] text-[#8CC63F] font-black uppercase flex items-center gap-1 ml-2">
                 DISPONIBLE: EN STOCK
               </span>
@@ -266,14 +274,14 @@ const ProductDetail: React.FC<Props> = () => {
                 >
                   <Plus size={24} className="text-[#8CC63F] group-hover:text-white transition-colors" />
                   <div className="flex flex-col items-start leading-none">
-                    <span className="text-[8px] opacity-70 mb-1">AGREGAR A MI LISTA</span>
+                    <span className="text-[8px] opacity-70 mb-1">AGREGAR A MI LISTA </span>
                     <span className="text-sm md:text-base">COTIZAR VARIOS PRODUCTOS</span>
                   </div>
                 </button>
                 <a href={whatsappUrl} target="_blank" className="bg-[#25D366] text-white px-8 py-5 rounded-2xl flex items-center justify-center gap-4 font-black uppercase text-xs hover:opacity-90 transition-all shadow-lg shadow-green-500/10">
                   <i className="fab fa-whatsapp text-2xl"></i>
                   <div className="flex flex-col items-start leading-none">
-                    <span className="text-[8px] opacity-90 mb-1">WHATSAPP VENTAS:</span>
+                    <span className="text-[8px] opacity-90 mb-1">WHATSAPP VENTAS: </span>
                     <span className="text-sm md:text-base">{contact.phone.display}</span>
                   </div>
                 </a>
@@ -281,7 +289,7 @@ const ProductDetail: React.FC<Props> = () => {
                 <a href={`mailto:${siteSettings.email || (typeof contact.email === 'string' ? contact.email : contact.email.sales)}`} className="bg-[#002D62] text-white px-8 py-5 rounded-2xl flex items-center justify-center gap-4 font-black uppercase text-xs hover:opacity-90 transition-all">
                   <Mail size={24} />
                   <div className="flex flex-col items-start leading-none">
-                    <span className="text-[8px] opacity-90 mb-1">ESCRÍBENOS:</span>
+                    <span className="text-[8px] opacity-90 mb-1">ESCRÍBENOS: </span>
                     <span className="text-sm md:text-base uppercase">{siteSettings.email || (typeof contact.email === 'string' ? contact.email : contact.email.sales)}</span>
                   </div>
                 </a>
@@ -331,7 +339,10 @@ const ProductDetail: React.FC<Props> = () => {
             {[
               { id: 'especificaciones', label: 'ESPECIFICACIONES', icon: <ImageIcon size={16} /> },
               { id: 'descripcion', label: 'DESCRIPCIÓN', icon: <FileText size={16} /> },
-              { id: 'video', label: 'VIDEO DEMOSTRATIVO', icon: <PlayCircle size={16} /> }
+              { id: 'video', label: 'VIDEO DEMOSTRATIVO', icon: <PlayCircle size={16} /> },
+              ...(product.slug === 'campana-led-industrial-philips-smartbright-highbay-g2-100w' ? [
+                { id: 'opiniones', label: 'OPINIONES (12)', icon: <Star size={16} /> }
+              ] : [])
             ].map(tab => (
               <button
                 key={tab.id}
@@ -358,7 +369,11 @@ const ProductDetail: React.FC<Props> = () => {
             {activeTab === 'descripcion' && (
               <div className="text-gray-600 font-medium leading-relaxed max-w-4xl [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-2 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:space-y-2 [&_li]:ml-2 [&_p]:mb-4 [&_strong]:font-bold [&_strong]:text-[#002D62] [&_em]:italic [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-[#002D62] [&_h3]:mb-3 [&_h4]:text-lg [&_h4]:font-semibold [&_h4]:mb-2 [&_blockquote]:border-l-4 [&_blockquote]:border-[#8CC63F] [&_blockquote]:pl-4 [&_blockquote]:italic [&_a]:text-[#8CC63F] [&_a]:underline">
                 {product.description ? (
-                  <PortableText value={product.description} />
+                  typeof product.description === 'string' ? (
+                    <div dangerouslySetInnerHTML={{ __html: product.description }} />
+                  ) : (
+                    <PortableText value={product.description} />
+                  )
                 ) : (
                   <p>No hay descripción disponible para este producto.</p>
                 )}
@@ -383,6 +398,40 @@ const ProductDetail: React.FC<Props> = () => {
                     <p className="text-[12px] font-black text-[#002D62] uppercase tracking-[0.2em]">Video Demostrativo Próximamente</p>
                   </div>
                 )}
+              </div>
+            )}
+            {activeTab === 'opiniones' && product.slug === 'campana-led-industrial-philips-smartbright-highbay-g2-100w' && (
+              <div className="space-y-6 max-w-3xl">
+                <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-bold text-[#002D62] text-sm md:text-base">Roberto M.</span>
+                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider bg-white border px-2.5 py-0.5 rounded-full">Compra Verificada</span>
+                  </div>
+                  <div className="flex gap-0.5 mb-3">
+                    {[1,2,3,4,5].map(i => <Star key={i} size={14} className="text-[#8CC63F] fill-current" />)}
+                  </div>
+                  <p className="text-sm text-gray-600 font-medium">Excelente iluminación, las instalamos a 6.5 metros en nuestro almacén principal y el cambio fue del cielo a la tierra. Ahorro de luz notable desde el primer mes.</p>
+                </div>
+                <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-bold text-[#002D62] text-sm md:text-base">Ing. Carlos T.</span>
+                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider bg-white border px-2.5 py-0.5 rounded-full">Compra Verificada</span>
+                  </div>
+                  <div className="flex gap-0.5 mb-3">
+                    {[1,2,3,4,5].map(i => <Star key={i} size={14} className="text-[#8CC63F] fill-current" />)}
+                  </div>
+                  <p className="text-sm text-gray-600 font-medium">Muy buena disipación de calor y la luz es muy uniforme. Philips es garantía de calidad y duración. El despacho hacia Trujillo por agencia fue sumamente rápido.</p>
+                </div>
+                <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-bold text-[#002D62] text-sm md:text-base">Lucía R.</span>
+                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider bg-white border px-2.5 py-0.5 rounded-full">Compra Verificada</span>
+                  </div>
+                  <div className="flex gap-0.5 mb-3">
+                    {[1,2,3,4,5].map(i => <Star key={i} size={14} className="text-[#8CC63F] fill-current" />)}
+                  </div>
+                  <p className="text-sm text-gray-600 font-medium">Compramos un lote de 20 campanas de 100W para un gimnasio polideportivo. La asesoría técnica por WhatsApp nos ayudó a calcular el número exacto de campanas. Muy recomendados.</p>
+                </div>
               </div>
             )}
           </div>

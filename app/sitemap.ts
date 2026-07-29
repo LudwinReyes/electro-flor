@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { sanityServerClient } from '../services/sanity';
+import { BLOG_POSTS } from '../constants/posts';
 
 // Forzar que el sitemap se regenere en cada petición (no cacheado en build)
 export const revalidate = 0;
@@ -45,6 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/contacto', freq: 'monthly' as const, prio: 0.7 },
     { path: '/faq', freq: 'monthly' as const, prio: 0.5 },
     { path: '/marcas', freq: 'weekly' as const, prio: 0.8 },
+    { path: '/blog', freq: 'daily' as const, prio: 0.8 },
     { path: '/libro-de-reclamaciones', freq: 'yearly' as const, prio: 0.4 },
   ].map(route => ({
     url: `${baseUrl}${route.path}`,
@@ -104,6 +106,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: p._updatedAt ? new Date(p._updatedAt) : new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.9,
+    })),
+
+    // Todos los posts de blog
+    ...BLOG_POSTS.map((post) => ({
+      url: `${baseUrl}/blog/${post.slug}`,
+      lastModified: new Date(post.date),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
     })),
   ];
 
