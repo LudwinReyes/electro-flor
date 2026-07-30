@@ -75,6 +75,27 @@ export async function generateMetadata({
   };
 }
 
+function generateProductSku(product: any): string {
+  if (product.code && product.code.length <= 20) {
+    return product.code.toUpperCase();
+  }
+  
+  // Si no tiene código o es muy largo, generar uno único y corto
+  const brand = (product.brand || 'EF').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3);
+  const category = (product.category || 'PROD').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3);
+  
+  // Usar un hash simple del slug o del ID para garantizar unicidad y brevedad
+  const source = product.slug || product._id || product.id || 'PRODUCT';
+  let hash = 0;
+  for (let i = 0; i < source.length; i++) {
+    hash = (hash << 5) - hash + source.charCodeAt(i);
+    hash |= 0;
+  }
+  const uniqueCode = Math.abs(hash).toString(36).toUpperCase().slice(0, 5);
+  
+  return `${brand}-${category}-${uniqueCode}`;
+}
+
 export default async function Page({ 
   params 
 }: { 
@@ -144,7 +165,8 @@ export default async function Page({
       name: product.name,
       image: allImages,
       description: seoDescription,
-      ...(product.code ? { sku: product.code, mpn: product.code } : {}),
+      sku: generateProductSku(product),
+      mpn: generateProductSku(product),
       brand: {
         '@type': 'Brand',
         name: product.brand,
