@@ -157,12 +157,6 @@ export default async function Page({
         bestRating: '5',
         worstRating: '1',
       },
-      offers: {
-        '@type': 'Offer',
-        priceCurrency: 'PEN',
-        availability: 'https://schema.org/InStock',
-        url: `https://electroflorperu.com/producto/${product.slug || id}`,
-      },
       ...(additionalProps.length > 0 ? { additionalProperty: additionalProps } : {}),
     };
 
