@@ -217,6 +217,14 @@ export default async function Page({
         'mainEntity': [
           {
             '@type': 'Question',
+            'name': '¿Es equivalente o reemplazo de los modelos Philips BY320P o BY321P?',
+            'acceptedAnswer': {
+              '@type': 'Answer',
+              'text': 'Sí, la campana SmartBright G2 BY239P de 100W es el reemplazo y alternativa directa más eficiente para luminarias Philips GreenUp BY320P y BY321P de 100W, ofreciendo idéntico rendimiento lumínico (13,000 lm) con menor costo y certificación IP65.'
+            }
+          },
+          {
+            '@type': 'Question',
             'name': '¿Cuántos metros cuadrados ilumina una campana LED Philips de 100W?',
             'acceptedAnswer': {
               '@type': 'Answer',

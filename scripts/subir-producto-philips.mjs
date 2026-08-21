@@ -75,9 +75,20 @@ const descriptionHtml = `<div class="space-y-8 text-gray-700">
     </ul>
   </section>
 
+  <section class="bg-blue-50/50 p-6 rounded-2xl border border-blue-100 my-6">
+    <h2 class="text-xl font-bold text-[#002D62] mb-3">Equivalencia y Reemplazo de Modelos Philips BY320P y BY321P</h2>
+    <p class="leading-relaxed text-gray-700">
+      La campana <strong>Philips SmartBright Highbay G2 (BY239P 100W)</strong> es la <strong>equivalencia y reemplazo ideal para los modelos Philips GreenUp Highbay BY320P y BY321P de 100W</strong>. Ofrece una mejor relación costo-eficiencia con una entrega lumínica real de <strong>13.000 lúmenes (130 lm/W)</strong>, factor de potencia &gt; 0.9, grado de hermeticidad <strong>IP65</strong> y resistencia a impactos <strong>IK07</strong>, asegurando total compatibilidad en proyectos industriales, naves y almacenes comerciales sin pagar sobrecostos.
+    </p>
+  </section>
+
   <section>
     <h2 class="text-2xl font-bold text-[#002D62] mb-4">Preguntas Frecuentes sobre la Campana Philips 100W</h2>
     <div class="space-y-4">
+      <div>
+        <h4 class="font-bold text-[#002D62] text-md">¿Es equivalente a los modelos Philips BY320P o BY321P?</h4>
+        <p class="text-gray-600">Sí, la campana SmartBright G2 BY239P de 100W es el reemplazo y alternativa directa más eficiente para luminarias Philips GreenUp BY320P y BY321P de 100W, ofreciendo idéntico rendimiento lumínico (13,000 lm) con menor costo y certificación IP65.</p>
+      </div>
       <div>
         <h4 class="font-bold text-[#002D62] text-md">¿Cuántos metros cuadrados ilumina una campana LED Philips de 100W?</h4>
         <p class="text-gray-600">Instalada a una altura estándar de 6 metros, la campana cubre eficientemente un área de 25 a 36 metros cuadrados, proporcionando niveles óptimos de iluminación (luxes) para almacenes comerciales de tránsito general.</p>
@@ -190,11 +201,14 @@ const philipsProduct = {
   _id: 'imported-product-14-1768857829251',
   name: 'Campana LED Philips Highbay 100W Industrial',
   slug: { _type: 'slug', current: 'campana-led-industrial-philips-smartbright-highbay-g2-100w' },
-  shortDescription: 'Campana LED Philips de 100W con 13.000 lúmenes (130 lm/W). Protección IP65 e IK07. Luz fría (6500K) y garantía de 3 años. Diseño robusto en aluminio.',
+  shortDescription: 'Campana LED Philips de 100W con 13.000 lúmenes (130 lm/W). Protección IP65 e IK07. Reemplazo ideal para BY320P/BY321P. Luz fría (6500K) y 3 años de garantía.',
   brand: 'PHILIPS',
+  featured: true,
+  displaySections: ['lo_mas_pedido', 'ultimo_ingreso'],
   description: parseHtmlToBlocks(descriptionHtml), // ¡Sincronizado nativamente como bloques de Sanity!
   specifications: [
     { _key: 'potencia', label: 'Potencia', value: '100W' },
+    { _key: 'equivalencia', label: 'Equivalencia / Reemplazo', value: 'Philips GreenUp Highbay BY320P / BY321P (100W)' },
     { _key: 'voltaje', label: 'Voltaje', value: '220-240V' },
     { _key: 'ip', label: 'IP', value: 'IP65' },
     { _key: 'lumenes', label: 'Lúmenes', value: '13000 lm' },
@@ -209,7 +223,16 @@ const philipsProduct = {
   seo: {
     title: 'Philips Highbay 100W LED Campana Industrial | Precio en Perú',
     description: 'Cotiza la Campana LED Philips Highbay 100W Industrial al mejor precio en Perú. Con 13,000 lm, protección IP65, garantía de 3 años y envío rápido.',
-    keywords: ['philips highbay 100w', 'campana led 100w', 'iluminacion industrial philips', 'BY239P philips', 'campana philips peru']
+    keywords: [
+      'philips highbay 100w',
+      'campana led 100w',
+      'iluminacion industrial philips',
+      'BY239P philips',
+      'BY320P philips',
+      'highbay by320p',
+      'highbay by321p',
+      'campana philips peru'
+    ]
   }
 };
 

@@ -28,9 +28,17 @@ export default async function HomePage() {
         getPromoBanners()
     ]);
 
-    const products = productsData || [];
+    let products = [...(productsData || [])];
     const categories = categoriesData || [];
     const promoBanner = promoBannersData && promoBannersData.length > 0 ? promoBannersData[0] : null;
+
+    // Priorizar Campana LED Philips Highbay 100W en la posición #1 de la Home para máxima fuerza SEO
+    const philipsSlug = 'campana-led-industrial-philips-smartbright-highbay-g2-100w';
+    const philipsIndex = products.findIndex((p: any) => p.slug === philipsSlug);
+    if (philipsIndex > 0) {
+        const [philipsItem] = products.splice(philipsIndex, 1);
+        products.unshift(philipsItem);
+    }
 
     const localBusinessSchema = {
         '@context': 'https://schema.org',

@@ -173,9 +173,10 @@ export const PRODUCTS: Product[] = [
     code: 'BY239P',
     category: 'HighBay',
     image: 'https://cdn.sanity.io/images/2gy084y4/production/84811396293890d7294b7e81c0e94ff8033c4d8e-800x800.webp',
-    shortDescription: 'Campana LED Philips de 100W con 13.000 lúmenes (130 lm/W). Protección IP65 e IK07. Luz fría (6500K) y garantía de 3 años. Diseño robusto en aluminio.',
+    shortDescription: 'Campana LED Philips de 100W con 13.000 lúmenes (130 lm/W). Protección IP65 e IK07. Reemplazo ideal para BY320P/BY321P. Luz fría (6500K) y garantía de 3 años.',
     specifications: {
       'Potencia': '100W',
+      'Equivalencia / Reemplazo': 'Philips GreenUp Highbay BY320P / BY321P (100W)',
       'Voltaje': '220-240V',
       'IP': 'IP65',
       'Lúmenes': '13000 lm',
@@ -190,7 +191,16 @@ export const PRODUCTS: Product[] = [
     seo: {
       title: 'Philips Highbay 100W LED Campana Industrial | Precio en Perú',
       description: 'Cotiza la Campana LED Philips Highbay 100W Industrial al mejor precio en Perú. Con 13,000 lm, protección IP65, garantía de 3 años y envío rápido.',
-      keywords: ['philips highbay 100w', 'campana led 100w', 'iluminacion industrial philips', 'BY239P philips', 'campana philips peru']
+      keywords: [
+        'philips highbay 100w',
+        'campana led 100w',
+        'iluminacion industrial philips',
+        'BY239P philips',
+        'BY320P philips',
+        'highbay by320p',
+        'highbay by321p',
+        'campana philips peru'
+      ]
     },
     description: `
       <div class="space-y-8 text-gray-700">
