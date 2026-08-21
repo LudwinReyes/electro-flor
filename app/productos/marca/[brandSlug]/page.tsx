@@ -1,12 +1,13 @@
 import { Suspense } from 'react';
 import ProductsPage from '../../../../components/ProductsPage';
 import { getBrandBySlug, getProducts, getCategories, getBrands } from '../../../../services/sanity';
+import { Metadata } from 'next';
 
 export async function generateMetadata({ 
   params 
 }: { 
   params: Promise<{ brandSlug: string }> | { brandSlug: string } 
-}) {
+}): Promise<Metadata> {
   const resolvedParams = await params;
   const brandSlug = resolvedParams.brandSlug;
   const brand = await getBrandBySlug(brandSlug);
@@ -16,29 +17,113 @@ export async function generateMetadata({
     .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
 
+  const title = brand?.seoTitle || `Catálogo ${formattedBrand} en Lima Perú | Distribuidor Oficial & Precios - Electro Flor`;
+  const description = brand?.seoDescription || brand?.description?.slice(0, 160) || `✓ Distribuidor de la marca ${formattedBrand} en Lima, Perú. Stock garantizado, fichas técnicas y precios especiales para contratistas. Cotiza en Electro Flor.`;
+
   return {
-    title: brand?.seoTitle || `Productos de la Marca ${formattedBrand} | Electro Flor`,
-    description: brand?.seoDescription || brand?.description?.slice(0, 160) || `Encuentra el catálogo completo de productos de la marca ${formattedBrand} en Electro Flor. Stock garantizado, fichas técnicas y precios competitivos en el mercado peruano.`,
+    title,
+    description,
+    keywords: [formattedBrand, `${formattedBrand} perú`, `${formattedBrand} lima`, `productos ${formattedBrand}`, 'distribuidor oficial', 'electro flor'],
+    robots: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `https://electroflorperu.com/productos/marca/${brandSlug}`,
+      type: 'website',
+      locale: 'es_PE',
+      siteName: 'ELECTRO FLOR'
+    },
     alternates: {
       canonical: `/productos/marca/${brandSlug}`,
     },
   };
 }
 
-export default async function Page() {
-  const [products, categories, brands] = await Promise.all([
+export default async function Page({
+  params
+}: {
+  params: Promise<{ brandSlug: string }> | { brandSlug: string }
+}) {
+  const resolvedParams = await params;
+  const brandSlug = resolvedParams.brandSlug;
+
+  const [brand, products, categories, brands] = await Promise.all([
+    getBrandBySlug(brandSlug),
     getProducts(),
     getCategories(),
     getBrands()
   ]);
 
+  const brandName = brand?.name || brandSlug;
+  const brandProducts = (products || []).filter((p: any) => 
+    p.brandSlug === brandSlug || p.brand?.toLowerCase() === brandName.toLowerCase()
+  );
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Inicio',
+        item: 'https://electroflorperu.com/'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Marcas',
+        item: 'https://electroflorperu.com/marcas'
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: brandName,
+        item: `https://electroflorperu.com/productos/marca/${brandSlug}`
+      }
+    ]
+  };
+
+  const collectionJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: brand?.seoTitle || `Productos ${brandName} en Perú`,
+    description: brand?.seoDescription || brand?.description,
+    url: `https://electroflorperu.com/productos/marca/${brandSlug}`,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: brandProducts.slice(0, 10).map((prod: any, idx: number) => ({
+        '@type': 'ListItem',
+        position: idx + 1,
+        url: `https://electroflorperu.com/producto/${prod.slug || prod.id}`,
+        name: prod.name
+      }))
+    }
+  };
+
   return (
-    <Suspense fallback={<div>Cargando...</div>}>
-      <ProductsPage 
-        initialProducts={products || []} 
-        initialCategories={categories || []} 
-        initialBrands={brands || []} 
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-    </Suspense>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
+      />
+      <Suspense fallback={<div className="h-64 flex justify-center items-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#002D62]"></div></div>}>
+        <ProductsPage 
+          initialProducts={products || []} 
+          initialCategories={categories || []} 
+          initialBrands={brands || []} 
+        />
+      </Suspense>
+    </>
   );
 }
