@@ -14,12 +14,12 @@ export const BRANDS: Brand[] = [
 ];
 
 export const CATEGORIES: Category[] = [
-  { name: 'Iluminación', icon: 'fa-lightbulb', slug: 'iluminacion', image: 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?auto=format&fit=crop&q=80&w=400' },
-  { name: 'Luminarias Públicas', icon: 'fa-street-view', slug: 'luminarias-publicas', image: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&q=80&w=400', parentCategory: 'iluminacion' },
-  { name: 'Cables y Conductores', icon: 'fa-microchip', slug: 'cables', image: 'https://images.unsplash.com/photo-1558444479-c848517e77a2?auto=format&fit=crop&q=80&w=400' },
-  { name: 'Distribución en Baja Tensión', icon: 'fa-bolt', slug: 'distribucion', image: 'https://images.unsplash.com/photo-1517055729445-fa7d27394b48?auto=format&fit=crop&q=80&w=400' },
-  { name: 'Herramientas Eléctricas', icon: 'fa-plug', slug: 'herramientas-elec', image: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&q=80&w=400' },
-  { name: 'Gasfitería Técnica', icon: 'fa-faucet', slug: 'gasfiteria', image: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&q=80&w=400' },
+  { name: 'Iluminación', icon: 'Lightbulb', slug: 'iluminacion', image: 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?auto=format&fit=crop&q=80&w=400' },
+  { name: 'Luminarias Públicas', icon: 'LampDesk', slug: 'luminarias-publicas', image: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&q=80&w=400', parentCategory: 'iluminacion' },
+  { name: 'Cables y Conductores', icon: 'Cable', slug: 'cables', image: 'https://images.unsplash.com/photo-1558444479-c848517e77a2?auto=format&fit=crop&q=80&w=400' },
+  { name: 'Distribución en Baja Tensión', icon: 'Zap', slug: 'distribucion', image: 'https://images.unsplash.com/photo-1517055729445-fa7d27394b48?auto=format&fit=crop&q=80&w=400' },
+  { name: 'Herramientas Eléctricas', icon: 'Hammer', slug: 'herramientas-elec', image: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&q=80&w=400' },
+  { name: 'Gasfitería Técnica', icon: 'Droplets', slug: 'gasfiteria', image: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&q=80&w=400' },
 ];
 
 export const PRODUCTS: Product[] = [

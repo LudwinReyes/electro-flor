@@ -278,11 +278,16 @@ const ProductDetail: React.FC<Props> = () => {
                     <span className="text-sm md:text-base">COTIZAR VARIOS PRODUCTOS</span>
                   </div>
                 </button>
-                <a href={whatsappUrl} target="_blank" className="bg-[#25D366] text-white px-8 py-5 rounded-2xl flex items-center justify-center gap-4 font-black uppercase text-xs hover:opacity-90 transition-all shadow-lg shadow-green-500/10">
-                  <i className="fab fa-whatsapp text-2xl"></i>
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-[#25D366] text-white px-8 py-5 rounded-2xl flex items-center justify-center gap-4 font-black uppercase text-xs hover:opacity-95 hover:scale-[1.01] active:scale-[0.99] transition-all shadow-lg shadow-green-500/20 group"
+                >
+                  <i className="fab fa-whatsapp text-3xl transition-transform group-hover:scale-110"></i>
                   <div className="flex flex-col items-start leading-none">
-                    <span className="text-[8px] opacity-90 mb-1">WHATSAPP VENTAS: </span>
-                    <span className="text-sm md:text-base">{contact.phone.display}</span>
+                    <span className="text-[9px] opacity-95 font-bold mb-1 tracking-wider">ATENCIÓN INMEDIATA POR WHATSAPP</span>
+                    <span className="text-base md:text-lg font-black tracking-tight">COTIZA AHORA</span>
                   </div>
                 </a>
 

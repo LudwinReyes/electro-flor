@@ -13,9 +13,17 @@ import { BRAND_COLORS } from '../config';
 import { getProducts, getCategories, getBrands } from '../services/sanity';
 
 
-interface Props {}
+interface Props {
+  initialProducts?: any[];
+  initialCategories?: any[];
+  initialBrands?: any[];
+}
 
-const ProductsPage: React.FC<Props> = () => {
+const ProductsPage: React.FC<Props> = ({
+  initialProducts,
+  initialCategories,
+  initialBrands
+}) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { categorySlug, subcategorySlug, brandSlug } = useParams<{ categorySlug?: string; subcategorySlug?: string; brandSlug?: string }>();
@@ -29,10 +37,14 @@ const ProductsPage: React.FC<Props> = () => {
   const productsTopRef = useRef<HTMLDivElement>(null);
 
   // Estados para datos de Sanity
-  const [sanityProducts, setSanityProducts] = useState<any[]>([]);
-  const [sanityCategories, setSanityCategories] = useState<any[]>([]);
-  const [sanityBrands, setSanityBrands] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [sanityProducts, setSanityProducts] = useState<any[]>(initialProducts || []);
+  const [sanityCategories, setSanityCategories] = useState<any[]>(initialCategories || []);
+  const [sanityBrands, setSanityBrands] = useState<any[]>(initialBrands || []);
+  const [loading, setLoading] = useState(
+    (!initialProducts || initialProducts.length === 0) &&
+    (!initialCategories || initialCategories.length === 0) &&
+    (!initialBrands || initialBrands.length === 0)
+  );
 
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [activeBrand, setActiveBrand] = useState<string | null>(null);
@@ -40,11 +52,20 @@ const ProductsPage: React.FC<Props> = () => {
 
   useEffect(() => {
     const loadData = async () => {
+      const fetchProducts = !initialProducts || initialProducts.length === 0;
+      const fetchCategories = !initialCategories || initialCategories.length === 0;
+      const fetchBrands = !initialBrands || initialBrands.length === 0;
+
+      if (!fetchProducts && !fetchCategories && !fetchBrands) {
+        setLoading(false);
+        return;
+      }
+
       setLoading(true);
       const [products, categories, brands] = await Promise.all([
-        getProducts(),
-        getCategories(),
-        getBrands()
+        fetchProducts ? getProducts() : Promise.resolve(initialProducts),
+        fetchCategories ? getCategories() : Promise.resolve(initialCategories),
+        fetchBrands ? getBrands() : Promise.resolve(initialBrands)
       ]);
 
       if (products && products.length > 0) setSanityProducts(products);
@@ -54,7 +75,7 @@ const ProductsPage: React.FC<Props> = () => {
       setLoading(false);
     };
     loadData();
-  }, []);
+  }, [initialProducts, initialCategories, initialBrands]);
 
   // Usar datos de Sanity si existen, sino usar hardcodeados
   const products = sanityProducts.length > 0 ? sanityProducts : PRODUCTS;

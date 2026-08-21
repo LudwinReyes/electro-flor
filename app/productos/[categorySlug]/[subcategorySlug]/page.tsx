@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import ProductsPage from '../../../../components/ProductsPage';
-import { getCategoryBySlug } from '../../../../services/sanity';
+import { getCategoryBySlug, getProducts, getCategories, getBrands } from '../../../../services/sanity';
 
 export async function generateMetadata({ 
   params 
@@ -33,10 +33,20 @@ export async function generateMetadata({
   };
 }
 
-export default function Page() {
+export default async function Page() {
+  const [products, categories, brands] = await Promise.all([
+    getProducts(),
+    getCategories(),
+    getBrands()
+  ]);
+
   return (
     <Suspense fallback={<div>Cargando...</div>}>
-      <ProductsPage />
+      <ProductsPage 
+        initialProducts={products || []} 
+        initialCategories={categories || []} 
+        initialBrands={brands || []} 
+      />
     </Suspense>
   );
 }

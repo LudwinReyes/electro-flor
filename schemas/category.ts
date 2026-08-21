@@ -1,4 +1,7 @@
+import React from 'react'
 import { defineField, defineType } from 'sanity'
+import LucideIconPicker from '../sanity/components/LucideIconPicker'
+import CategoryIcon from '../components/CategoryIcon'
 
 export default defineType({
   name: 'category',
@@ -40,10 +43,12 @@ export default defineType({
     }),
     defineField({
       name: 'icon',
-      title: 'Icono FontAwesome',
+      title: 'Icono de la Categoría (Lucide Icons)',
       type: 'string',
-      description: 'Ejemplo: fa-lightbulb, fa-bolt, fa-plug, fa-wrench, etc. Ver: fontawesome.com/icons',
-      placeholder: 'fa-lightbulb'
+      description: 'Busca y selecciona visualmente el icono (ej: LampCeiling para lámparas colgantes, Lightbulb para iluminación, Plug para enchufes, etc.).',
+      components: {
+        input: LucideIconPicker
+      }
     }),
     defineField({
       name: 'parentCategory',
@@ -79,13 +84,14 @@ export default defineType({
     select: {
       title: 'name',
       subtitle: 'parentCategory.name',
-      media: 'image'
+      media: 'image',
+      icon: 'icon'
     },
-    prepare({ title, subtitle, media }) {
+    prepare({ title, subtitle, media, icon }) {
       return {
         title: subtitle ? `${subtitle} > ${title}` : title,
         subtitle: subtitle ? 'Subcategoría' : 'Categoría Principal',
-        media
+        media: media || (icon ? () => React.createElement(CategoryIcon, { name: icon, size: 20, color: '#8CC63F' }) : undefined)
       }
     }
   }

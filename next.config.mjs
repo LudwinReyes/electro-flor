@@ -53,6 +53,10 @@ const nextConfig = {
             key: 'Strict-Transport-Security',
             value: 'max-age=63072000; includeSubDomains; preload',
           },
+          {
+            key: 'Content-Security-Policy',
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: blob: https://cdn.sanity.io https://images.unsplash.com https://loganelectricperu.com https://placehold.jp; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; connect-src 'self' https://*.sanity.io https://api.whatsapp.com; frame-src 'self' https://*.google.com https://share.google;",
+          },
         ],
       },
     ];

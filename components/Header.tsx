@@ -13,6 +13,7 @@ import { BRAND_COLORS, CONTACT_INFO } from '../config';
 import { useSiteConfig } from '../contexts/SiteConfigContext';
 import { getCategories } from '../services/sanity';
 import { optimizeImage } from '../utils/optimizeImage';
+import CategoryIcon from './CategoryIcon';
 
 interface Props {
   quoteCount: number;
@@ -160,20 +161,20 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenPriceList, onS
 
             {/* Desktop Category Menu */}
             {isCategoryMenuOpen && (
-              <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 py-4 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="absolute top-full left-0 mt-2 w-72 max-h-[75vh] overflow-y-auto bg-white rounded-2xl shadow-2xl border border-gray-100 py-4 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="px-6 mb-2 border-b border-gray-50 pb-2">
                   <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Nuestras Líneas</p>
                 </div>
-                {categories.filter((cat: any) => !cat.parentCategory).map((cat: any) => (
+                {categories.filter((cat: any) => cat.featured !== false).map((cat: any) => (
                   <Link
                     key={cat.slug}
                     href={`/productos/${cat.slug}`}
                     onClick={() => setIsCategoryMenuOpen(false)}
-                    className="flex items-center justify-between px-6 py-3 transition-colors group"
+                    className="flex items-center justify-between px-6 py-3 transition-colors group hover:bg-gray-50"
                     style={{ color: colors.primary }}
                   >
                     <div className="flex items-center gap-3">
-                      <i className={`fas ${cat.icon || 'fa-folder'} w-5 text-center`} style={{ color: colors.secondary }}></i>
+                      <CategoryIcon name={cat.icon} size={18} color={colors.secondary} />
                       <span className="text-[11px] font-black uppercase tracking-tight">{cat.name}</span>
                     </div>
                     <ArrowUpRight size={14} className="text-gray-200 group-hover:text-current transition-colors" style={{ color: colors.secondary }} />
@@ -293,14 +294,14 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenPriceList, onS
             <div className={`flex flex-col gap-6 font-black uppercase text-[11px] tracking-widest text-[${BRAND_COLORS.primary}]`}>
               <div className="space-y-4">
                 <p className={`text-[9px] font-black text-[${BRAND_COLORS.secondary}] border-b border-gray-50 pb-1`}>PRODUCTOS</p>
-                {categories.filter((cat: any) => !cat.parentCategory).map((cat: any) => (
+                {categories.filter((cat: any) => cat.featured !== false).map((cat: any) => (
                   <Link
                     key={cat.slug}
-                    href={`/productos?category=${encodeURIComponent(cat.name)}`}
+                    href={`/productos/${cat.slug}`}
                     onClick={() => setIsMenuOpen(false)}
                     className={`flex items-center gap-3 hover:text-[${BRAND_COLORS.secondary}]`}
                   >
-                    <i className={`fas ${cat.icon || 'fa-folder'} text-[${BRAND_COLORS.secondary}] w-4`}></i> {cat.name}
+                    <CategoryIcon name={cat.icon} size={16} color={BRAND_COLORS.secondary} /> {cat.name}
                   </Link>
                 ))}
               </div>

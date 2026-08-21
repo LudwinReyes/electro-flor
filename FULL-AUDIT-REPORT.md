@@ -1,46 +1,51 @@
-# Reporte de Auditoría SEO Completo
+# Reporte de Auditoría Completo
 
 - URL: `https://electroflorperu.com/`
-- Generado: `2026-07-24T19:21:44.982203`
-- Puntuación General: `56/100` (Auditoría previa sobre la versión en vivo)
-- Confianza de la Puntuación: `Media`
-- Versión del Algoritmo: `1`
+- Generado: `2026-07-24T23:11:49.794389`
+- Puntuación General: `67/100`
+- Confianza del Puntaje: `Alta`
+- Versión de Puntuación: `1`
 
 ## Tarjeta de Puntuación (Score Card)
 
-| Categoría | Peso | Puntuación | Estado tras Ajustes |
-| --- | ---: | ---: | --- |
-| Encabezados de Seguridad | 8 | 55 | ✅ Corregido en next.config.mjs (100) |
-| Meta Social (OpenGraph) | 5 | 62 | ✅ Corregido en layout.tsx (100) |
-| Robots y Rastreadores | 8 | 80 | ✅ Corregido en robots.ts (100) |
-| Enlaces Rotos | 10 | 100 | ✅ Correcto (Sin enlaces caídos) |
-| Enlaces Internos | 8 | 60 | ⏳ Pendiente (Mejorar interconexión de productos) |
-| Redirecciones | 3 | 100 | ✅ Correcto (Redirecciones limpias) |
-| Búsqueda de IA (GEO / AEO) | 5 | 0 | ✅ Corregido con llms.txt (100) |
-| Rendimiento y Core Web Vitals | 13 | 0 | ℹ️ Medición omitida (Falta API Key de PageSpeed) |
-| SEO On-Page (Metatítulos) | 10 | 100 | ✅ Correcto (Longitud de descripciones ajustada) |
-| Legibilidad del Contenido | 8 | 0 | ⚠️ Contenido escaso detectado en HTML base |
-| SEO de Entidades (Wikidata) | 5 | 0 | ℹ️ Solo aplica si la marca cumple notoriedad |
-| Perfil de Enlaces (Backlinks) | 7 | 55 | ⏳ Trabajo de autoridad externo continuo |
-| Hreflang | 5 | 0 | ℹ️ No aplica (Sitio en un solo idioma: Español) |
-| Unicidad del Contenido | 5 | 0 | ✅ Correcto (Sin duplicados graves) |
+| Categoría | Peso | Puntuación |
+| --- | ---: | ---: |
+| Encabezados de Seguridad | 8 | 85 |
+| Meta Social (OpenGraph) | 5 | 85 |
+| Robots y Rastreadores | 8 | 90 |
+| Enlaces Rotos | 10 | 100 |
+| Enlaces Internos | 8 | 60 |
+| Redirecciones | 3 | 100 |
+| Búsqueda de IA (GEO / AEO) | 5 | 90 |
+| Rendimiento y Core Web Vitals | 13 | 70 |
+| SEO On-Page | 10 | 100 |
+| Legibilidad | 8 | 0 |
+| SEO de Entidades (Wikidata) | 5 | 0 |
+| Perfil de Enlaces (Backlinks) | 7 | 55 |
+| Hreflang | 5 | 0 |
+| Unicidad de Contenido | 5 | 0 |
 
-## Hallazgos Detallados
+## Hallazgos
 
 | Severidad | Área | Hallazgo | Evidencia | Solución / Estado |
 | --- | --- | --- | --- | --- |
-| 🔴 Crítico | Esquema | No se encontró la entidad de Organización/Persona en el JSON-LD. | Reportado en auditoría de datos estructurados. | **Corregido ✅**: Se agregó el esquema de tipo `Organization` en la página de inicio con logo y datos oficiales. |
-| 🔴 Crítico | Seguridad | Faltan 4 encabezados de seguridad en el servidor. | No se detectaron encabezados de protección contra clickjacking y HSTS. | **Corregido ✅**: Se configuraron HSTS, X-Frame-Options, X-Content-Type-Options y Referrer-Policy en Next.js. |
-| 🔴 Crítico | Perfil de Enlaces | 7 páginas huérfanas detectadas (cero enlaces internos apuntando a ellas). | Mapeadas por el script `internal_links.py`. | **Corregido ✅**: Se agregó la sección de "Productos Relacionados" al final de cada página de producto para enlace cruzado automático. |
-| 🔴 Crítico | Social | Falta la etiqueta OpenGraph requerida: `og:image` | Sin vista previa de imagen en la Home. | **Corregido ✅**: Agregada la URL del logotipo con dimensiones correctas en los metadatos de Layout. |
-| 🔴 Crítico | Social | Falta la etiqueta OpenGraph requerida: `og:url` | Sin URL canónica social. | **Corregido ✅**: Agregada a la configuración global de Next.js Metadata. |
-| ⚠️ Advertencia | SEO On-Page | La descripción meta está fuera del rango óptimo (demasiado larga). | 196 caracteres en la Home. | **Corregido ✅**: Se optimizó la descripción a 151 caracteres legibles y enfocados. |
-| ⚠️ Advertencia | Búsqueda de IA | No se detectó el archivo `llms.txt`. | Ausencia de archivo de texto estructurado para bots de lenguaje (LLM). | **Corregido ✅**: Se creó el archivo `/llms.txt` con la estructura jerárquica del negocio. |
-| ⚠️ Advertencia | Robots | 11 rastreadores de IA no están configurados de forma explícita. | Bots de OpenAI, Claude, etc., entran con reglas genéricas. | **Corregido ✅**: Se añadieron bloqueos y permisos específicos para crawlers de IA en `robots.ts`. |
-| ⚠️ Advertencia | Enlaces Internos | 16 páginas huérfanas potenciales (tienen 1 o menos enlaces entrantes). | Varias páginas secundarias de categorías. | **Pendiente ⏳**: Enlazar estas categorías directamente desde el menú principal o la Home. |
-| ⚠️ Advertencia | Enlaces Internos | 9 enlaces no tienen texto de anclaje (Anchor Text). | Enlaces de imágenes o iconos sin textos accesibles. | **Pendiente ⏳**: Añadir etiquetas `aria-label` a los botones y logotipos sin texto legible. |
+| Crítico | link_profile | 7 páginas huérfanas con cero enlaces internos entrantes. | Mapeado por auditoría. | Añadir enlaces internos desde páginas de contenido relevantes hacia estas páginas huérfanas. |
+| Advertencia | environment | Falta 1 encabezado de seguridad. | La falta de encabezados reduce la confianza y puede exponer al sitio a riesgos de seguridad/navegador. | Configurar las cabeceras a través de la configuración del servidor o reglas del CDN. |
+| Advertencia | environment | La legibilidad del contenido es difícil. | Textos largos y complejos pueden reducir el engagement y la comprensión. | Reescribir secciones clave con oraciones más cortas (15-20 palabras), párrafos más cortos (2-4 oraciones) y subtítulos claros. |
+| Advertencia | internal_links | ⚠️ 16 páginas huérfanas potenciales (≤1 enlace interno apuntando a ellas) | Mapeado por auditoría. | Enlazar categorías principales y secundarias en el menú de navegación principal. |
+| Advertencia | internal_links | ⚠️ 9 enlace(s) no tienen texto de anclaje (Anchor Text) | Iconos/imágenes sin texto alternativo o etiquetas de accesibilidad. | Añadir etiquetas `aria-label` descriptivas a los botones y enlaces sin texto de lectura. |
+| Advertencia | readability | ⚠️ El contenido es difícil de leer (Flesch: 0) — puede reducir el engagement | Textos largos en algunas secciones. | Simplificar el vocabulario y acortar los enunciados. |
+| Advertencia | readability | ⚠️ 40.7% de palabras complejas (3+ sílabas) — considera simplificar | Vocabulario excesivamente técnico. | Suavizar el vocabulario para un público general. |
+| Advertencia | readability | ⚠️ Contenido delgado (81 palabras) — puede posicionar mal | Poca información en la Home. | Expandir los textos informativos en la Home sobre la propuesta de valor. |
+| Advertencia | robots | ⚠️ 6 rastreadores de IA no están configurados de forma explícita: Applebot-Extended, Bytespider, CCBot, anthropic-ai, FacebookBot | Directivas robots.txt generalistas. | Agregar reglas explícitas de bloqueo o permiso en `robots.ts` para estos bots. |
+| Advertencia | security | ⚠️ Falta 1 encabezado(s) de seguridad | Cabecera CSP o similar omitida. | Configurar directivas básicas de Content Security Policy (CSP). |
+| Info | Wikidata | No se encontró ninguna entrada de Wikidata para 'Electro Flor E.I.R.L.'. | Sin ID de Wikidata. | Si la entidad cumple con las directrices de notoriedad de Wikidata, crea o mejora un elemento con referencias precisas. |
+| Info | Wikipedia | No se encontró ningún artículo de Wikipedia para 'Electro Flor E.I.R.L.'. | Sin entrada en Wikipedia. | Solo buscar crear Wikipedia si cumple con notoriedad independiente. De lo contrario, fortalecer redes y schema. |
+| Info | sameAs | Falta el enlace sameAs a Wikipedia (Señal principal del Grafo de Conocimiento). | Schema.org incompleto. | Añadir el enlace de Wikipedia al array `sameAs` de la schema Organization si se crea. |
+| Info | sameAs | Falta el enlace sameAs a Wikidata (Señal principal del Grafo de Conocimiento). | Schema.org incompleto. | Añadir el enlace de Wikidata al array `sameAs` de la schema Organization si se crea. |
+| Info | sameAs | Falta el enlace sameAs a LinkedIn (Señal fuerte del Grafo de Conocimiento). | Schema.org incompleto. | Añadir la URL del perfil de LinkedIn al array `sameAs` en layout.tsx. |
+| Info | sameAs | Falta el enlace sameAs a Twitter/X (Señal fuerte del Grafo de Conocimiento). | Schema.org incompleto. | Añadir la URL del perfil de Twitter/X al array `sameAs` en layout.tsx. |
 
-## Notas sobre la Medición
+## Notas de Medición
 
-1. Las mediciones de PageSpeed y Core Web Vitals arrojaron un error temporal debido a que se requiere configurar una variable `PAGESPEED_API_KEY` en el entorno para evitar límites de uso de Google.
-2. Los cambios ya fueron implementados en el código local y enviados al repositorio remoto de GitHub para su despliegue automático en Netlify.
+Todas las comprobaciones configuradas se completaron sin errores a nivel de script.

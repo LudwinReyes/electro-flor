@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Zap, Trophy, ShieldCheck, Clock, Building2 } from 'lucide-react';
+import CategoryIcon from '../components/CategoryIcon';
 import { getProducts, getCategories, getPromoBanners } from '../services/sanity';
 import { optimizeImage } from '../utils/optimizeImage';
 import Hero from '../components/Hero';
@@ -111,7 +112,7 @@ export default async function HomePage() {
                         categories.filter((c: any) => c.featured !== false).map((cat: any) => (
                             <Link href={`/productos/${cat.slug}`} key={cat.slug} className="bg-white p-5 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] shadow-lg text-center flex flex-col items-center group transition-all hover:-translate-y-1 border-b-4 border-transparent hover:border-[#8CC63F]">
                                 <div className="bg-[#002D62] w-14 h-14 md:w-24 md:h-24 rounded-2xl md:rounded-3xl flex items-center justify-center mb-4 md:mb-6 shadow-xl transition-transform group-hover:scale-105">
-                                    <i className={`fas ${cat.icon} text-xl md:text-4xl text-[#8CC63F]`}></i>
+                                    <CategoryIcon name={cat.icon} size={36} color="#8CC63F" className="text-[#8CC63F]" />
                                 </div>
                                 <h3 className="text-[9px] md:text-[12px] font-black uppercase text-[#002D62] leading-tight tracking-tighter h-8 md:h-10 flex items-center justify-center">
                                     {cat.name}

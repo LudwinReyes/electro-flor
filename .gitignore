@@ -80,3 +80,8 @@ plantilla_productos.csv
 sitemap.xml
 public/sitemap.xml
 public/robots.txt
+
+# Agent config, skills & logs
+.agents/
+*.tsbuildinfo
+client_secret*.json
