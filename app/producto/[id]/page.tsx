@@ -29,9 +29,10 @@ export async function generateMetadata({
     };
   }
 
-  const seoTitle = product.seo?.title || `${product.name} - ${product.brand} | Electro Flor`;
+  const codeSuffix = product.code ? ` (${product.code})` : '';
+  const seoTitle = product.seo?.title || `${product.name}${codeSuffix} | Stock en Lima & Ficha Técnica - Electro Flor`;
   const categoryName = product.category || 'Material Eléctrico';
-  const seoDesc = product.seo?.description || product.shortDescription || `Comprar ${product.name} de ${product.brand}. ${categoryName} con stock garantizado, ficha técnica y envío a todo Perú. Cotiza ahora en Electro Flor.`;
+  const seoDesc = product.seo?.description || (product.shortDescription ? `${product.shortDescription} ✓ Stock en Lima ✓ Envíos a todo el Perú. Cotiza al mejor precio en Electro Flor.` : `✓ ${product.name} de ${product.brand}. ${categoryName} con stock garantizado en C.C. Nicolini Lima, ficha técnica y envíos a todo el Perú. Cotiza ahora.`);
   
   // Imagen principal del producto (priorizar la primera imagen)
   const mainImage = product.image || (product.images && product.images[0]) || '';

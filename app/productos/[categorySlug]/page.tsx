@@ -1,12 +1,13 @@
 import { Suspense } from 'react';
 import ProductsPage from '../../../components/ProductsPage';
 import { getCategoryBySlug, getProducts, getCategories, getBrands } from '../../../services/sanity';
+import { Metadata } from 'next';
 
 export async function generateMetadata({ 
   params 
 }: { 
   params: Promise<{ categorySlug: string }> | { categorySlug: string } 
-}) {
+}): Promise<Metadata> {
   const resolvedParams = await params;
   const categorySlug = resolvedParams.categorySlug;
   const category = await getCategoryBySlug(categorySlug);
@@ -16,29 +17,113 @@ export async function generateMetadata({
     .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
 
+  const title = category?.seoTitle || `${formattedCategory} en Lima Perú | Precios por Mayor - Electro Flor`;
+  const description = category?.seoDescription || category?.description?.slice(0, 160) || `Encuentra productos de ${formattedCategory} con stock garantizado en Lima, Perú. Cotiza con los mejores precios de distribuidor en Electro Flor.`;
+
   return {
-    title: category?.seoTitle || `${formattedCategory} | Material Eléctrico y Ferretería | Electro Flor`,
-    description: category?.seoDescription || category?.description?.slice(0, 160) || `Encuentra una amplia variedad de productos de la categoría ${formattedCategory} en Electro Flor. Stock garantizado, marcas líderes y entregas inmediatas en Lima, Perú.`,
+    title,
+    description,
+    keywords: [formattedCategory, `${formattedCategory} perú`, `${formattedCategory} lima`, 'material eléctrico', 'electro flor', 'distribuidor mayorista'],
+    robots: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `https://electroflorperu.com/productos/${categorySlug}`,
+      type: 'website',
+      locale: 'es_PE',
+      siteName: 'ELECTRO FLOR'
+    },
     alternates: {
       canonical: `/productos/${categorySlug}`,
     },
   };
 }
 
-export default async function Page() {
-  const [products, categories, brands] = await Promise.all([
+export default async function Page({
+  params
+}: {
+  params: Promise<{ categorySlug: string }> | { categorySlug: string }
+}) {
+  const resolvedParams = await params;
+  const categorySlug = resolvedParams.categorySlug;
+
+  const [category, products, categories, brands] = await Promise.all([
+    getCategoryBySlug(categorySlug),
     getProducts(),
     getCategories(),
     getBrands()
   ]);
 
+  const categoryName = category?.name || categorySlug;
+  const categoryProducts = (products || []).filter((p: any) => 
+    p.categorySlug === categorySlug || p.category === categoryName || p.category === category?.name
+  );
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Inicio',
+        item: 'https://electroflorperu.com/'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Productos',
+        item: 'https://electroflorperu.com/productos'
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: categoryName,
+        item: `https://electroflorperu.com/productos/${categorySlug}`
+      }
+    ]
+  };
+
+  const collectionJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: category?.seoTitle || `${categoryName} en Perú`,
+    description: category?.seoDescription || category?.description,
+    url: `https://electroflorperu.com/productos/${categorySlug}`,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: categoryProducts.slice(0, 10).map((prod: any, idx: number) => ({
+        '@type': 'ListItem',
+        position: idx + 1,
+        url: `https://electroflorperu.com/producto/${prod.slug || prod.id}`,
+        name: prod.name
+      }))
+    }
+  };
+
   return (
-    <Suspense fallback={<div>Cargando...</div>}>
-      <ProductsPage 
-        initialProducts={products || []} 
-        initialCategories={categories || []} 
-        initialBrands={brands || []} 
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-    </Suspense>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
+      />
+      <Suspense fallback={<div className="h-64 flex justify-center items-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#002D62]"></div></div>}>
+        <ProductsPage 
+          initialProducts={products || []} 
+          initialCategories={categories || []} 
+          initialBrands={brands || []} 
+        />
+      </Suspense>
+    </>
   );
 }

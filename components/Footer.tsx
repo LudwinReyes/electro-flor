@@ -110,9 +110,13 @@ const Footer: React.FC = () => {
               ))
             ) : (
               <>
-                <li><Link href="/productos" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Iluminación</Link></li>
-                <li><Link href="/productos" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Conductores Eléctricos</Link></li>
-                <li><Link href="/productos" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Baja Tensión</Link></li>
+                <li><Link href="/productos/cables-y-conductores" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Cables y Conductores</Link></li>
+                <li><Link href="/productos/iluminacion" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Iluminación LED</Link></li>
+                <li><Link href="/productos/highbay" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Campanas High Bay</Link></li>
+                <li><Link href="/productos/reflectores" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Reflectores LED</Link></li>
+                <li><Link href="/productos/interruptores" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Interruptores & Tableros</Link></li>
+                <li><Link href="/productos/paneles-y-downlights" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Paneles LED 60x60</Link></li>
+                <li><Link href="/productos/luces-de-emergencia" className="flex items-center gap-3 hover:opacity-80 group"><ArrowRight size={14} style={{ color: colors.secondary }} className="group-hover:translate-x-1 transition-transform" /> Luces de Emergencia</Link></li>
               </>
             )}
           </ul>

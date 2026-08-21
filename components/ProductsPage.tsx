@@ -435,6 +435,81 @@ const ProductsPage: React.FC<Props> = ({
         </div>
       </div>
 
+      {/* Category SEO Content & Buyer's Guide */}
+      {activeCategoryData && activeCategoryData.description && (
+        <section className="max-w-7xl mx-auto px-4 mt-16">
+          <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-sm border border-gray-100 space-y-8">
+            <div>
+              <span className={`text-[${BRAND_COLORS.secondary}] font-black uppercase text-[10px] md:text-xs tracking-widest mb-2 block`}>
+                GUÍA TÉCNICA Y ESPECIFICACIONES
+              </span>
+              <h2 className={`text-2xl md:text-4xl font-black text-[${BRAND_COLORS.primary}] uppercase tracking-tighter mb-4`}>
+                Todo sobre {activeCategoryData.name} en Perú
+              </h2>
+              <p className="text-gray-600 text-sm md:text-base leading-relaxed font-normal">
+                {activeCategoryData.description}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-100">
+              <div className="flex items-start gap-4">
+                <div className={`bg-[${BRAND_COLORS.primary}] text-[${BRAND_COLORS.secondary}] p-3 rounded-2xl flex-shrink-0 font-black text-lg`}>
+                  ✓
+                </div>
+                <div>
+                  <h3 className={`text-[${BRAND_COLORS.primary}] font-black text-sm uppercase`}>Stock Inmediato</h3>
+                  <p className="text-gray-500 text-xs mt-1">Disponibilidad asegurada en tienda física en C.C. Nicolini, Cercado de Lima.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className={`bg-[${BRAND_COLORS.primary}] text-[${BRAND_COLORS.secondary}] p-3 rounded-2xl flex-shrink-0 font-black text-lg`}>
+                  ✓
+                </div>
+                <div>
+                  <h3 className={`text-[${BRAND_COLORS.primary}] font-black text-sm uppercase`}>Precios por Mayor</h3>
+                  <p className="text-gray-500 text-xs mt-1">Cotizaciones directas para contratistas, técnicos electricistas y empresas.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className={`bg-[${BRAND_COLORS.primary}] text-[${BRAND_COLORS.secondary}] p-3 rounded-2xl flex-shrink-0 font-black text-lg`}>
+                  ✓
+                </div>
+                <div>
+                  <h3 className={`text-[${BRAND_COLORS.primary}] font-black text-sm uppercase`}>Envíos a Todo el Perú</h3>
+                  <p className="text-gray-500 text-xs mt-1">Despachos diarios a agencias de transporte terrestre a nivel nacional.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-6 border-t border-gray-100">
+              <h3 className={`text-[${BRAND_COLORS.primary}] font-black text-base uppercase tracking-tight mb-4`}>
+                Preguntas Frecuentes sobre {activeCategoryData.name}
+              </h3>
+              <div className="space-y-3">
+                <details className="group bg-gray-50 p-4 rounded-2xl cursor-pointer">
+                  <summary className={`font-bold text-xs md:text-sm text-[${BRAND_COLORS.primary}] list-none flex justify-between items-center`}>
+                    ¿Cómo solicitar una cotización formal de {activeCategoryData.name}?
+                    <span className={`text-[${BRAND_COLORS.secondary}] font-black text-lg group-open:rotate-45 transition-transform`}>+</span>
+                  </summary>
+                  <p className="text-gray-600 text-xs mt-3 leading-relaxed">
+                    Puedes hacer clic en el botón de WhatsApp o llamarnos directamente al 948 198 701. Nuestro equipo técnico comercial te enviará una cotización detallada con ficha técnica y disponibilidad en minutos.
+                  </p>
+                </details>
+                <details className="group bg-gray-50 p-4 rounded-2xl cursor-pointer">
+                  <summary className={`font-bold text-xs md:text-sm text-[${BRAND_COLORS.primary}] list-none flex justify-between items-center`}>
+                    ¿Emiten Factura Electrónica y Guía de Remisión?
+                    <span className={`text-[${BRAND_COLORS.secondary}] font-black text-lg group-open:rotate-45 transition-transform`}>+</span>
+                  </summary>
+                  <p className="text-gray-600 text-xs mt-3 leading-relaxed">
+                    Sí, emitimos Factura Electrónica (con RUC) y Boleta de Venta oficial según las normativas de SUNAT. Todos nuestros productos cuentan con garantía de fábrica y certificación técnica.
+                  </p>
+                </details>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Brand Selector Section */}
       <section className="max-w-7xl mx-auto px-4 mt-20 pt-20 border-t border-gray-100">
         <div className="text-center mb-12">
