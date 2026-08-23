@@ -110,6 +110,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
             {/* Floating WhatsApp Button */}
             <a
+              id="btn-whatsapp-flotante"
               href={`https://wa.me/51948198701?text=Hola,%20quisiera%20hacer%20una%20consulta`}
               target="_blank"
               rel="noopener noreferrer"

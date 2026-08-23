@@ -16,6 +16,7 @@ import { Product } from '../types';
 
 
 import { optimizeImage, optimizeImages } from '../utils/optimizeImage';
+import { trackEvent } from '../utils/analytics';
 
 import { useQuote } from '../contexts/QuoteContext';
 
@@ -279,9 +280,18 @@ const ProductDetail: React.FC<Props> = () => {
                   </div>
                 </button>
                 <a
+                  id="btn-whatsapp-cotiza-ahora"
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => {
+                    trackEvent('click_whatsapp_producto', {
+                      button_name: 'cotiza_ahora_producto',
+                      product_name: product.name,
+                      product_code: product.code || '',
+                      product_brand: product.brand || '',
+                    });
+                  }}
                   className="bg-[#25D366] text-white px-8 py-5 rounded-2xl flex items-center justify-center gap-4 font-black uppercase text-xs hover:opacity-95 hover:scale-[1.01] active:scale-[0.99] transition-all shadow-lg shadow-green-500/20 group"
                 >
                   <i className="fab fa-whatsapp text-3xl transition-transform group-hover:scale-110"></i>

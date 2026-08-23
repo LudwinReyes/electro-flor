@@ -2,6 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { optimizeImage } from '../utils/optimizeImage';
+import { trackEvent } from '../utils/analytics';
 import { Product } from '../types';
 import { X, Trash2, MessageCircle, FileText } from 'lucide-react';
 import { BRAND_COLORS, CONTACT_INFO, SITE_MESSAGES } from '../config';
@@ -17,6 +18,12 @@ interface Props {
 const QuoteCart: React.FC<Props> = ({ isOpen, onClose, items, onRemove, onClear }) => {
   const sendQuote = () => {
     if (items.length === 0) return;
+
+    trackEvent('click_whatsapp_lista', {
+      button_name: 'enviar_lista_whatsapp',
+      total_items: items.length,
+      items_names: items.map(i => i.name).join(', '),
+    });
 
     // Construcción del mensaje con saltos de línea claros
     let message = `${SITE_MESSAGES.whatsapp.bulkQuote}\n\n`;
@@ -88,6 +95,7 @@ const QuoteCart: React.FC<Props> = ({ isOpen, onClose, items, onRemove, onClear 
             </div>
 
             <button
+              id="btn-whatsapp-enviar-lista"
               onClick={sendQuote}
               className={`w-full bg-[${BRAND_COLORS.success}] text-white py-4 rounded-2xl font-black uppercase text-xs flex items-center justify-center gap-3 shadow-xl hover:scale-[1.02] active:scale-95 transition-all`}
             >
