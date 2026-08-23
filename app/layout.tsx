@@ -83,6 +83,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-M3JVGCV6');`,
           }}
         />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-XD6V9M3TRZ"
+          strategy="afterInteractive"
+        />
+        <Script
+          id="google-analytics-ga4"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-XD6V9M3TRZ');
+            `,
+          }}
+        />
         <link rel="icon" href="/media/favicon.png" type="image/png" />
         <link rel="shortcut icon" href="/media/favicon.png" type="image/png" />
         <link rel="apple-touch-icon" href="/media/favicon.png" type="image/png" />
