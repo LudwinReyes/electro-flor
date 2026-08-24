@@ -55,7 +55,7 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: blob: https://cdn.sanity.io https://images.unsplash.com https://loganelectricperu.com https://placehold.jp; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; connect-src 'self' https://*.sanity.io https://api.whatsapp.com; frame-src 'self' https://*.google.com https://share.google;",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://www.googletagmanager.com https://ssl.google-analytics.com https://www.google-analytics.com https://tagmanager.google.com https://www.googleadservices.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://tagmanager.google.com; img-src 'self' data: blob: https://cdn.sanity.io https://images.unsplash.com https://loganelectricperu.com https://placehold.jp https://www.googletagmanager.com https://ssl.gstatic.com https://www.google-analytics.com https://www.google.com; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; connect-src 'self' https://*.sanity.io https://api.whatsapp.com https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://region1.google-analytics.com; frame-src 'self' https://*.google.com https://share.google https://www.googletagmanager.com; worker-src blob:;",
           },
         ],
       },
