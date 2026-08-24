@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
-import { GoogleTagManager, GoogleAnalytics } from '@next/third-parties/google';
+import Script from 'next/script';
 import './globals.css';
 import { SiteConfigProvider } from '../contexts/SiteConfigContext';
 import { QuoteProvider } from '../contexts/QuoteContext';
@@ -72,14 +72,42 @@ export default async function RootLayout({
   return (
     <html lang="es">
       <head>
+        {/* Google Tag Manager - beforeInteractive para SSR */}
+        <Script
+          id="gtm-script"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-M3JVGCV6');`,
+          }}
+        />
+        {/* Google Analytics GA4 */}
+        <Script
+          id="ga4-script-src"
+          strategy="beforeInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-XD6V9M3TRZ"
+        />
+        <Script
+          id="ga4-config"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XD6V9M3TRZ');`,
+          }}
+        />
         <link rel="icon" href="/media/favicon.png" type="image/png" />
         <link rel="shortcut icon" href="/media/favicon.png" type="image/png" />
         <link rel="apple-touch-icon" href="/media/favicon.png" type="image/png" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
       </head>
       <body className="min-h-screen bg-white font-sans text-gray-900">
-        <GoogleTagManager gtmId="GTM-M3JVGCV6" />
-        <GoogleAnalytics gaId="G-XD6V9M3TRZ" />
+        {/* GTM noscript fallback */}
+        <noscript>
+          <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M3JVGCV6"
+            height="0" width="0" style={{ display: 'none', visibility: 'hidden' }} />
+        </noscript>
         <SiteConfigProvider>
           <QuoteProvider>
             <ScrollToTop />
