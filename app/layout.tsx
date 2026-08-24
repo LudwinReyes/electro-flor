@@ -72,9 +72,8 @@ export default async function RootLayout({
   return (
     <html lang="es">
       <head>
-        <Script
-          id="google-tag-manager"
-          strategy="afterInteractive"
+        {/* Google Tag Manager */}
+        <script
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -83,13 +82,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-M3JVGCV6');`,
           }}
         />
-        <Script
+        {/* Google Analytics (gtag.js) */}
+        <script
+          async
           src="https://www.googletagmanager.com/gtag/js?id=G-XD6V9M3TRZ"
-          strategy="afterInteractive"
         />
-        <Script
-          id="google-analytics-ga4"
-          strategy="afterInteractive"
+        <script
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
