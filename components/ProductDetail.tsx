@@ -20,33 +20,50 @@ import { trackEvent } from '../utils/analytics';
 
 import { useQuote } from '../contexts/QuoteContext';
 
-interface Props {}
+interface Props {
+  initialProduct?: Product | null;
+  initialRelatedProducts?: Product[];
+}
 
-const ProductDetail: React.FC<Props> = () => {
+const ProductDetail: React.FC<Props> = ({ initialProduct = null, initialRelatedProducts = [] }) => {
   const { addToQuote } = useQuote();
   const { id } = useParams(); // id es realmente el slug
   const { siteSettings, contact } = useSiteConfig();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [product, setProduct] = useState<Product | null>(initialProduct);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>(initialRelatedProducts);
+  const [loading, setLoading] = useState(!initialProduct);
   const [activeTab, setActiveTab] = useState('especificaciones');
-  const [selectedImage, setSelectedImage] = useState('');
+  const [selectedImage, setSelectedImage] = useState(initialProduct?.image || '');
   const [zoomStyle, setZoomStyle] = useState({ display: 'none', transformOrigin: '0% 0%' });
 
-  // Cargar producto y relacionados desde Sanity o fallback
+  // Cargar producto y relacionados desde Sanity o fallback si no viene de SSR
   useEffect(() => {
+    if (initialProduct && initialProduct.slug === id) {
+      setProduct(initialProduct);
+      setSelectedImage(initialProduct.image);
+      setLoading(false);
+      if (initialRelatedProducts.length > 0) {
+        setRelatedProducts(initialRelatedProducts);
+        return;
+      }
+    }
+
     const loadProduct = async () => {
-      setLoading(true);
+      if (!initialProduct) {
+        setLoading(true);
+      }
       try {
         const idStr = Array.isArray(id) ? id[0] : id;
         const optimizedSlug = 'campana-led-industrial-philips-smartbright-highbay-g2-100w';
         
-        let loadedProduct: Product | null = null;
-        const sanityProduct = await getProductBySlug(idStr || '');
-        if (sanityProduct) {
-          loadedProduct = sanityProduct;
-        } else {
-          loadedProduct = PRODUCTS.find(p => p.slug === id || p.id === id) || null;
+        let loadedProduct: Product | null = initialProduct;
+        if (!loadedProduct) {
+          const sanityProduct = await getProductBySlug(idStr || '');
+          if (sanityProduct) {
+            loadedProduct = sanityProduct;
+          } else {
+            loadedProduct = PRODUCTS.find(p => p.slug === id || p.id === id) || null;
+          }
         }
 
         if (loadedProduct) {

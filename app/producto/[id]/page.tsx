@@ -291,7 +291,7 @@ export default async function Page({
   return (
     <>
       {jsonLdScript}
-      <ProductDetail />
+      <ProductDetail initialProduct={product} />
     </>
   );
 }
