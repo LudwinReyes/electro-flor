@@ -17,8 +17,14 @@ export async function generateMetadata({
     .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
 
-  const title = category?.seoTitle || `${formattedCategory} en Lima Perú | Precios por Mayor - Electro Flor`;
-  const description = category?.seoDescription || category?.description?.slice(0, 160) || `Encuentra productos de ${formattedCategory} con stock garantizado en Lima, Perú. Cotiza con los mejores precios de distribuidor en Electro Flor.`;
+  let title = category?.seoTitle || `${formattedCategory} en Lima Perú | Precios por Mayor`;
+  if (!title.toLowerCase().includes('electro flor')) {
+    title = `${title} | Electro Flor`;
+  }
+  const rawDescription = category?.seoDescription || category?.description || `Encuentra productos de ${formattedCategory} con stock garantizado en Lima, Perú. Cotiza con los mejores precios de distribuidor en Electro Flor.`;
+  const description = rawDescription.length > 160 ? rawDescription.slice(0, 157).trim() + '...' : rawDescription;
+
+  const canonicalUrl = `https://www.electroflorperu.com/productos/${categorySlug}`;
 
   return {
     title,
@@ -34,13 +40,13 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      url: `https://electroflorperu.com/productos/${categorySlug}`,
+      url: canonicalUrl,
       type: 'website',
       locale: 'es_PE',
       siteName: 'ELECTRO FLOR'
     },
     alternates: {
-      canonical: `/productos/${categorySlug}`,
+      canonical: canonicalUrl,
     },
   };
 }
@@ -73,19 +79,19 @@ export default async function Page({
         '@type': 'ListItem',
         position: 1,
         name: 'Inicio',
-        item: 'https://electroflorperu.com/'
+        item: 'https://www.electroflorperu.com/'
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Productos',
-        item: 'https://electroflorperu.com/productos'
+        item: 'https://www.electroflorperu.com/productos'
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: categoryName,
-        item: `https://electroflorperu.com/productos/${categorySlug}`
+        item: `https://www.electroflorperu.com/productos/${categorySlug}`
       }
     ]
   };
@@ -95,13 +101,13 @@ export default async function Page({
     '@type': 'CollectionPage',
     name: category?.seoTitle || `${categoryName} en Perú`,
     description: category?.seoDescription || category?.description,
-    url: `https://electroflorperu.com/productos/${categorySlug}`,
+    url: `https://www.electroflorperu.com/productos/${categorySlug}`,
     mainEntity: {
       '@type': 'ItemList',
       itemListElement: categoryProducts.slice(0, 10).map((prod: any, idx: number) => ({
         '@type': 'ListItem',
         position: idx + 1,
-        url: `https://electroflorperu.com/producto/${prod.slug || prod.id}`,
+        url: `https://www.electroflorperu.com/producto/${prod.slug || prod.id}`,
         name: prod.name
       }))
     }

@@ -185,9 +185,9 @@ const ProductsPage: React.FC<Props> = ({
   const FilterContent = () => (
     <div className="space-y-8">
       <div className="space-y-4">
-        <h3 className={`text-[${BRAND_COLORS.primary}] font-black text-xs uppercase tracking-widest flex items-center gap-2`}>
-          <div className={`w-4 h-1 bg-[${BRAND_COLORS.secondary}] rounded-full`}></div> Categorías
-        </h3>
+        <p className={`text-[${BRAND_COLORS.primary}] font-black text-xs uppercase tracking-widest flex items-center gap-2`}>
+          <span className={`w-4 h-1 bg-[${BRAND_COLORS.secondary}] rounded-full inline-block`}></span> Categorías
+        </p>
         <div className="grid grid-cols-1 gap-2">
           {/* Categorías principales (sin parentCategory) */}
           {categories.filter((cat: any) => !cat.parentCategory).map((parentCat: any) => {
@@ -248,9 +248,9 @@ const ProductsPage: React.FC<Props> = ({
       </div>
 
       <div className="space-y-4">
-        <h3 className={`text-[${BRAND_COLORS.primary}] font-black text-xs uppercase tracking-widest flex items-center gap-2`}>
-          <div className={`w-4 h-1 bg-[${BRAND_COLORS.secondary}] rounded-full`}></div> Marcas
-        </h3>
+        <p className={`text-[${BRAND_COLORS.primary}] font-black text-xs uppercase tracking-widest flex items-center gap-2`}>
+          <span className={`w-4 h-1 bg-[${BRAND_COLORS.secondary}] rounded-full inline-block`}></span> Marcas
+        </p>
         <div className="grid grid-cols-1 gap-2 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
           {brands.map((brand: any) => (
             <Link
@@ -387,7 +387,7 @@ const ProductsPage: React.FC<Props> = ({
         <aside className="hidden lg:block w-72 flex-shrink-0">
           <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 sticky top-40 max-h-[calc(100vh-11rem)] overflow-y-auto custom-scrollbar">
             <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-50">
-              <h2 className={`font-black text-[${BRAND_COLORS.primary}] uppercase text-sm`}>Filtros</h2>
+              <p className={`font-black text-[${BRAND_COLORS.primary}] uppercase text-sm`}>Filtros</p>
               <button onClick={clearFilters} className="text-[10px] font-bold text-gray-400 hover:text-red-500 uppercase transition-colors">Limpiar</button>
             </div>
             <FilterContent />
@@ -396,23 +396,28 @@ const ProductsPage: React.FC<Props> = ({
 
         <div className="flex-grow space-y-6">
           <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest hidden sm:inline">Ordenar:</span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className={`bg-gray-50 border-none rounded-xl px-4 py-2 text-[10px] font-black text-[${BRAND_COLORS.primary}] uppercase focus:ring-2 focus:ring-[${BRAND_COLORS.secondary}]`}
+            <h2 className={`font-black text-xs md:text-sm text-[${BRAND_COLORS.primary}] uppercase tracking-wide`}>
+              Catálogo de {pageTitle} {pageTitleHighlight} ({filteredProducts.length})
+            </h2>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest hidden sm:inline">Ordenar:</span>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className={`bg-gray-50 border-none rounded-xl px-4 py-2 text-[10px] font-black text-[${BRAND_COLORS.primary}] uppercase focus:ring-2 focus:ring-[${BRAND_COLORS.secondary}]`}
+                >
+                  <option>A a la Z</option>
+                  <option>Z a la A</option>
+                </select>
+              </div>
+              <button
+                onClick={() => setIsFilterDrawerOpen(true)}
+                className={`lg:hidden flex items-center gap-2 bg-[${BRAND_COLORS.primary}] text-white px-5 py-2.5 rounded-xl font-black text-[10px] uppercase active:scale-95 transition-all`}
               >
-                <option>A a la Z</option>
-                <option>Z a la A</option>
-              </select>
+                <SlidersHorizontal size={14} className={`text-[${BRAND_COLORS.secondary}]`} /> Filtros
+              </button>
             </div>
-            <button
-              onClick={() => setIsFilterDrawerOpen(true)}
-              className={`lg:hidden flex items-center gap-2 bg-[${BRAND_COLORS.primary}] text-white px-5 py-2.5 rounded-xl font-black text-[10px] uppercase active:scale-95 transition-all`}
-            >
-              <SlidersHorizontal size={14} className={`text-[${BRAND_COLORS.secondary}]`} /> Filtros
-            </button>
           </div>
 
           {loading ? (
@@ -428,7 +433,7 @@ const ProductsPage: React.FC<Props> = ({
             </div>
           ) : (
             <div className="bg-white rounded-3xl p-20 text-center border-2 border-dashed border-gray-200">
-              <h3 className={`text-[${BRAND_COLORS.primary}] font-black uppercase text-xl mb-2`}>Sin resultados</h3>
+              <p className={`text-[${BRAND_COLORS.primary}] font-black uppercase text-xl mb-2`}>Sin resultados</p>
               <button onClick={clearFilters} className={`mt-8 text-[${BRAND_COLORS.secondary}] font-black text-xs uppercase border-b-2 border-[${BRAND_COLORS.secondary}] pb-1`}>Reiniciar búsqueda</button>
             </div>
           )}
@@ -547,7 +552,7 @@ const ProductsPage: React.FC<Props> = ({
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsFilterDrawerOpen(false)}></div>
           <div className="absolute right-0 top-0 bottom-0 w-[85%] max-w-sm bg-white shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
             <div className={`bg-[${BRAND_COLORS.primary}] p-6 text-white flex justify-between items-center`}>
-              <h2 className="font-black uppercase text-sm">Filtros</h2>
+              <p className="font-black uppercase text-sm">Filtros</p>
               <button onClick={() => setIsFilterDrawerOpen(false)} aria-label="Cerrar filtros" className="bg-white/10 p-2 rounded-full"><X size={20} /></button>
             </div>
             <div className="flex-grow overflow-y-auto p-6"><FilterContent /></div>
