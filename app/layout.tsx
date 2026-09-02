@@ -12,10 +12,10 @@ import { getProducts } from '../services/sanity';
 import GlobalModalsWrapper from '../components/GlobalModalsWrapper';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://electroflorperu.com'),
+  metadataBase: new URL('https://www.electroflorperu.com'),
   title: {
     default: 'ELECTRO FLOR | Material Eléctrico e Iluminación LED en Perú',
-    template: '%s | Electro Flor',
+    template: '%s',
   },
   description: 'Distribuidor de material eléctrico e iluminación LED en Perú. Venta de cables, reflectores y herramientas. Stock garantizado con entrega inmediata en Lima.',
   robots: {
@@ -27,12 +27,12 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    url: 'https://electroflorperu.com',
+    url: 'https://www.electroflorperu.com',
     siteName: 'ELECTRO FLOR',
     locale: 'es_PE',
     images: [
       {
-        url: 'https://electroflorperu.com/media/Logo%20Electro%20Flor.png',
+        url: 'https://www.electroflorperu.com/media/Logo%20Electro%20Flor.png',
         width: 1200,
         height: 630,
         alt: 'ELECTRO FLOR | Material Eléctrico e Iluminación LED',

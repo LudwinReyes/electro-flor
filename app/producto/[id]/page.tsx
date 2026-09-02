@@ -30,12 +30,18 @@ export async function generateMetadata({
   }
 
   const codeSuffix = product.code ? ` (${product.code})` : '';
-  const seoTitle = product.seo?.title || `${product.name}${codeSuffix} | Stock en Lima & Ficha Técnica - Electro Flor`;
+  let seoTitle = product.seo?.title || `${product.name}${codeSuffix} | Stock en Lima & Ficha Técnica`;
+  if (!seoTitle.toLowerCase().includes('electro flor')) {
+    seoTitle = `${seoTitle} | Electro Flor`;
+  }
   const categoryName = product.category || 'Material Eléctrico';
-  const seoDesc = product.seo?.description || (product.shortDescription ? `${product.shortDescription} ✓ Stock en Lima ✓ Envíos a todo el Perú. Cotiza al mejor precio en Electro Flor.` : `✓ ${product.name} de ${product.brand}. ${categoryName} con stock garantizado en C.C. Nicolini Lima, ficha técnica y envíos a todo el Perú. Cotiza ahora.`);
+  const rawDesc = product.seo?.description || (product.shortDescription ? `${product.shortDescription}` : `✓ ${product.name} de ${product.brand}. ${categoryName} con stock garantizado en Lima y envíos a todo el Perú. Cotiza ahora.`);
+  const seoDesc = rawDesc.length > 160 ? rawDesc.slice(0, 157).trim() + '...' : rawDesc;
   
   // Imagen principal del producto (priorizar la primera imagen)
   const mainImage = product.image || (product.images && product.images[0]) || '';
+
+  const canonicalUrl = `https://www.electroflorperu.com/producto/${product.slug || id}`;
 
   return {
     title: seoTitle,
@@ -52,7 +58,7 @@ export async function generateMetadata({
       type: 'website',
       title: seoTitle,
       description: seoDesc,
-      url: `https://electroflorperu.com/producto/${product.slug || id}`,
+      url: canonicalUrl,
       siteName: 'ELECTRO FLOR',
       images: mainImage ? [
         {
@@ -71,7 +77,7 @@ export async function generateMetadata({
       images: mainImage ? [mainImage] : [],
     },
     alternates: {
-      canonical: `/producto/${product.slug || id}`,
+      canonical: canonicalUrl,
     },
   };
 }
@@ -191,21 +197,21 @@ export default async function Page({
           '@type': 'ListItem',
           'position': 1,
           'name': 'Inicio',
-          'item': 'https://electroflorperu.com/'
+          'item': 'https://www.electroflorperu.com/'
         },
         {
           '@type': 'ListItem',
           'position': 2,
           'name': product.category || 'Productos',
           'item': product.categorySlug 
-            ? `https://electroflorperu.com/productos/${product.categorySlug}` 
-            : 'https://electroflorperu.com/productos'
+            ? `https://www.electroflorperu.com/productos/${product.categorySlug}` 
+            : 'https://www.electroflorperu.com/productos'
         },
         {
           '@type': 'ListItem',
           'position': 3,
           'name': product.name,
-          'item': `https://electroflorperu.com/producto/${product.slug || id}`
+          'item': `https://www.electroflorperu.com/producto/${product.slug || id}`
         }
       ]
     };

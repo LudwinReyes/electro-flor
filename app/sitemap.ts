@@ -7,7 +7,7 @@ export const revalidate = 0;
 export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://electroflorperu.com';
+  const baseUrl = 'https://www.electroflorperu.com';
 
   // Consultas directas a Sanity SIN caché CDN para datos siempre frescos
   let products: any[] = [];

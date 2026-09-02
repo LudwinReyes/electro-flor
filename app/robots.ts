@@ -34,6 +34,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin', '/api/', '/studio'],
       }
     ],
-    sitemap: 'https://electroflorperu.com/sitemap.xml',
+    sitemap: 'https://www.electroflorperu.com/sitemap.xml',
   };
 }
