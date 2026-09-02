@@ -281,9 +281,9 @@ const ProductDetail: React.FC<Props> = ({ initialProduct = null, initialRelatedP
 
             {/* SECCIÓN COTIZACIÓN (Captura) */}
             <div className="bg-[#f8f9fa] border border-gray-100 rounded-[2.5rem] p-10 md:p-12 shadow-sm">
-              <h3 className="text-[#002D62] font-black text-xl uppercase mb-8 flex items-center gap-2">
+              <p className="text-[#002D62] font-black text-xl uppercase mb-8 flex items-center gap-2">
                 SOLICITA UNA <span className="text-[#8CC63F]">COTIZACIÓN:</span>
-              </h3>
+              </p>
 
               <div className="flex flex-col gap-4">
                 <button
@@ -388,17 +388,26 @@ const ProductDetail: React.FC<Props> = ({ initialProduct = null, initialRelatedP
           </div>
 
           <div className="p-10 md:p-16 border-x border-b border-gray-50 min-h-[300px] bg-white">
-            {activeTab === 'especificaciones' && (
+            {/* Panel Especificaciones */}
+            <div className={activeTab === 'especificaciones' ? 'block' : 'hidden'}>
+              <h2 className="text-xl font-black text-[#002D62] uppercase mb-8 flex items-center gap-3">
+                <span className="w-6 h-1 rounded-full bg-[#8CC63F]"></span> ESPECIFICACIONES TÉCNICAS
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-y-10 gap-x-20 max-w-5xl">
                 {Object.entries(normalizedSpecs).map(([key, val]) => (
                   <div key={key} className="flex flex-col border-b border-gray-100 pb-4">
-                    <span className="text-[10px] font-black text-gray-300 uppercase tracking-[0.2em] mb-2">{key}:</span>
+                    <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2">{key}:</h3>
                     <span className="text-base font-black text-[#002D62] uppercase">{val}</span>
                   </div>
                 ))}
               </div>
-            )}
-            {activeTab === 'descripcion' && (
+            </div>
+
+            {/* Panel Descripción */}
+            <div className={activeTab === 'descripcion' ? 'block' : 'hidden'}>
+              <h2 className="text-xl font-black text-[#002D62] uppercase mb-6 flex items-center gap-3">
+                <span className="w-6 h-1 rounded-full bg-[#8CC63F]"></span> DESCRIPCIÓN DEL PRODUCTO
+              </h2>
               <div className="text-gray-600 font-medium leading-relaxed max-w-4xl [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-2 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:space-y-2 [&_li]:ml-2 [&_p]:mb-4 [&_strong]:font-bold [&_strong]:text-[#002D62] [&_em]:italic [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-[#002D62] [&_h3]:mb-3 [&_h4]:text-lg [&_h4]:font-semibold [&_h4]:mb-2 [&_blockquote]:border-l-4 [&_blockquote]:border-[#8CC63F] [&_blockquote]:pl-4 [&_blockquote]:italic [&_a]:text-[#8CC63F] [&_a]:underline">
                 {product.description ? (
                   typeof product.description === 'string' ? (
@@ -410,8 +419,13 @@ const ProductDetail: React.FC<Props> = ({ initialProduct = null, initialRelatedP
                   <p>No hay descripción disponible para este producto.</p>
                 )}
               </div>
-            )}
-            {activeTab === 'video' && (
+            </div>
+
+            {/* Panel Video Demostrativo */}
+            <div className={activeTab === 'video' ? 'block' : 'hidden'}>
+              <h2 className="text-xl font-black text-[#002D62] uppercase mb-8 flex items-center gap-3">
+                <span className="w-6 h-1 rounded-full bg-[#8CC63F]"></span> VIDEO DEMOSTRATIVO
+              </h2>
               <div className="flex flex-col items-center justify-center">
                 {product.youtubeVideo ? (
                   <div className="w-full max-w-4xl aspect-video">
@@ -431,38 +445,45 @@ const ProductDetail: React.FC<Props> = ({ initialProduct = null, initialRelatedP
                   </div>
                 )}
               </div>
-            )}
-            {activeTab === 'opiniones' && product.slug === 'campana-led-industrial-philips-smartbright-highbay-g2-100w' && (
-              <div className="space-y-6 max-w-3xl">
-                <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="font-bold text-[#002D62] text-sm md:text-base">Roberto M.</span>
-                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider bg-white border px-2.5 py-0.5 rounded-full">Compra Verificada</span>
+            </div>
+
+            {/* Panel Opiniones */}
+            {product.slug === 'campana-led-industrial-philips-smartbright-highbay-g2-100w' && (
+              <div className={activeTab === 'opiniones' ? 'block' : 'hidden'}>
+                <h2 className="text-xl font-black text-[#002D62] uppercase mb-8 flex items-center gap-3">
+                  <span className="w-6 h-1 rounded-full bg-[#8CC63F]"></span> OPINIONES Y VALORACIONES
+                </h2>
+                <div className="space-y-6 max-w-3xl">
+                  <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-bold text-[#002D62] text-sm md:text-base">Roberto M.</span>
+                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider bg-white border px-2.5 py-0.5 rounded-full">Compra Verificada</span>
+                    </div>
+                    <div className="flex gap-0.5 mb-3">
+                      {[1,2,3,4,5].map(i => <Star key={i} size={14} className="text-[#8CC63F] fill-current" />)}
+                    </div>
+                    <p className="text-sm text-gray-600 font-medium">Excelente iluminación, las instalamos a 6.5 metros en nuestro almacén principal y el cambio fue del cielo a la tierra. Ahorro de luz notable desde el primer mes.</p>
                   </div>
-                  <div className="flex gap-0.5 mb-3">
-                    {[1,2,3,4,5].map(i => <Star key={i} size={14} className="text-[#8CC63F] fill-current" />)}
+                  <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-bold text-[#002D62] text-sm md:text-base">Ing. Carlos T.</span>
+                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider bg-white border px-2.5 py-0.5 rounded-full">Compra Verificada</span>
+                    </div>
+                    <div className="flex gap-0.5 mb-3">
+                      {[1,2,3,4,5].map(i => <Star key={i} size={14} className="text-[#8CC63F] fill-current" />)}
+                    </div>
+                    <p className="text-sm text-gray-600 font-medium">Muy buena disipación de calor y la luz es muy uniforme. Philips es garantía de calidad y duración. El despacho hacia Trujillo por agencia fue sumamente rápido.</p>
                   </div>
-                  <p className="text-sm text-gray-600 font-medium">Excelente iluminación, las instalamos a 6.5 metros en nuestro almacén principal y el cambio fue del cielo a la tierra. Ahorro de luz notable desde el primer mes.</p>
-                </div>
-                <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="font-bold text-[#002D62] text-sm md:text-base">Ing. Carlos T.</span>
-                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider bg-white border px-2.5 py-0.5 rounded-full">Compra Verificada</span>
+                  <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-bold text-[#002D62] text-sm md:text-base">Lucía R.</span>
+                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider bg-white border px-2.5 py-0.5 rounded-full">Compra Verificada</span>
+                    </div>
+                    <div className="flex gap-0.5 mb-3">
+                      {[1,2,3,4,5].map(i => <Star key={i} size={14} className="text-[#8CC63F] fill-current" />)}
+                    </div>
+                    <p className="text-sm text-gray-600 font-medium">Compramos un lote de 20 campanas de 100W para un gimnasio polideportivo. La asesoría técnica por WhatsApp nos ayudó a calcular el número exacto de campanas. Muy recomendados.</p>
                   </div>
-                  <div className="flex gap-0.5 mb-3">
-                    {[1,2,3,4,5].map(i => <Star key={i} size={14} className="text-[#8CC63F] fill-current" />)}
-                  </div>
-                  <p className="text-sm text-gray-600 font-medium">Muy buena disipación de calor y la luz es muy uniforme. Philips es garantía de calidad y duración. El despacho hacia Trujillo por agencia fue sumamente rápido.</p>
-                </div>
-                <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="font-bold text-[#002D62] text-sm md:text-base">Lucía R.</span>
-                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider bg-white border px-2.5 py-0.5 rounded-full">Compra Verificada</span>
-                  </div>
-                  <div className="flex gap-0.5 mb-3">
-                    {[1,2,3,4,5].map(i => <Star key={i} size={14} className="text-[#8CC63F] fill-current" />)}
-                  </div>
-                  <p className="text-sm text-gray-600 font-medium">Compramos un lote de 20 campanas de 100W para un gimnasio polideportivo. La asesoría técnica por WhatsApp nos ayudó a calcular el número exacto de campanas. Muy recomendados.</p>
                 </div>
               </div>
             )}

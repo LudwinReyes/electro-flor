@@ -49,10 +49,10 @@ const Footer: React.FC = () => {
             <span className="font-black text-[10px] uppercase tracking-[0.3em] mb-2 block" style={{ color: colors.secondary }}>
               {programaConfig?.badge || 'Programa Especialista'}
             </span>
-            <h3 className="text-white font-black text-2xl mb-4 uppercase tracking-tighter leading-none">
+            <p className="text-white font-black text-2xl mb-4 uppercase tracking-tighter leading-none">
               {programaConfig?.title || '¿ERES MAESTRO'} <br />
               <span style={{ color: colors.secondary }}>{programaConfig?.titleHighlight || 'DE OBRA?'}</span>
-            </h3>
+            </p>
 
             <div className="space-y-2 mb-8">
               {(programaConfig?.benefits || ['PRECIOS DE DISTRIBUIDOR', 'ENTREGA EN OBRA HOY']).map((benefit: string, idx: number) => (
@@ -96,9 +96,9 @@ const Footer: React.FC = () => {
 
         {/* Nuestras Líneas */}
         <div>
-          <h4 className="font-black mb-8 uppercase text-sm tracking-widest flex items-center gap-2" style={{ color: colors.primary }}>
+          <p className="font-black mb-8 uppercase text-sm tracking-widest flex items-center gap-2" style={{ color: colors.primary }}>
             <span className="w-8 h-1 rounded-full" style={{ backgroundColor: colors.secondary }}></span> NUESTRAS LÍNEAS
-          </h4>
+          </p>
           <ul className="space-y-4 text-xs font-black uppercase" style={{ color: colors.primary }}>
             {(footerSettings as any)?.featuredCategories?.length > 0 ? (
               (footerSettings as any).featuredCategories.map((cat: any) => (
@@ -124,9 +124,9 @@ const Footer: React.FC = () => {
 
         {/* Ayuda */}
         <div>
-          <h4 className="font-black mb-8 uppercase text-sm tracking-widest flex items-center gap-2" style={{ color: colors.primary }}>
+          <p className="font-black mb-8 uppercase text-sm tracking-widest flex items-center gap-2" style={{ color: colors.primary }}>
             <span className="w-8 h-1 rounded-full" style={{ backgroundColor: colors.secondary }}></span> INSTITUCIONAL
-          </h4>
+          </p>
           <ul className="space-y-4 text-xs text-gray-500 font-bold uppercase">
             <li><Link href="/nosotros" className="hover:opacity-80">Sobre Nosotros</Link></li>
             <li><Link href="/faq" className="hover:opacity-80">Preguntas Frecuentes</Link></li>
