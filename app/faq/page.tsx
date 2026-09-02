@@ -4,7 +4,7 @@ export const metadata = {
   title: 'Preguntas Frecuentes | Electro Flor',
   description: 'Resuelve tus dudas sobre envíos, garantías y métodos de pago.',
   alternates: {
-    canonical: '/faq',
+    canonical: 'https://www.electroflorperu.com/faq',
   },
 };
 

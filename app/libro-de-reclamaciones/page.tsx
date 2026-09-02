@@ -4,7 +4,7 @@ export const metadata = {
   title: 'Libro de Reclamaciones | Electro Flor',
   description: 'Libro de reclamaciones virtual de Electro Flor.',
   alternates: {
-    canonical: '/libro-de-reclamaciones',
+    canonical: 'https://www.electroflorperu.com/libro-de-reclamaciones',
   },
 };
 

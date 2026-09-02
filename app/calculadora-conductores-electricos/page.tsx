@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: 'Calculadora gratuita de sección de cables y caída de tensión. Ingresa la distancia, voltaje y potencia para obtener el calibre recomendado (AWG/mm²) al instante.',
   keywords: ['calculadora cables', 'conductores eléctricos', 'caída de tensión', 'AWG', 'mm2', 'electricidad', 'Perú'],
   alternates: {
-    canonical: '/calculadora-conductores-electricos',
+    canonical: 'https://www.electroflorperu.com/calculadora-conductores-electricos',
   },
   openGraph: {
     title: 'Calculadora de Conductores Eléctricos - Electro Flor',

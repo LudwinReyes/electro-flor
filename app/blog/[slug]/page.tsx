@@ -30,10 +30,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${post.title} | Blog de Electro Flor`,
     description: post.excerpt,
+    alternates: {
+      canonical: `https://www.electroflorperu.com/blog/${slug}`,
+    },
     openGraph: {
       type: 'article',
       title: `${post.title} | Blog de Electro Flor`,
       description: post.excerpt,
+      url: `https://www.electroflorperu.com/blog/${slug}`,
       images: [{ url: post.image }],
     },
   };

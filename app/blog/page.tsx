@@ -7,7 +7,10 @@ import { ChevronRight, Calendar, Clock, User, ArrowRight } from 'lucide-react';
 export const metadata = {
   title: 'Blog de Iluminación y Material Eléctrico | Electro Flor',
   description: 'Artículos de soporte, guías técnicas y comparativas sobre campanas industriales LED, cables eléctricos y distribución en baja tensión. Asesoría experta.',
-  keywords: ['blog iluminacion industrial', 'campanas led industriales', 'guias electricas', 'material electrico peru']
+  keywords: ['blog iluminacion industrial', 'campanas led industriales', 'guias electricas', 'material electrico peru'],
+  alternates: {
+    canonical: 'https://www.electroflorperu.com/blog',
+  },
 };
 
 export default function BlogLandingPage() {

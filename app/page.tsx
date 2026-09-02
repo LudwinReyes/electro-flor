@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: 'Iluminación y Material Eléctrico en Perú | ELECTRO FLOR',
   description: 'Distribuidor de material eléctrico e iluminación LED en Lima, Perú. Venta de cables, reflectores y herramientas. Cotiza en línea con stock garantizado.',
   alternates: {
-    canonical: '/',
+    canonical: 'https://www.electroflorperu.com',
   },
 };
 
