@@ -66,14 +66,14 @@ export default async function BlogPostPage({ params }: Props) {
     'author': {
       '@type': 'Organization',
       'name': 'Electro Flor',
-      'url': 'https://electroflorperu.com'
+      'url': 'https://www.electroflorperu.com'
     },
     'publisher': {
       '@type': 'Organization',
       'name': 'Electro Flor',
       'logo': {
         '@type': 'ImageObject',
-        'url': 'https://electroflorperu.com/media/favicon.png'
+        'url': 'https://www.electroflorperu.com/media/favicon.png'
       }
     },
     'description': post.excerpt
