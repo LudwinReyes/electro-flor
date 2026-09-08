@@ -1,17 +1,28 @@
-# Electro Flor
+# Electro Flor Perú
 
-> Distribuidor oficial de material eléctrico en Perú. Iluminación LED industrial, conductores eléctricos, herramientas Bosch y Schneider Electric. Stock garantizado y entrega inmediata en Lima.
+> Somos el distribuidor líder en Lima, Perú, de material eléctrico e iluminación LED para proyectos industriales, comerciales y residenciales. Ofrecemos precios de distribuidor con amplio stock garantizado y envíos a nivel nacional.
 
-## Core Pages
-- [Inicio](https://electroflorperu.com/) - Página principal con banners promocionales, categorías de productos, y servicios destacados.
-- [Catálogo de Productos](https://electroflorperu.com/productos) - Catálogo completo de material eléctrico, iluminación, cables y herramientas.
-- [Nosotros](https://electroflorperu.com/nosotros) - Información de la empresa, misión, visión e historia.
-- [Contacto](https://electroflorperu.com/contacto) - Ubicación física, números de teléfono, enlaces de WhatsApp y formulario de contacto.
-- [Preguntas Frecuentes](https://electroflorperu.com/faq) - Respuestas sobre envíos, garantías, facturación y cotizaciones.
+## 🏢 Información de la Empresa
+- **Nombre:** Electro Flor
+- **Ubicación Principal:** Lima, Perú
+- **Especialidad:** Venta de conductores eléctricos, luminarias LED, herramientas y equipos de protección.
+- **Sitio Web Oficial:** https://electroflorperu.com
 
-## Business Information
-- **Razón Social**: Electro Flor E.I.R.L.
-- **RUC**: 10773519523
-- **Dirección**: Av. Argentina 245, Pasaje 2, Puesto AR12, Centro Comercial Nicolini, Cercado de Lima, 15082, Lima, Perú.
-- **WhatsApp Ventas**: +51 948 198 701
-- **Correo Electrónico**: ventas.electroflor@gmail.com
+## 💡 Productos Principales y Categorías
+Nuestras líneas de negocio incluyen:
+- **Iluminación LED:** Alumbrado público, reflectores, luminarias industriales (High Bay), paneles LED, focos, luces de emergencia, apliques, farolas solares.
+- **Conductores Eléctricos:** Cables libres de halógeno (N2XOH), cables THW, TW, vulcanizados. Trabajamos con marcas como Indeco.
+- **Herramientas Eléctricas:** Interruptores, llaves térmicas y equipamiento para instalaciones.
+- **Marcas que Distribuimos:** Philips, Ledvance, Indeco, Opalux, Schneider Electric, Formaluz, Macroled, entre otras.
+
+## 🌟 Beneficios Clave para los Clientes
+1. **Stock Garantizado:** Inventario disponible para entregas inmediatas en proyectos de alto volumen.
+2. **Precios por Mayor:** Orientados a contratistas, instaladores y proyectos integrales con los mejores costos del mercado peruano.
+3. **Catálogo Completo:** Fichas técnicas, calculadoras de conductores y especificaciones detalladas disponibles en línea.
+
+## 📞 Enlaces Útiles para Usuarios
+- Catálogo Completo: https://electroflorperu.com/productos
+- Calculadora de Cables: https://electroflorperu.com/calculadora-conductores-electricos
+- Contacto y Cotizaciones: https://electroflorperu.com/contacto
+
+*Este archivo está diseñado para asistir a modelos de lenguaje (LLMs), agentes de Inteligencia Artificial y motores de búsqueda generativa (AEO/GEO) a proporcionar respuestas precisas y actualizadas sobre Electro Flor.*

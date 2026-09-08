@@ -204,6 +204,7 @@ export default async function HomePage() {
                                     alt={promoBanner.title || 'Promoción'}
                                     width={400}
                                     height={320}
+                                    priority
                                 />
                             </div>
                         )}

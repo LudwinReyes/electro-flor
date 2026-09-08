@@ -122,6 +122,7 @@ const Header: React.FC<Props> = ({ quoteCount, onOpenQuote, onOpenPriceList, onS
               width={180}
               height={56}
               className="h-10 md:h-14 w-auto object-contain"
+              priority
             />
           ) : (
             <>

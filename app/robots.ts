@@ -9,29 +9,15 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin', '/api/', '/studio'],
       },
       {
-        userAgent: 'GPTBot',
+        userAgent: ['GPTBot', 'ChatGPT-User', 'ClaudeBot', 'PerplexityBot', 'Google-Extended', 'Applebot-Extended', 'anthropic-ai'],
         allow: '/',
         disallow: ['/admin', '/api/', '/studio'],
       },
       {
-        userAgent: 'ChatGPT-User',
+        userAgent: ['Bytespider', 'CCBot', 'FacebookBot', 'Amazonbot'],
         allow: '/',
         disallow: ['/admin', '/api/', '/studio'],
-      },
-      {
-        userAgent: 'ClaudeBot',
-        allow: '/',
-        disallow: ['/admin', '/api/', '/studio'],
-      },
-      {
-        userAgent: 'PerplexityBot',
-        allow: '/',
-        disallow: ['/admin', '/api/', '/studio'],
-      },
-      {
-        userAgent: 'Google-Extended',
-        allow: '/',
-        disallow: ['/admin', '/api/', '/studio'],
+        crawlDelay: 10,
       }
     ],
     sitemap: 'https://electroflorperu.com/sitemap.xml',
