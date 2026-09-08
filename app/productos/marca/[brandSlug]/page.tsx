@@ -24,7 +24,7 @@ export async function generateMetadata({
   const rawDescription = brand?.seoDescription || brand?.description || `✓ Distribuidor de la marca ${formattedBrand} en Lima, Perú. Stock garantizado, fichas técnicas y precios especiales para contratistas. Cotiza en Electro Flor.`;
   const description = rawDescription.length > 160 ? rawDescription.slice(0, 157).trim() + '...' : rawDescription;
 
-  const canonicalUrl = `https://www.electroflorperu.com/productos/marca/${brandSlug}`;
+  const canonicalUrl = `https://electroflorperu.com/productos/marca/${brandSlug}`;
 
   return {
     title,
@@ -79,19 +79,19 @@ export default async function Page({
         '@type': 'ListItem',
         position: 1,
         name: 'Inicio',
-        item: 'https://www.electroflorperu.com/'
+        item: 'https://electroflorperu.com/'
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Marcas',
-        item: 'https://www.electroflorperu.com/marcas'
+        item: 'https://electroflorperu.com/marcas'
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: brandName,
-        item: `https://www.electroflorperu.com/productos/marca/${brandSlug}`
+        item: `https://electroflorperu.com/productos/marca/${brandSlug}`
       }
     ]
   };
@@ -101,13 +101,13 @@ export default async function Page({
     '@type': 'CollectionPage',
     name: brand?.seoTitle || `Productos ${brandName} en Perú`,
     description: brand?.seoDescription || brand?.description,
-    url: `https://www.electroflorperu.com/productos/marca/${brandSlug}`,
+    url: `https://electroflorperu.com/productos/marca/${brandSlug}`,
     mainEntity: {
       '@type': 'ItemList',
       itemListElement: brandProducts.slice(0, 10).map((prod: any, idx: number) => ({
         '@type': 'ListItem',
         position: idx + 1,
-        url: `https://www.electroflorperu.com/producto/${prod.slug || prod.id}`,
+        url: `https://electroflorperu.com/producto/${prod.slug || prod.id}`,
         name: prod.name
       }))
     }

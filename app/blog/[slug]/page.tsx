@@ -31,13 +31,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${post.title} | Blog de Electro Flor`,
     description: post.excerpt,
     alternates: {
-      canonical: `https://www.electroflorperu.com/blog/${slug}`,
+      canonical: `https://electroflorperu.com/blog/${slug}`,
     },
     openGraph: {
       type: 'article',
       title: `${post.title} | Blog de Electro Flor`,
       description: post.excerpt,
-      url: `https://www.electroflorperu.com/blog/${slug}`,
+      url: `https://electroflorperu.com/blog/${slug}`,
       images: [{ url: post.image }],
     },
   };
@@ -66,14 +66,14 @@ export default async function BlogPostPage({ params }: Props) {
     'author': {
       '@type': 'Organization',
       'name': 'Electro Flor',
-      'url': 'https://www.electroflorperu.com'
+      'url': 'https://electroflorperu.com'
     },
     'publisher': {
       '@type': 'Organization',
       'name': 'Electro Flor',
       'logo': {
         '@type': 'ImageObject',
-        'url': 'https://www.electroflorperu.com/media/favicon.png'
+        'url': 'https://electroflorperu.com/media/favicon.png'
       }
     },
     'description': post.excerpt

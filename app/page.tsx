@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: 'Iluminación y Material Eléctrico en Perú | ELECTRO FLOR',
   description: 'Distribuidor de material eléctrico e iluminación LED en Lima, Perú. Venta de cables, reflectores y herramientas. Cotiza en línea con stock garantizado.',
   alternates: {
-    canonical: 'https://www.electroflorperu.com',
+    canonical: 'https://electroflorperu.com',
   },
 };
 
@@ -45,9 +45,9 @@ export default async function HomePage() {
         '@type': 'HardwareStore',
         name: 'Electro Flor E.I.R.L.',
         alternateName: 'Electro Flor',
-        image: 'https://www.electroflorperu.com/media/Logo%20Electro%20Flor.png',
-        '@id': 'https://www.electroflorperu.com/#localbusiness',
-        url: 'https://www.electroflorperu.com',
+        image: 'https://electroflorperu.com/media/Logo%20Electro%20Flor.png',
+        '@id': 'https://electroflorperu.com/#localbusiness',
+        url: 'https://electroflorperu.com',
         telephone: ['+51 948 198 701', '+51 904 162 516'],
         email: ['ventas.electroflor@gmail.com', 'elmervazquezguevara@gmail.com'],
         priceRange: '$$',
@@ -82,11 +82,11 @@ export default async function HomePage() {
     const organizationSchema = {
         '@context': 'https://schema.org',
         '@type': 'Organization',
-        '@id': 'https://www.electroflorperu.com/#organization',
+        '@id': 'https://electroflorperu.com/#organization',
         name: 'Electro Flor E.I.R.L.',
         alternateName: 'Electro Flor',
-        url: 'https://www.electroflorperu.com',
-        logo: 'https://www.electroflorperu.com/media/Logo%20Electro%20Flor.png',
+        url: 'https://electroflorperu.com',
+        logo: 'https://electroflorperu.com/media/Logo%20Electro%20Flor.png',
         contactPoint: {
             '@type': 'ContactPoint',
             'telephone': '+51 948 198 701',

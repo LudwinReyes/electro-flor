@@ -4,7 +4,7 @@ export const metadata = {
   title: 'Contacto | Electro Flor',
   description: 'Contáctanos para cotizaciones, soporte técnico o consultas corporativas.',
   alternates: {
-    canonical: 'https://www.electroflorperu.com/contacto',
+    canonical: 'https://electroflorperu.com/contacto',
   },
 };
 

@@ -6,7 +6,7 @@ export const metadata = {
   title: 'Catálogo de Productos de Iluminación y Material Eléctrico | Electro Flor',
   description: 'Navega por nuestro catálogo de materiales eléctricos e iluminación LED en Perú. Precios por mayor, stock garantizado y envíos a todo el país.',
   alternates: {
-    canonical: 'https://www.electroflorperu.com/productos',
+    canonical: 'https://electroflorperu.com/productos',
   },
 };
 

@@ -4,7 +4,7 @@ export const metadata = {
   title: 'Nosotros | Electro Flor',
   description: 'Conoce más sobre Electro Flor, líderes en distribución de materiales eléctricos en el Perú.',
   alternates: {
-    canonical: 'https://www.electroflorperu.com/nosotros',
+    canonical: 'https://electroflorperu.com/nosotros',
   },
 };
 

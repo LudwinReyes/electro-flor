@@ -9,7 +9,7 @@ export const metadata = {
   description: 'Artículos de soporte, guías técnicas y comparativas sobre campanas industriales LED, cables eléctricos y distribución en baja tensión. Asesoría experta.',
   keywords: ['blog iluminacion industrial', 'campanas led industriales', 'guias electricas', 'material electrico peru'],
   alternates: {
-    canonical: 'https://www.electroflorperu.com/blog',
+    canonical: 'https://electroflorperu.com/blog',
   },
 };
 

@@ -24,7 +24,7 @@ export async function generateMetadata({
   const rawDescription = category?.seoDescription || category?.description || `Encuentra productos de ${formattedCategory} con stock garantizado en Lima, Perú. Cotiza con los mejores precios de distribuidor en Electro Flor.`;
   const description = rawDescription.length > 160 ? rawDescription.slice(0, 157).trim() + '...' : rawDescription;
 
-  const canonicalUrl = `https://www.electroflorperu.com/productos/${categorySlug}`;
+  const canonicalUrl = `https://electroflorperu.com/productos/${categorySlug}`;
 
   return {
     title,
@@ -79,19 +79,19 @@ export default async function Page({
         '@type': 'ListItem',
         position: 1,
         name: 'Inicio',
-        item: 'https://www.electroflorperu.com/'
+        item: 'https://electroflorperu.com/'
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Productos',
-        item: 'https://www.electroflorperu.com/productos'
+        item: 'https://electroflorperu.com/productos'
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: categoryName,
-        item: `https://www.electroflorperu.com/productos/${categorySlug}`
+        item: `https://electroflorperu.com/productos/${categorySlug}`
       }
     ]
   };
@@ -101,13 +101,13 @@ export default async function Page({
     '@type': 'CollectionPage',
     name: category?.seoTitle || `${categoryName} en Perú`,
     description: category?.seoDescription || category?.description,
-    url: `https://www.electroflorperu.com/productos/${categorySlug}`,
+    url: `https://electroflorperu.com/productos/${categorySlug}`,
     mainEntity: {
       '@type': 'ItemList',
       itemListElement: categoryProducts.slice(0, 10).map((prod: any, idx: number) => ({
         '@type': 'ListItem',
         position: idx + 1,
-        url: `https://www.electroflorperu.com/producto/${prod.slug || prod.id}`,
+        url: `https://electroflorperu.com/producto/${prod.slug || prod.id}`,
         name: prod.name
       }))
     }

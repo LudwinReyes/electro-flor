@@ -29,7 +29,7 @@ export async function generateMetadata({
     title,
     description,
     alternates: {
-      canonical: `https://www.electroflorperu.com/ficha-tecnica/${slug}`,
+      canonical: `https://electroflorperu.com/ficha-tecnica/${slug}`,
     },
     openGraph: {
       title,

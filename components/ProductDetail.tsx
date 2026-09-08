@@ -146,7 +146,7 @@ const ProductDetail: React.FC<Props> = ({ initialProduct = null, initialRelatedP
       return acc;
     }, {}) : (product.specifications || {});
 
-  const productPageUrl = `https://www.electroflorperu.com/producto/${product.slug}`;
+  const productPageUrl = `https://electroflorperu.com/producto/${product.slug}`;
   const whatsappMessage = SITE_MESSAGES.whatsapp.stockInquiry(product.name, productPageUrl);
   const whatsappUrl = `https://wa.me/${contact.phone.whatsapp}?text=${encodeURIComponent(whatsappMessage)}`;
 

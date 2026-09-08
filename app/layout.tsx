@@ -12,7 +12,7 @@ import { getProducts } from '../services/sanity';
 import GlobalModalsWrapper from '../components/GlobalModalsWrapper';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.electroflorperu.com'),
+  metadataBase: new URL('https://electroflorperu.com'),
   title: {
     default: 'ELECTRO FLOR | Material Eléctrico e Iluminación LED en Perú',
     template: '%s',
@@ -27,12 +27,12 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    url: 'https://www.electroflorperu.com',
+    url: 'https://electroflorperu.com',
     siteName: 'ELECTRO FLOR',
     locale: 'es_PE',
     images: [
       {
-        url: 'https://www.electroflorperu.com/media/Logo%20Electro%20Flor.png',
+        url: 'https://electroflorperu.com/media/Logo%20Electro%20Flor.png',
         width: 1200,
         height: 630,
         alt: 'ELECTRO FLOR | Material Eléctrico e Iluminación LED',

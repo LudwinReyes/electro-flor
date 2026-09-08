@@ -41,7 +41,7 @@ export async function generateMetadata({
   // Imagen principal del producto (priorizar la primera imagen)
   const mainImage = product.image || (product.images && product.images[0]) || '';
 
-  const canonicalUrl = `https://www.electroflorperu.com/producto/${product.slug || id}`;
+  const canonicalUrl = `https://electroflorperu.com/producto/${product.slug || id}`;
 
   return {
     title: seoTitle,
@@ -197,21 +197,21 @@ export default async function Page({
           '@type': 'ListItem',
           'position': 1,
           'name': 'Inicio',
-          'item': 'https://www.electroflorperu.com/'
+          'item': 'https://electroflorperu.com/'
         },
         {
           '@type': 'ListItem',
           'position': 2,
           'name': product.category || 'Productos',
           'item': product.categorySlug 
-            ? `https://www.electroflorperu.com/productos/${product.categorySlug}` 
-            : 'https://www.electroflorperu.com/productos'
+            ? `https://electroflorperu.com/productos/${product.categorySlug}` 
+            : 'https://electroflorperu.com/productos'
         },
         {
           '@type': 'ListItem',
           'position': 3,
           'name': product.name,
-          'item': `https://www.electroflorperu.com/producto/${product.slug || id}`
+          'item': `https://electroflorperu.com/producto/${product.slug || id}`
         }
       ]
     };
