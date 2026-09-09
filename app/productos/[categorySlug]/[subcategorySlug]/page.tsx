@@ -127,6 +127,9 @@ export default async function Page({
           initialProducts={products || []} 
           initialCategories={categories || []} 
           initialBrands={brands || []} 
+          initialCategorySlug={categorySlug}
+          initialSubcategorySlug={subcategorySlug}
+          initialCategoryName={subcategoryName}
         />
       </Suspense>
     </>

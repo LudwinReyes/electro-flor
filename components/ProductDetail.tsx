@@ -146,9 +146,10 @@ const ProductDetail: React.FC<Props> = ({ initialProduct = null, initialRelatedP
       return acc;
     }, {}) : (product.specifications || {});
 
-  const productPageUrl = `https://electroflorperu.com/producto/${product.slug}`;
-  const whatsappMessage = SITE_MESSAGES.whatsapp.stockInquiry(product.name, productPageUrl);
-  const whatsappUrl = `https://wa.me/${contact.phone.whatsapp}?text=${encodeURIComponent(whatsappMessage)}`;
+  const productPageUrl = `https://electroflorperu.com/producto/${product.slug || ''}`;
+  const whatsappMessage = SITE_MESSAGES.whatsapp.stockInquiry(product.name || '', productPageUrl);
+  const whatsappPhone = contact?.phone?.whatsapp || CONTACT_INFO.phone.whatsapp;
+  const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappMessage)}`;
 
   // Extraer ID del video de YouTube
   const getYouTubeEmbedUrl = (url: string) => {
@@ -180,7 +181,9 @@ const ProductDetail: React.FC<Props> = ({ initialProduct = null, initialRelatedP
           <div className="flex items-center gap-2 text-[10px] md:text-[11px] font-black text-[#002D62] uppercase tracking-tighter">
             <Link href="/" className="hover:opacity-80">INICIO</Link>
             <ChevronRight size={12} strokeWidth={3} />
-            <Link href="/productos" className="hover:opacity-80">{product.category.toUpperCase()}</Link>
+            <Link href="/productos" className="hover:opacity-80">
+              {((typeof product.category === 'string' ? product.category : (product.category as any)?.name) || 'PRODUCTOS').toUpperCase()}
+            </Link>
             <ChevronRight size={12} strokeWidth={3} />
             <span className="opacity-60 truncate max-w-[150px] md:max-w-none">{product.name}</span>
           </div>
@@ -331,21 +334,21 @@ const ProductDetail: React.FC<Props> = ({ initialProduct = null, initialRelatedP
                 <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">COMPARTIR:</span>
                 <div className="flex gap-4 text-gray-400">
                   <a
-                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productPageUrl)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-[#002D62]"
                     title="Compartir en Facebook"
                   ><Facebook size={18} /></a>
                   <a
-                    href={`https://wa.me/?text=${encodeURIComponent(`Mira este producto: ${product.name} - ELECTRO FLOR ${window.location.href}`)}`}
+                    href={`https://wa.me/?text=${encodeURIComponent(`Mira este producto: ${product.name} - ELECTRO FLOR ${productPageUrl}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-[#25D366]"
                     title="Compartir en WhatsApp"
                   ><i className="fab fa-whatsapp text-lg"></i></a>
                   <a
-                    href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(product.name)}`}
+                    href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(productPageUrl)}&title=${encodeURIComponent(product.name)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-[#002D62]"
@@ -353,10 +356,12 @@ const ProductDetail: React.FC<Props> = ({ initialProduct = null, initialRelatedP
                   ><Linkedin size={18} /></a>
                   <button
                     onClick={() => {
-                      navigator.clipboard.writeText(window.location.href);
-                      alert('Enlace copiado al portapapeles');
+                      if (typeof navigator !== 'undefined' && navigator.clipboard) {
+                        navigator.clipboard.writeText(typeof window !== 'undefined' ? window.location.href : productPageUrl);
+                        alert('Enlace copiado al portapapeles');
+                      }
                     }}
-                    className="hover:text-[#002D62]"
+                    className="hover:text-[#002D62] cursor-pointer"
                     title="Copiar enlace"
                   ><Share2 size={18} /></button>
                 </div>

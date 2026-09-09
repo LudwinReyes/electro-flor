@@ -34,19 +34,20 @@ export async function generateMetadata({
   if (!seoTitle.toLowerCase().includes('electro flor')) {
     seoTitle = `${seoTitle} | Electro Flor`;
   }
-  const categoryName = product.category || 'Material Eléctrico';
-  const rawDesc = product.seo?.description || (product.shortDescription ? `${product.shortDescription}` : `✓ ${product.name} de ${product.brand}. ${categoryName} con stock garantizado en Lima y envíos a todo el Perú. Cotiza ahora.`);
+  const brandName = typeof product.brand === 'string' ? product.brand : product.brand?.name || 'Electro Flor';
+  const categoryName = typeof product.category === 'string' ? product.category : product.category?.name || 'Material Eléctrico';
+  const rawDesc = product.seo?.description || (product.shortDescription ? `${product.shortDescription}` : `✓ ${product.name} de ${brandName}. ${categoryName} con stock garantizado en Lima y envíos a todo el Perú. Cotiza ahora.`);
   const seoDesc = rawDesc.length > 160 ? rawDesc.slice(0, 157).trim() + '...' : rawDesc;
   
   // Imagen principal del producto (priorizar la primera imagen)
-  const mainImage = product.image || (product.images && product.images[0]) || '';
+  const mainImage = product.image || (Array.isArray(product.images) && product.images[0]) || '';
 
   const canonicalUrl = `https://electroflorperu.com/producto/${product.slug || id}`;
 
   return {
     title: seoTitle,
     description: seoDesc,
-    keywords: product.seo?.keywords || [product.name, product.brand, 'material eléctrico', 'Perú', 'comprar'],
+    keywords: product.seo?.keywords || [product.name, brandName, 'material eléctrico', 'Perú', 'comprar'],
     robots: {
       index: true,
       follow: true,
@@ -83,16 +84,20 @@ export async function generateMetadata({
 }
 
 function generateProductSku(product: any): string {
-  if (product.code && product.code.length <= 20) {
-    return product.code.toUpperCase();
+  const code = product.code ? String(product.code).trim() : '';
+  if (code && code.length <= 20) {
+    return code.toUpperCase();
   }
   
   // Si no tiene código o es muy largo, generar uno único y corto
-  const brand = (product.brand || 'EF').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3);
-  const category = (product.category || 'PROD').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3);
+  const rawBrand = typeof product.brand === 'string' ? product.brand : product.brand?.name || 'EF';
+  const rawCategory = typeof product.category === 'string' ? product.category : product.category?.name || 'PROD';
+  
+  const brand = String(rawBrand || 'EF').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3) || 'EF';
+  const category = String(rawCategory || 'PROD').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3) || 'PROD';
   
   // Usar un hash simple del slug o del ID para garantizar unicidad y brevedad
-  const source = product.slug || product._id || product.id || 'PRODUCT';
+  const source = String(product.slug || product._id || product.id || 'PRODUCT');
   let hash = 0;
   for (let i = 0; i < source.length; i++) {
     hash = (hash << 5) - hash + source.charCodeAt(i);
@@ -127,32 +132,36 @@ export default async function Page({
   
   if (product) {
     // Imagen principal del producto SIEMPRE primero
-    const mainImage = product.image || (product.images && product.images[0]) || '';
-    const allImages = product.images && product.images.length > 0
-      ? [mainImage, ...product.images.filter((img: string) => img !== mainImage)].slice(0, 5)
+    const mainImage = product.image || (Array.isArray(product.images) && product.images[0]) || '';
+    const rawImages = Array.isArray(product.images) ? product.images : [];
+    const allImages = rawImages.length > 0
+      ? [mainImage, ...rawImages.filter((img: any) => typeof img === 'string' && img !== mainImage)].slice(0, 5)
       : (mainImage ? [mainImage] : []);
       
+    const brandName = typeof product.brand === 'string' ? product.brand : product.brand?.name || 'Electro Flor';
+    const categoryName = typeof product.category === 'string' ? product.category : product.category?.name || 'Material Eléctrico';
+
     const seoDescription = (() => {
-      if (product.shortDescription) return product.shortDescription;
+      if (product.shortDescription) return String(product.shortDescription);
       if (typeof product.description === 'string') return product.description.slice(0, 160);
       if (Array.isArray(product.description)) {
         return product.description
-          .filter((b: any) => b._type === 'block')
-          .map((b: any) => b.children?.map((c: any) => c.text).join(''))
+          .filter((b: any) => b && b._type === 'block')
+          .map((b: any) => (Array.isArray(b.children) ? b.children.map((c: any) => c?.text || '').join('') : ''))
           .join(' ')
           .slice(0, 160);
       }
-      return `${product.name} - ${product.brand}. Disponible con stock garantizado en ELECTRO FLOR.`;
+      return `${product.name || 'Producto'} - ${brandName}. Disponible con stock garantizado en ELECTRO FLOR.`;
     })();
 
     // Extraer especificaciones para enriquecer el schema
     const specs = product.specifications || {};
     const normalizedSpecs: Record<string, string> = Array.isArray(specs)
       ? specs.reduce((acc: Record<string, string>, spec: any) => {
-        if (spec.label && spec.value) acc[spec.label] = spec.value;
+        if (spec && spec.label && spec.value) acc[String(spec.label)] = String(spec.value);
         return acc;
       }, {})
-      : (specs || {});
+      : (typeof specs === 'object' && specs !== null ? specs : {});
 
     const wattage = normalizedSpecs.potencia || normalizedSpecs.Potencia || '';
     const voltage = normalizedSpecs.voltaje || normalizedSpecs.Voltaje || '';
@@ -165,7 +174,7 @@ export default async function Page({
       ...(ipRating ? [{ '@type': 'PropertyValue', name: 'Protección IP', value: ipRating }] : []),
     ];
 
-    // Schema Product con aggregateRating (satisface Google sin necesitar price)
+    // Schema Product seguro y conforme a las directrices de Google
     const jsonLd: any = {
       '@context': 'https://schema.org',
       '@type': 'Product',
@@ -176,16 +185,9 @@ export default async function Page({
       mpn: generateProductSku(product),
       brand: {
         '@type': 'Brand',
-        name: product.brand,
+        name: brandName,
       },
-      category: product.category || 'Material Eléctrico',
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: product.slug === optimizedSlug ? '4.9' : '4.8',
-        reviewCount: product.slug === optimizedSlug ? '12' : '1',
-        bestRating: '5',
-        worstRating: '1',
-      },
+      category: categoryName,
       ...(additionalProps.length > 0 ? { additionalProperty: additionalProps } : {}),
     };
 
@@ -202,7 +204,7 @@ export default async function Page({
         {
           '@type': 'ListItem',
           'position': 2,
-          'name': product.category || 'Productos',
+          'name': categoryName || 'Productos',
           'item': product.categorySlug 
             ? `https://electroflorperu.com/productos/${product.categorySlug}` 
             : 'https://electroflorperu.com/productos'
@@ -216,64 +218,6 @@ export default async function Page({
       ]
     };
 
-    let faqJsonLd = null;
-    if (product.slug === optimizedSlug) {
-      faqJsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        'mainEntity': [
-          {
-            '@type': 'Question',
-            'name': '¿Es equivalente o reemplazo de los modelos Philips BY320P o BY321P?',
-            'acceptedAnswer': {
-              '@type': 'Answer',
-              'text': 'Sí, la campana SmartBright G2 BY239P de 100W es el reemplazo y alternativa directa más eficiente para luminarias Philips GreenUp BY320P y BY321P de 100W, ofreciendo idéntico rendimiento lumínico (13,000 lm) con menor costo y certificación IP65.'
-            }
-          },
-          {
-            '@type': 'Question',
-            'name': '¿Cuántos metros cuadrados ilumina una campana LED Philips de 100W?',
-            'acceptedAnswer': {
-              '@type': 'Answer',
-              'text': 'Instalada a una altura estándar de 6 metros, la campana cubre eficientemente un área de 25 a 36 metros cuadrados, proporcionando niveles óptimos de iluminación (luxes) para almacenes comerciales de tránsito general.'
-            }
-          },
-          {
-            '@type': 'Question',
-            'name': '¿Viene con garantía de fábrica?',
-            'acceptedAnswer': {
-              '@type': 'Answer',
-              'text': 'Sí, cuenta con 3 años de garantía oficial respaldada por Philips Perú. Ante cualquier desperfecto de fabricación, ELECTRO FLOR gestionará la garantía para brindarte un cambio inmediato.'
-            }
-          },
-          {
-            '@type': 'Question',
-            'name': '¿La luminaria puede instalarse a la intemperie?',
-            'acceptedAnswer': {
-              '@type': 'Answer',
-              'text': 'Sí, gracias a su clasificación IP65, es completamente hermética contra el polvo y chorros de agua. Se puede instalar con total seguridad en hangares semiabiertos, techos industriales o áreas expuestas a altos niveles de polvo y humedad.'
-            }
-          },
-          {
-            '@type': 'Question',
-            'name': '¿Es regulable (dimmerizable)?',
-            'acceptedAnswer': {
-              '@type': 'Answer',
-              'text': 'No, el modelo SmartBright Highbay G2 BY239P es del tipo ON/OFF (no dimerizable), lo que simplifica su instalación y reduce la posibilidad de fallas en el circuito.'
-            }
-          },
-          {
-            '@type': 'Question',
-            'name': '¿Viene lista para conectar a la red de 220V?',
-            'acceptedAnswer': {
-              '@type': 'Answer',
-              'text': 'Sí, incluye su propio cable de alimentación trifásico pelado en los extremos (Línea, Neutro y Tierra), listo para realizar el empalme directo a la caja de pase de 220V.'
-            }
-          }
-        ]
-      };
-    }
-
     jsonLdScript = (
       <>
         <script
@@ -284,12 +228,6 @@ export default async function Page({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
         />
-        {faqJsonLd && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-          />
-        )}
       </>
     );
   }

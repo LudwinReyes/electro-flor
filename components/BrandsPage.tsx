@@ -15,49 +15,52 @@ interface Brand {
     description?: string;
 }
 
-const BrandsPage: React.FC = () => {
+const PRIORITY_BRANDS = [
+    "LEDVANCE",
+    "NOVALAMPS",
+    "OPALUX",
+    "PHILIPS",
+    "SCHNEIDER",
+    "SHALUX LIGHTING"
+];
+
+const sortBrands = (data: Brand[]): Brand[] => {
+    return [...data].sort((a, b) => {
+        const nameA = (a.name || '').toUpperCase();
+        const nameB = (b.name || '').toUpperCase();
+
+        const indexA = PRIORITY_BRANDS.findIndex(p => nameA.includes(p));
+        const indexB = PRIORITY_BRANDS.findIndex(p => nameB.includes(p));
+
+        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+        if (indexA !== -1) return -1;
+        if (indexB !== -1) return 1;
+
+        return nameA.localeCompare(nameB);
+    });
+};
+
+interface Props {
+    initialBrands?: Brand[];
+}
+
+const BrandsPage: React.FC<Props> = ({ initialBrands = [] }) => {
     const { colors, siteSettings } = useSiteConfig();
-    const [brands, setBrands] = useState<Brand[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [brands, setBrands] = useState<Brand[]>(initialBrands.length > 0 ? sortBrands(initialBrands) : []);
+    const [loading, setLoading] = useState(initialBrands.length === 0);
 
     useEffect(() => {
+        if (initialBrands && initialBrands.length > 0) {
+            setBrands(sortBrands(initialBrands));
+            setLoading(false);
+            return;
+        }
+
         const fetchBrands = async () => {
             try {
                 const data = await getBrands();
                 if (data) {
-                    // Ordenar marcas: Prioridad específica primero, luego alfabético
-                    const PRIORITY_BRANDS = [
-                        "LEDVANCE",
-                        "NOVALAMPS",
-                        "OPALUX",
-                        "PHILIPS",
-                        "SCHNEIDER",
-                        "SHALUX LIGHTING"
-                    ];
-
-                    const sortedBrands = data.sort((a, b) => {
-                        const nameA = a.name.toUpperCase();
-                        const nameB = b.name.toUpperCase();
-
-                        // Buscar índice de prioridad (si existe)
-                        // Buscamos coincidencia parcial o exacta
-                        const indexA = PRIORITY_BRANDS.findIndex(p => nameA.includes(p));
-                        const indexB = PRIORITY_BRANDS.findIndex(p => nameB.includes(p));
-
-                        // Si ambas están en prioridad, ordenar por su posición en la lista PRIORITY
-                        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
-
-                        // Si solo A está en prioridad, va primero
-                        if (indexA !== -1) return -1;
-
-                        // Si solo B está en prioridad, va primero
-                        if (indexB !== -1) return 1;
-
-                        // Si ninguna es prioritaria, orden alfabético normal
-                        return nameA.localeCompare(nameB);
-                    });
-
-                    setBrands(sortedBrands);
+                    setBrands(sortBrands(data));
                 }
             } catch (error) {
                 console.error('Error fetching brands:', error);
@@ -66,7 +69,7 @@ const BrandsPage: React.FC = () => {
             }
         };
         fetchBrands();
-    }, []);
+    }, [initialBrands]);
 
     if (loading) {
         return (

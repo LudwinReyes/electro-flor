@@ -11,9 +11,10 @@ import { useQuote } from '../contexts/QuoteContext';
 
 interface Props {
   product: Product;
+  priority?: boolean;
 }
 
-const ProductCard: React.FC<Props> = ({ product }) => {
+const ProductCard: React.FC<Props> = ({ product, priority = false }) => {
   const { addToQuote } = useQuote();
   return (
     <div className="bg-white rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-lg transition-all group flex flex-col h-full overflow-hidden relative p-4">
@@ -34,10 +35,12 @@ const ProductCard: React.FC<Props> = ({ product }) => {
       <div className="relative h-52 md:h-64 flex items-center justify-center bg-gradient-to-b from-gray-50 to-white mb-4 w-full rounded-2xl overflow-hidden">
         <Link href={`/producto/${product.slug || product.id}`} className="w-full h-full flex items-center justify-center p-2">
           <Image
-            src={optimizeImage(product.image, 600)}
+            src={optimizeImage(product.image, 400) || '/media/Logo%20Electro%20Flor.png'}
             alt={product.name}
             width={300}
             height={300}
+            priority={priority}
+            sizes="(max-width: 640px) 50vw, (max-width: 1280px) 33vw, 25vw"
             className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
           />
         </Link>

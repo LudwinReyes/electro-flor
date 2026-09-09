@@ -7,6 +7,8 @@ import PriceListModal from './PriceListModal';
 import { useQuote } from '../contexts/QuoteContext';
 import { Product } from '../types';
 
+import { usePathname } from 'next/navigation';
+
 export default function GlobalModalsWrapper({
   children,
   products
@@ -14,6 +16,10 @@ export default function GlobalModalsWrapper({
   children: React.ReactNode;
   products: Product[];
 }) {
+  const pathname = usePathname();
+  const isFichaTecnica = pathname?.startsWith('/ficha-tecnica');
+  const isStudio = pathname?.startsWith('/admin');
+
   const {
     quoteItems,
     isQuoteOpen,
@@ -23,6 +29,33 @@ export default function GlobalModalsWrapper({
     removeFromQuote,
     clearQuote
   } = useQuote();
+
+  if (isStudio) {
+    return <main>{children}</main>;
+  }
+
+  if (isFichaTecnica) {
+    return (
+      <>
+        <main className="w-full flex-1">
+          {children}
+        </main>
+
+        <QuoteCart
+          isOpen={isQuoteOpen}
+          onClose={() => setIsQuoteOpen(false)}
+          items={quoteItems}
+          onRemove={removeFromQuote}
+          onClear={clearQuote}
+        />
+
+        <PriceListModal
+          isOpen={isPriceListOpen}
+          onClose={() => setIsPriceListOpen(false)}
+        />
+      </>
+    );
+  }
 
   return (
     <>

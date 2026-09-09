@@ -41,6 +41,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const parentCategories = categories.filter((c: any) => !c.parentCategory);
   const subCategories = categories.filter((c: any) => c.parentCategory);
 
+  const STATIC_LASTMOD = new Date('2026-09-08T00:00:00.000Z');
+
   const staticRoutes = [
     { path: '/nosotros', freq: 'monthly' as const, prio: 0.6 },
     { path: '/contacto', freq: 'monthly' as const, prio: 0.7 },
@@ -50,7 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/libro-de-reclamaciones', freq: 'yearly' as const, prio: 0.4 },
   ].map(route => ({
     url: `${baseUrl}${route.path}`,
-    lastModified: new Date(),
+    lastModified: STATIC_LASTMOD,
     changeFrequency: route.freq,
     priority: route.prio,
   }));
@@ -58,19 +60,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const sitemap: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
-      lastModified: new Date(),
+      lastModified: STATIC_LASTMOD,
       changeFrequency: 'daily',
       priority: 1,
     },
     {
       url: `${baseUrl}/productos`,
-      lastModified: new Date(),
+      lastModified: STATIC_LASTMOD,
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
       url: `${baseUrl}/calculadora-conductores-electricos`,
-      lastModified: new Date(),
+      lastModified: STATIC_LASTMOD,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
@@ -79,7 +81,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Categorías padre: /productos/iluminacion
     ...parentCategories.map((c: any) => ({
       url: `${baseUrl}/productos/${c.slug}`,
-      lastModified: c._updatedAt ? new Date(c._updatedAt) : new Date(),
+      lastModified: c._updatedAt ? new Date(c._updatedAt) : STATIC_LASTMOD,
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     })),
@@ -87,7 +89,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Subcategorías: /productos/iluminacion/apliques-de-exterior-decorativo
     ...subCategories.map((c: any) => ({
       url: `${baseUrl}/productos/${c.parentCategory}/${c.slug}`,
-      lastModified: c._updatedAt ? new Date(c._updatedAt) : new Date(),
+      lastModified: c._updatedAt ? new Date(c._updatedAt) : STATIC_LASTMOD,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     })),
@@ -95,7 +97,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Todas las marcas
     ...brands.map((b: any) => ({
       url: `${baseUrl}/productos/marca/${b.slug || b._id}`,
-      lastModified: b._updatedAt ? new Date(b._updatedAt) : new Date(),
+      lastModified: b._updatedAt ? new Date(b._updatedAt) : STATIC_LASTMOD,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     })),
@@ -103,7 +105,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Todos los productos
     ...products.map((p: any) => ({
       url: `${baseUrl}/producto/${p.slug || p._id}`,
-      lastModified: p._updatedAt ? new Date(p._updatedAt) : new Date(),
+      lastModified: p._updatedAt ? new Date(p._updatedAt) : STATIC_LASTMOD,
       changeFrequency: 'weekly' as const,
       priority: 0.9,
     })),

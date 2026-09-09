@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { Truck } from 'lucide-react';
 import { BRAND_COLORS } from '../config';
 import { getUrgencyBar } from '../services/sanity';
@@ -12,7 +13,12 @@ interface UrgencyConfig {
 }
 
 const ShipmentUrgencyBar: React.FC = () => {
+  const pathname = usePathname();
   const [config, setConfig] = useState<UrgencyConfig | null>(null);
+
+  if (pathname?.startsWith('/ficha-tecnica') || pathname?.startsWith('/admin')) {
+    return null;
+  }
 
   useEffect(() => {
     getUrgencyBar().then(data => {

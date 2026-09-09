@@ -128,6 +128,8 @@ export default async function Page({
           initialProducts={products || []} 
           initialCategories={categories || []} 
           initialBrands={brands || []} 
+          initialBrandSlug={brandSlug}
+          initialBrandName={brandName}
         />
       </Suspense>
     </>

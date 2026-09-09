@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin, ArrowRight, Construction, CheckCircle2 } from 'lucide-react';
 import { BRAND_COLORS, CONTACT_INFO } from '../config';
 import { useSiteConfig } from '../contexts/SiteConfigContext';
@@ -10,11 +11,16 @@ import { saveLead, getProgramaEspecialista } from '../services/sanity';
 import { optimizeImage } from '../utils/optimizeImage';
 
 const Footer: React.FC = () => {
+  const pathname = usePathname();
   const { siteSettings, footerSettings, colors, contact } = useSiteConfig();
   const [whatsappInput, setWhatsappInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [programaConfig, setProgramaConfig] = useState<any>(null);
+
+  if (pathname?.startsWith('/ficha-tecnica') || pathname?.startsWith('/admin')) {
+    return null;
+  }
 
   useEffect(() => {
     getProgramaEspecialista().then(config => {

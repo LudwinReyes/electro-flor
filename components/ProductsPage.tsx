@@ -17,16 +17,29 @@ interface Props {
   initialProducts?: any[];
   initialCategories?: any[];
   initialBrands?: any[];
+  initialCategorySlug?: string;
+  initialSubcategorySlug?: string;
+  initialBrandSlug?: string;
+  initialCategoryName?: string;
+  initialBrandName?: string;
 }
 
 const ProductsPage: React.FC<Props> = ({
   initialProducts,
   initialCategories,
-  initialBrands
+  initialBrands,
+  initialCategorySlug,
+  initialSubcategorySlug,
+  initialBrandSlug,
+  initialCategoryName,
+  initialBrandName
 }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { categorySlug, subcategorySlug, brandSlug } = useParams<{ categorySlug?: string; subcategorySlug?: string; brandSlug?: string }>();
+  const params = useParams<{ categorySlug?: string; subcategorySlug?: string; brandSlug?: string }>();
+  const categorySlug = initialCategorySlug || params.categorySlug;
+  const subcategorySlug = initialSubcategorySlug || params.subcategorySlug;
+  const brandSlug = initialBrandSlug || params.brandSlug;
 
   const searchUrl = searchParams.get('search') || '';
   const categoryUrl = searchParams.get('category') || '';
@@ -46,9 +59,24 @@ const ProductsPage: React.FC<Props> = ({
     (!initialBrands || initialBrands.length === 0)
   );
 
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [activeBrand, setActiveBrand] = useState<string | null>(null);
-  const [selectedBrands, setSelectedBrands] = useState<string[]>(brandUrl ? [brandUrl] : []);
+  // Determinar categoría y marca iniciales desde el servidor para SSR instantáneo
+  const serverCategoryName = initialCategoryName || (
+    subcategorySlug
+      ? (initialCategories || CATEGORIES).find((c: any) => c.slug === subcategorySlug)?.name || null
+      : categorySlug
+        ? (initialCategories || CATEGORIES).find((c: any) => c.slug === categorySlug)?.name || null
+        : null
+  );
+
+  const serverBrandName = initialBrandName || (
+    brandSlug
+      ? (initialBrands || BRANDS).find((b: any) => b.slug === brandSlug)?.name || null
+      : null
+  );
+
+  const [activeCategory, setActiveCategory] = useState<string | null>(serverCategoryName);
+  const [activeBrand, setActiveBrand] = useState<string | null>(serverBrandName);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>(brandUrl ? [brandUrl] : (serverBrandName ? [serverBrandName] : []));
 
   useEffect(() => {
     const loadData = async () => {
@@ -330,14 +358,16 @@ const ProductsPage: React.FC<Props> = ({
 
   const pageTitle = useMemo(() => {
     if (activeBrandData) return activeBrandData.name;
+    if (serverBrandName) return serverBrandName;
     if (activeCategoryData) return activeCategoryData.name;
-    return 'EXPLORA NUESTROS';
-  }, [activeBrandData, activeCategoryData]);
+    if (serverCategoryName) return serverCategoryName;
+    return 'CATÁLOGO DE MATERIAL';
+  }, [activeBrandData, activeCategoryData, serverBrandName, serverCategoryName]);
 
   const pageTitleHighlight = useMemo(() => {
-    if (activeBrandData || activeCategoryData) return '';
-    return 'PRODUCTOS';
-  }, [activeBrandData, activeCategoryData]);
+    if (activeBrandData || activeCategoryData || serverBrandName || serverCategoryName) return '';
+    return 'ELÉCTRICO E ILUMINACIÓN';
+  }, [activeBrandData, activeCategoryData, serverBrandName, serverCategoryName]);
 
   return (
     <div className={`bg-[${BRAND_COLORS.background.alt}] min-h-screen relative pb-10`}>
@@ -397,7 +427,7 @@ const ProductsPage: React.FC<Props> = ({
         <div className="flex-grow space-y-6">
           <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between gap-4">
             <h2 className={`font-black text-xs md:text-sm text-[${BRAND_COLORS.primary}] uppercase tracking-wide`}>
-              Catálogo de {pageTitle} {pageTitleHighlight} ({filteredProducts.length})
+              {activeBrandData || activeCategoryData ? `Catálogo de ${pageTitle}` : 'Catálogo General de Productos'} ({filteredProducts.length})
             </h2>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
@@ -427,8 +457,8 @@ const ProductsPage: React.FC<Props> = ({
             </div>
           ) : filteredProducts.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 md:gap-8">
-              {filteredProducts.map((product: any) => (
-                <ProductCard key={product._id || product.id} product={product} />
+              {filteredProducts.map((product: any, idx: number) => (
+                <ProductCard key={product._id || product.id} product={product} priority={idx < 4} />
               ))}
             </div>
           ) : (
